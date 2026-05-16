@@ -855,50 +855,60 @@ async function doLogin() {
 }
 
 async function onLogin(user) {
-  // Buscar dados do funcionário na tabela employees
-  const { data: emp, error } = await SB.from('employees')
-    .select('*')
-    .eq('user_id', user.id)
-    .single();
+  const btnText = document.getElementById('loginBtnText');
+  const errEl = document.getElementById('loginError');
 
-  if (error || !emp) {
-    // Tenta pelo e-mail (caso user_id ainda não esteja vinculado)
-    const { data: emp2, error: err2 } = await SB.from('employees')
+  try {
+    // Busca pelo user_id (já vinculado)
+    let { data: emp } = await SB.from('employees')
       .select('*')
-      .eq('email', user.email)
-      .single();
+      .eq('user_id', user.id)
+      .maybeSingle();
 
-    if (err2 || !emp2) {
+    if (!emp) {
+      // Busca pelo e-mail (primeira vez / não vinculado ainda)
+      // Pega o mais recente caso haja duplicatas
+      const { data: emps } = await SB.from('employees')
+        .select('*')
+        .ilike('email', user.email)
+        .order('created_at', { ascending: false })
+        .limit(1);
+
+      emp = emps && emps.length > 0 ? emps[0] : null;
+
+      if (!emp) {
+        await SB.auth.signOut();
+        errEl.textContent = 'Acesso negado. Este e-mail não está registrado como funcionário. Contate o administrador.';
+        errEl.style.display = 'block';
+        btnText.textContent = 'Entrar →';
+        return;
+      }
+
+      // Vincular user_id automaticamente
+      await SB.from('employees').update({ user_id: user.id }).eq('id', emp.id);
+      emp.user_id = user.id;
+    }
+
+    if (emp.status === 'inativo') {
       await SB.auth.signOut();
-      const errEl = document.getElementById('loginError');
-      errEl.textContent = 'Acesso negado. Conta não registrada como funcionário. Contate o administrador.';
+      errEl.textContent = 'Sua conta está inativa. Contate o administrador.';
       errEl.style.display = 'block';
-      document.getElementById('loginBtnText').textContent = 'Entrar →';
+      btnText.textContent = 'Entrar →';
       return;
     }
 
-    // Vincular user_id automaticamente (primeira vez que este funcionário loga)
-    if (!emp2.user_id) {
-      await SB.from('employees').update({ user_id: user.id }).eq('id', emp2.id);
-    }
-    currentEmployee = { ...emp2, user_id: user.id };
-  } else {
+    currentUser = user;
     currentEmployee = emp;
-  }
+    document.getElementById('login-screen').style.display = 'none';
+    await loadAll();
+    initUI();
 
-  if (currentEmployee.status === 'inativo') {
-    await SB.auth.signOut();
-    const errEl = document.getElementById('loginError');
-    errEl.textContent = 'Conta inativa. Contate o administrador.';
+  } catch(e) {
+    console.error('Erro no login:', e);
+    errEl.textContent = 'Erro inesperado: ' + e.message;
     errEl.style.display = 'block';
-    document.getElementById('loginBtnText').textContent = 'Entrar →';
-    return;
+    btnText.textContent = 'Entrar →';
   }
-
-  currentUser = user;
-  document.getElementById('login-screen').style.display = 'none';
-  await loadAll();
-  initUI();
 }
 
 function initUI() {
