@@ -849,22 +849,29 @@ async function doLogin() {
   btn.textContent = 'Verificando...';
 
   try {
-    console.log('Buscando email:', email);
+    // Usa fetch direto na REST API do Supabase (mais confiável que o SDK neste contexto)
+    const url = SB_URL + '/rest/v1/employees?email=ilike.' + encodeURIComponent(email) + '&limit=1&select=*';
+    const res = await fetch(url, {
+      headers: {
+        'apikey': SB_KEY,
+        'Authorization': 'Bearer ' + SB_KEY,
+        'Content-Type': 'application/json'
+      }
+    });
 
-    // Busca funcionário pelo e-mail na tabela employees
-    const { data: emps, error: err } = await SB.from('employees')
-      .select('*')
-      .ilike('email', email)
-      .limit(1);
+    console.log('Status HTTP:', res.status);
 
-    console.log('Resultado:', emps, 'Erro:', err);
-
-    if (err) {
-      errEl.textContent = 'Erro ao verificar acesso: ' + err.message;
+    if (!res.ok) {
+      const txt = await res.text();
+      console.error('Erro REST:', txt);
+      errEl.textContent = 'Erro ao verificar acesso (HTTP ' + res.status + '). Contate o administrador.';
       errEl.style.display = 'block';
       btn.textContent = 'Acessar painel →';
       return;
     }
+
+    const emps = await res.json();
+    console.log('Funcionários encontrados:', emps);
 
     const emp = emps && emps.length > 0 ? emps[0] : null;
 
@@ -885,17 +892,17 @@ async function doLogin() {
     // Verifica nome (case-insensitive, ignora espaços extras)
     const nomeRegistrado = (emp.nome || '').trim().toLowerCase();
     const nomeDigitado = nome.toLowerCase();
-    console.log('Nome registrado:', nomeRegistrado, '| Nome digitado:', nomeDigitado);
+    console.log('Nome no banco: "' + nomeRegistrado + '" | Digitado: "' + nomeDigitado + '"');
 
     if (nomeRegistrado !== nomeDigitado) {
-      errEl.textContent = 'Nome não confere. Cadastrado: "' + emp.nome + '"';
+      errEl.textContent = 'Nome não confere com o cadastro.';
       errEl.style.display = 'block';
       btn.textContent = 'Acessar painel →';
       return;
     }
 
     // Acesso liberado
-    console.log('Acesso liberado para:', emp.nome);
+    console.log('Acesso liberado:', emp.nome);
     currentEmployee = emp;
     currentUser = { id: emp.id, email: emp.email };
     await loadAll();
@@ -904,7 +911,7 @@ async function doLogin() {
 
   } catch(e) {
     console.error('Erro doLogin:', e);
-    errEl.textContent = e.message || 'Erro ao verificar acesso.';
+    errEl.textContent = 'Erro de conexão: ' + (e.message || 'Tente novamente.');
     errEl.style.display = 'block';
     btn.textContent = 'Acessar painel →';
   }
