@@ -255,14 +255,14 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <input class="form-input" id="loginEmail" type="email" placeholder="seu@email.com">
     </div>
     <div class="form-group">
-      <label class="form-label">Senha</label>
-      <input class="form-input" id="loginPassword" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+      <label class="form-label">Nome completo</label>
+      <input class="form-input" id="loginNome" type="text" placeholder="Seu nome completo" onkeydown="if(event.key==='Enter')doLogin()">
     </div>
     <div id="loginError" style="font-size:12.5px;color:var(--red);margin-bottom:12px;display:none;padding:10px 12px;background:rgba(239,68,68,.1);border-radius:8px;border:1px solid rgba(239,68,68,.2);"></div>
     <button class="btn btn-accent" style="width:100%;justify-content:center;padding:13px;font-size:14px;" onclick="doLogin()">
-      <span id="loginBtnText">Entrar →</span>
+      <span id="loginBtnText">Acessar painel →</span>
     </button>
-    <p style="font-size:11px;color:var(--dim);margin-top:16px;text-align:center;">Suas credenciais foram fornecidas pelo administrador.</p>
+    <p style="font-size:11px;color:var(--dim);margin-top:16px;text-align:center;">Acesso exclusivo para funcionários cadastrados.</p>
   </div>
 </div>
 
@@ -830,130 +830,73 @@ window.addEventListener('load', async () => {
   // Setar avatar da Wex já na tela de login
   const loginImg = document.getElementById('login-wex-img');
   if (loginImg) loginImg.src = WEX_AVATAR_SRC;
-  const { data: { session } } = await SB.auth.getSession();
-  if (session) {
-    await onLogin(session.user);
-  }
+  // Sem sessão persistente — login manual a cada acesso
 });
 
 async function doLogin() {
-  const email = document.getElementById('loginEmail').value.trim();
-  const password = document.getElementById('loginPassword').value;
+  const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+  const nome = document.getElementById('loginNome').value.trim();
   const errEl = document.getElementById('loginError');
   const btn = document.getElementById('loginBtnText');
   errEl.style.display = 'none';
 
-  if (!email || !password) {
-    errEl.textContent = 'Preencha e-mail e senha.';
+  if (!email || !nome) {
+    errEl.textContent = 'Preencha o e-mail e o nome completo.';
     errEl.style.display = 'block';
     return;
   }
 
-  btn.textContent = 'Entrando...';
-  try {
-    const { data, error } = await SB.auth.signInWithPassword({ email, password });
-    if (error) throw error;
-    await onLogin(data.user);
-  } catch(e) {
-    errEl.textContent = e.message.includes('Invalid login') ? 'E-mail ou senha incorretos.' : e.message;
-    errEl.style.display = 'block';
-    btn.textContent = 'Entrar →';
-  }
-}
-
-async function onLogin(user) {
-  const btnText = document.getElementById('loginBtnText');
-  const errEl = document.getElementById('loginError');
-
-  const showErr = (msg) => {
-    errEl.textContent = msg;
-    errEl.style.display = 'block';
-    btnText.textContent = 'Entrar →';
-  };
+  btn.textContent = 'Verificando...';
 
   try {
-    let emp = null;
+    // Busca funcionário pelo e-mail na tabela employees
+    const { data: emps, error: err } = await SB.from('employees')
+      .select('*')
+      .ilike('email', email)
+      .limit(1);
 
-    // 1. Busca pelo user_id já vinculado
-    const { data: byId, error: e1 } = await SB.from('employees')
-      .select('*').eq('user_id', user.id).maybeSingle();
+    if (err) throw new Error('Erro ao verificar acesso: ' + err.message);
 
-    console.log('Busca por user_id:', byId, e1);
+    const emp = emps && emps.length > 0 ? emps[0] : null;
 
-    if (byId) {
-      emp = byId;
-    } else {
-      // 2. Busca por e-mail (case-insensitive) — pega o mais recente
-      const { data: byEmail, error: e2 } = await SB.from('employees')
-        .select('*')
-        .ilike('email', user.email)
-        .order('created_at', { ascending: false })
-        .limit(1);
-
-      console.log('Busca por email:', byEmail, e2);
-
-      // Se a tabela não existe ou deu erro, cria um employee fictício com dados do auth
-      if (e1 || e2) {
-        console.warn('Tabela employees inacessível, usando dados do auth diretamente.');
-        emp = {
-          id: user.id,
-          user_id: user.id,
-          email: user.email,
-          nome: user.user_metadata?.nome || user.email,
-          apelido: null,
-          cargo: 'Consultor Comercial',
-          comissao_pct: 20,
-          meta_mensal: 0,
-          status: 'ativo',
-          created_at: new Date().toISOString(),
-        };
-      } else {
-        emp = byEmail && byEmail.length > 0 ? byEmail[0] : null;
-
-        if (!emp) {
-          // Cria employee fictício para não bloquear o acesso
-          console.warn('Funcionário não encontrado na tabela employees, usando auth como fallback.');
-          emp = {
-            id: user.id,
-            user_id: user.id,
-            email: user.email,
-            nome: user.user_metadata?.nome || user.email,
-            apelido: null,
-            cargo: 'Consultor Comercial',
-            comissao_pct: 20,
-            meta_mensal: 0,
-            status: 'ativo',
-            created_at: new Date().toISOString(),
-          };
-        } else {
-          // Vincular user_id para próximos logins serem diretos
-          await SB.from('employees').update({ user_id: user.id }).eq('id', emp.id);
-          emp.user_id = user.id;
-        }
-      }
-    }
-
-    if (emp.status === 'inativo') {
-      await SB.auth.signOut();
-      showErr('Conta inativa. Contate o administrador.');
+    if (!emp) {
+      errEl.textContent = 'E-mail não cadastrado. Contate o administrador.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Acessar painel →';
       return;
     }
 
-    currentUser = user;
+    if (emp.status === 'inativo') {
+      errEl.textContent = 'Conta inativa. Contate o administrador.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Acessar painel →';
+      return;
+    }
+
+    // Verifica nome (case-insensitive, ignora espaços extras)
+    const nomeRegistrado = (emp.nome || '').trim().toLowerCase();
+    const nomeDigitado = nome.toLowerCase();
+    if (nomeRegistrado !== nomeDigitado) {
+      errEl.textContent = 'Nome não confere com o cadastro.';
+      errEl.style.display = 'block';
+      btn.textContent = 'Acessar painel →';
+      return;
+    }
+
+    // Acesso liberado
     currentEmployee = emp;
-
-    // Esconder tela de login
-    document.getElementById('login-screen').style.display = 'none';
-
-    // Carregar dados e iniciar UI
+    currentUser = { id: emp.id, email: emp.email };
     await loadAll();
     initUI();
-
+    document.getElementById('login-screen').style.display = 'none';
   } catch(e) {
-    console.error('onLogin erro:', e);
-    showErr('Erro: ' + (e.message || 'Tente novamente'));
+    errEl.textContent = e.message || 'Erro ao verificar acesso.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Acessar painel →';
   }
 }
+
+// onLogin removido — login agora é direto via tabela employees
 
 function initUI() {
   setWexImages();
