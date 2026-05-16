@@ -833,6 +833,37 @@ window.addEventListener('load', async () => {
   // Sem sessão persistente — login manual a cada acesso
 });
 
+// Helper REST API
+async function sbGet(table, params = '') {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + params + '&select=*', {
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+  });
+  return res.ok ? await res.json() : [];
+}
+async function sbPost(table, body) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table, {
+    method: 'POST',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify(body)
+  });
+  return res.ok ? null : await res.text();
+}
+async function sbPatch(table, filter, body) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + filter, {
+    method: 'PATCH',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+    body: JSON.stringify(body)
+  });
+  return res.ok ? null : await res.text();
+}
+async function sbDelete(table, filter) {
+  const res = await fetch(SB_URL + '/rest/v1/' + table + '?' + filter, {
+    method: 'DELETE',
+    headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+  });
+  return res.ok ? null : await res.text();
+}
+
 async function doLogin() {
   const email = document.getElementById('loginEmail').value.trim().toLowerCase();
   const nome = document.getElementById('loginNome').value.trim();
@@ -945,7 +976,6 @@ function initUI() {
 }
 
 async function doLogout() {
-  await SB.auth.signOut();
   window.location.reload();
 }
 
@@ -957,11 +987,15 @@ async function loadAll() {
 }
 
 async function loadClientes() {
-  const { data } = await SB.from('employee_clients')
-    .select('*')
-    .eq('employee_id', currentEmployee.id)
-    .order('created_at', { ascending: false });
-  myClientes = data || [];
+  try {
+    const url = SB_URL + '/rest/v1/employee_clients?employee_id=eq.' + currentEmployee.id + '&order=created_at.desc&select=*';
+    const res = await fetch(url, {
+      headers: { 'apikey': SB_KEY, 'Authorization': 'Bearer ' + SB_KEY }
+    });
+    myClientes = res.ok ? await res.json() : [];
+  } catch(e) {
+    myClientes = [];
+  }
   document.getElementById('badge-clientes').textContent = myClientes.length;
 }
 
@@ -1062,7 +1096,7 @@ async function addCliente() {
 
   if (!nome) { toast('Informe o nome do cliente', 'error'); return; }
 
-  const { error } = await SB.from('employee_clients').insert({
+  const error = await sbPost('employee_clients', {
     employee_id: currentEmployee.id,
     nome_cliente: nome,
     email_cliente: email || null,
@@ -1099,14 +1133,13 @@ async function saveEditCliente() {
   const followup = document.getElementById('edit-cli-followup').value;
   const notas = document.getElementById('edit-cli-notas').value.trim();
 
-  const { error } = await SB.from('employee_clients').update({
+  const error = await sbPatch('employee_clients', 'id=eq.' + id, {
     status_crm: crm,
     data_followup: followup || null,
     notas: notas || null,
-    updated_at: new Date().toISOString()
-  }).eq('id', id);
+  });
 
-  if (error) { toast('Erro ao salvar: ' + error.message, 'error'); return; }
+  if (error) { toast('Erro ao salvar: ' + error, 'error'); return; }
   toast('Salvo!', 'success');
   closeModal('modal-edit-cliente');
   await loadClientes();
@@ -1116,7 +1149,7 @@ async function saveEditCliente() {
 
 async function removeCliente(id) {
   if (!confirm('Remover este cliente da sua carteira?')) return;
-  const { error } = await SB.from('employee_clients').delete().eq('id', id);
+  const error = await sbDelete('employee_clients', 'id=eq.' + id);
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
   toast('Removido', 'info');
   await loadClientes();
@@ -1190,10 +1223,10 @@ function renderMetas() {
 // RANKING
 // 
 async function renderRanking() {
-  const { data: allEmps } = await SB.from('employees').select('id, nome, cargo').eq('status', 'ativo');
+  const allEmps = await sbGet('employees', 'status=eq.ativo&select=id,nome,cargo');
   if (!allEmps || allEmps.length === 0) return;
 
-  const { data: allClients } = await SB.from('employee_clients').select('employee_id, plano, status_crm');
+  const allClients = await sbGet('employee_clients', 'select=employee_id,plano,status_crm');
   if (!allClients) return;
 
   const ranking = allEmps.map(e => {
@@ -1234,10 +1267,7 @@ async function renderRanking() {
 // SUGESTÃO
 // 
 async function loadSugestoes() {
-  const { data } = await SB.from('employee_suggestions')
-    .select('*')
-    .eq('employee_id', currentEmployee.id)
-    .order('created_at', { ascending: false });
+  const data = await sbGet('employee_suggestions', 'employee_id=eq.' + currentEmployee.id + '&order=created_at.desc');
 
   if (!data || data.length === 0) {
     document.getElementById('minhas-sugestoes').innerHTML = '<div class="empty"><p>Nenhuma sugestão enviada ainda este mês</p></div>';
@@ -1279,7 +1309,7 @@ async function enviarSugestao() {
     toast('Preencha todos os campos', 'error'); return;
   }
 
-  const { error } = await SB.from('employee_suggestions').insert({
+  const error = await sbPost('employee_suggestions', {
     employee_id: currentEmployee.id,
     titulo,
     descricao,
@@ -1324,9 +1354,7 @@ async function alterarSenha() {
   if (!nova || nova.length < 6) { toast('Senha deve ter pelo menos 6 caracteres', 'error'); return; }
   if (nova !== conf) { toast('Senhas não coincidem', 'error'); return; }
 
-  const { error } = await SB.auth.updateUser({ password: nova });
-  if (error) { toast('Erro: ' + error.message, 'error'); return; }
-  toast('Senha alterada com sucesso!', 'success');
+  toast('Alteração de senha não disponível neste modo de acesso.', 'info');
   document.getElementById('nova-senha').value = '';
   document.getElementById('conf-senha').value = '';
 }
