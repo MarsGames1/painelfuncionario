@@ -862,21 +862,26 @@ async function onLogin(user) {
     .single();
 
   if (error || !emp) {
-    // Tenta pelo email
-    const { data: emp2 } = await SB.from('employees')
+    // Tenta pelo e-mail (caso user_id ainda não esteja vinculado)
+    const { data: emp2, error: err2 } = await SB.from('employees')
       .select('*')
       .eq('email', user.email)
       .single();
 
-    if (!emp2) {
+    if (err2 || !emp2) {
       await SB.auth.signOut();
       const errEl = document.getElementById('loginError');
-      errEl.textContent = 'Acesso negado. Conta não registrada como funcionário.';
+      errEl.textContent = 'Acesso negado. Conta não registrada como funcionário. Contate o administrador.';
       errEl.style.display = 'block';
       document.getElementById('loginBtnText').textContent = 'Entrar →';
       return;
     }
-    currentEmployee = emp2;
+
+    // Vincular user_id automaticamente (primeira vez que este funcionário loga)
+    if (!emp2.user_id) {
+      await SB.from('employees').update({ user_id: user.id }).eq('id', emp2.id);
+    }
+    currentEmployee = { ...emp2, user_id: user.id };
   } else {
     currentEmployee = emp;
   }
