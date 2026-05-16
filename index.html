@@ -865,56 +865,63 @@ async function onLogin(user) {
   const btnText = document.getElementById('loginBtnText');
   const errEl = document.getElementById('loginError');
 
-  try {
-    // Busca pelo user_id (já vinculado)
-    let { data: emp } = await SB.from('employees')
-      .select('*')
-      .eq('user_id', user.id)
-      .maybeSingle();
+  const showErr = (msg) => {
+    errEl.textContent = msg;
+    errEl.style.display = 'block';
+    btnText.textContent = 'Entrar →';
+  };
 
-    if (!emp) {
-      // Busca pelo e-mail (primeira vez / não vinculado ainda)
-      // Pega o mais recente caso haja duplicatas
-      const { data: emps } = await SB.from('employees')
+  try {
+    let emp = null;
+
+    // 1. Busca pelo user_id já vinculado
+    const { data: byId, error: e1 } = await SB.from('employees')
+      .select('*').eq('user_id', user.id).maybeSingle();
+
+    if (byId) {
+      emp = byId;
+    } else {
+      // 2. Busca por e-mail (case-insensitive) — pega o mais recente
+      const { data: byEmail, error: e2 } = await SB.from('employees')
         .select('*')
         .ilike('email', user.email)
         .order('created_at', { ascending: false })
         .limit(1);
 
-      emp = emps && emps.length > 0 ? emps[0] : null;
+      if (e2) { showErr('Erro ao buscar funcionário: ' + e2.message); return; }
+
+      emp = byEmail && byEmail.length > 0 ? byEmail[0] : null;
 
       if (!emp) {
         await SB.auth.signOut();
-        errEl.textContent = 'Acesso negado. Este e-mail não está registrado como funcionário. Contate o administrador.';
-        errEl.style.display = 'block';
-        btnText.textContent = 'Entrar →';
+        showErr('Acesso negado. E-mail não cadastrado como funcionário. Contate o administrador.');
         return;
       }
 
-      // Vincular user_id automaticamente
+      // Vincular user_id para próximos logins serem diretos
       await SB.from('employees').update({ user_id: user.id }).eq('id', emp.id);
       emp.user_id = user.id;
     }
 
     if (emp.status === 'inativo') {
       await SB.auth.signOut();
-      errEl.textContent = 'Sua conta está inativa. Contate o administrador.';
-      errEl.style.display = 'block';
-      btnText.textContent = 'Entrar →';
+      showErr('Conta inativa. Contate o administrador.');
       return;
     }
 
     currentUser = user;
     currentEmployee = emp;
+
+    // Esconder tela de login
     document.getElementById('login-screen').style.display = 'none';
+
+    // Carregar dados e iniciar UI
     await loadAll();
     initUI();
 
   } catch(e) {
-    console.error('Erro no login:', e);
-    errEl.textContent = 'Erro inesperado: ' + e.message;
-    errEl.style.display = 'block';
-    btnText.textContent = 'Entrar →';
+    console.error('onLogin erro:', e);
+    showErr('Erro: ' + (e.message || 'Tente novamente'));
   }
 }
 
