@@ -849,13 +849,22 @@ async function doLogin() {
   btn.textContent = 'Verificando...';
 
   try {
+    console.log('Buscando email:', email);
+
     // Busca funcionário pelo e-mail na tabela employees
     const { data: emps, error: err } = await SB.from('employees')
       .select('*')
       .ilike('email', email)
       .limit(1);
 
-    if (err) throw new Error('Erro ao verificar acesso: ' + err.message);
+    console.log('Resultado:', emps, 'Erro:', err);
+
+    if (err) {
+      errEl.textContent = 'Erro ao verificar acesso: ' + err.message;
+      errEl.style.display = 'block';
+      btn.textContent = 'Acessar painel →';
+      return;
+    }
 
     const emp = emps && emps.length > 0 ? emps[0] : null;
 
@@ -876,20 +885,25 @@ async function doLogin() {
     // Verifica nome (case-insensitive, ignora espaços extras)
     const nomeRegistrado = (emp.nome || '').trim().toLowerCase();
     const nomeDigitado = nome.toLowerCase();
+    console.log('Nome registrado:', nomeRegistrado, '| Nome digitado:', nomeDigitado);
+
     if (nomeRegistrado !== nomeDigitado) {
-      errEl.textContent = 'Nome não confere com o cadastro.';
+      errEl.textContent = 'Nome não confere. Cadastrado: "' + emp.nome + '"';
       errEl.style.display = 'block';
       btn.textContent = 'Acessar painel →';
       return;
     }
 
     // Acesso liberado
+    console.log('Acesso liberado para:', emp.nome);
     currentEmployee = emp;
     currentUser = { id: emp.id, email: emp.email };
     await loadAll();
     initUI();
     document.getElementById('login-screen').style.display = 'none';
+
   } catch(e) {
+    console.error('Erro doLogin:', e);
     errEl.textContent = e.message || 'Erro ao verificar acesso.';
     errEl.style.display = 'block';
     btn.textContent = 'Acessar painel →';
