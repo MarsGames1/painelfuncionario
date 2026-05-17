@@ -1218,7 +1218,7 @@ const WEX_AVATAR_SRC = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSU
 // 
 const SB_URL = 'https://tbnoiwkproawwncuorpw.supabase.co';
 const SB_KEY = 'sb_publishable_6sJeXecAy_M6gBP_b-j0QQ_0Ybgx_ng';
-const GROQ_KEY = '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';
+const GROQ_KEY = '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';
 
 // Role que identifica funcionários na tabela employees
 const EMPLOYEE_ROLE = 'funcionario';
@@ -2042,6 +2042,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
     cor: 'rgba(249,115,22,.15)',
     sugs: ['O que é venda consultiva?','Como identificar a dor do cliente','Como apresentar uma proposta de valor'],
+    dicas: [
+      '🎯 Pergunte antes de apresentar — entenda o problema antes de falar do produto.',
+      '🔍 Use a pergunta: "Qual é o maior desafio hoje na gestão dos seus leads/obras?" para abrir a conversa.',
+      '💡 Venda o resultado, não a ferramenta: "Você vai economizar tempo e fechar mais contratos" em vez de "temos esse recurso".',
+      '📋 Anote o que o cliente disse e repita no fechamento — mostra que você ouviu de verdade.',
+      '⏱️ Limite sua apresentação inicial a 3 minutos. Quem fala demais perde o cliente.',
+      '✅ Ao final de toda reunião, defina o próximo passo com data e hora marcada.'
+    ],
     prompt: 'Você é um instrutor especialista em vendas B2B. Ensine de forma prática sobre vendas consultivas para a construção civil: como descobrir a necessidade real do cliente, como apresentar valor, como conduzir uma conversa de vendas. Use exemplos concretos do setor de construção civil. Seja didático, direto e use linguagem acessível. Máximo 4 parágrafos por resposta.'
   },
   objecoes: {
@@ -2050,6 +2058,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
     cor: 'rgba(139,92,246,.15)',
     sugs: ['Quais são as principais objeções?','Como responder "está caro"?','O cliente diz que vai pensar, e agora?'],
+    dicas: [
+      '💰 "Tá caro" → "Entendo. Em relação a quê você está comparando?" — descubra a referência dele.',
+      '🤔 "Vou pensar" → "Claro! O que falta pra você tomar a decisão hoje?" — identifique a dúvida real.',
+      '⏳ "Não tenho tempo" → "Leva só 15 minutos. Posso na segunda às 9h ou na terça às 14h?" — dê opções.',
+      '🔄 "Já tenho solução" → "Legal! O que você acha que ainda falta na solução atual?" — abra brecha.',
+      '🚫 Nunca discuta com o cliente. Concorde primeiro, depois apresente seu ponto.',
+      '📌 Toda objeção é uma dúvida disfarçada — trate com curiosidade, não com defesa.'
+    ],
     prompt: 'Você é um especialista em vendas e contorno de objeções. Ensine como lidar com as objeções mais comuns no contexto de vendas de software/SaaS para empresas de construção civil: preço alto, não tenho tempo, vou pensar, já tenho solução, não confio. Dê respostas práticas e scripts prontos. Máximo 4 parágrafos por resposta.'
   },
   followup: {
@@ -2058,6 +2074,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.03"/></svg>',
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Quando fazer o primeiro follow-up?','Como abordar sem ser chato?','Scripts de follow-up por WhatsApp'],
+    dicas: [
+      '⏰ Primeiro follow-up: 24h após o contato inicial — enquanto você ainda está fresco na memória.',
+      '📅 Padrão ideal: contato D+1, D+3, D+7, D+14 e D+30 para leads frios.',
+      '💬 Nunca comece com "Só passando pra ver..." — traga algo novo: uma dica, um dado, uma novidade.',
+      '📲 WhatsApp > E-mail para resposta rápida. Use áudio curto (30 seg) para parecer mais humano.',
+      '🔁 Se não respondeu em 3 tentativas, mude o canal: WhatsApp → ligação → e-mail.',
+      '🗓️ Sempre termine com uma pergunta aberta: "Quando seria melhor pra você?"'
+    ],
     prompt: 'Você é um especialista em follow-up e fechamento de vendas. Ensine técnicas práticas de acompanhamento de leads: quando contatar, como contatar (WhatsApp, e-mail, ligação), o que falar, quantas tentativas fazer, como nutrir um lead frio. Use exemplos reais do setor de construção civil. Máximo 4 parágrafos por resposta.'
   },
   leads_correto: {
@@ -2066,6 +2090,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
     cor: 'rgba(16,185,129,.15)',
     sugs: ['O que é score de lead?','Como priorizar leads?','Como fazer o primeiro contato?'],
+    dicas: [
+      '🔥 Priorize leads com score alto — são os que mais demonstraram interesse e têm perfil certo.',
+      '📞 Entre em contato em até 5 minutos após o lead chegar — a taxa de conversão cai 80% depois de 1h.',
+      '🏗️ Verifique o CNAE do lead antes de ligar — adapte a conversa para construtoras, fornecedores ou empreiteiros.',
+      '📝 Sempre registre no CRM o que foi falado, status e data do próximo contato — não confie na memória.',
+      '🧊 Lead frio (sem resposta há 15+ dias)? Mude a abordagem: envie um conteúdo útil antes de tentar vender.',
+      '✅ Lead qualificado = tem CNPJ ativo, perfil de construção civil e capacidade de pagar o plano.'
+    ],
     prompt: 'Você é um especialista em gestão de leads B2B. Ensine como trabalhar leads de forma estratégica: o que é lead qualificado, como funciona pontuação/score, como priorizar o atendimento, como estruturar a abordagem inicial, diferença entre leads quentes e frios, como usar o CRM para registrar tudo. Use exemplos do contexto de construção civil. Máximo 4 parágrafos por resposta.'
   },
   negociacao: {
@@ -2074,6 +2106,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
     cor: 'rgba(251,191,36,.15)',
     sugs: ['Como criar urgência na negociação?','Como defender o preço sem ceder?','Técnicas de fechamento eficazes'],
+    dicas: [
+      '🎯 Fechamento por alternativa: "Você prefere começar pelo Starter ou já ir pro Pro?" — nunca "Vai fechar?"',
+      '⏳ Urgência real: "Essa condição é válida até sexta" — use só quando for verdade, senão perde credibilidade.',
+      '💪 Defenda o preço com valor: "O que você paga por mês em planilhas e horas perdidas hoje?"',
+      '🤝 Se der desconto, peça algo em troca: "Se eu conseguir isso pra você, podemos fechar agora?"',
+      '🔇 Após apresentar o preço, fique em silêncio — quem fala primeiro, perde.',
+      '📊 Mostre o ROI: "Com o plano Pro, em 3 meses você recupera o investimento só no tempo economizado."'
+    ],
     prompt: 'Você é um especialista em negociação e fechamento de vendas. Ensine técnicas práticas: como criar urgência, como defender preço sem dar desconto, como identificar o momento certo de fechar, gatilhos mentais éticos, técnicas de fechamento (alternativa, urgência, assumido). Use exemplos do setor de construção civil. Máximo 4 parágrafos por resposta.'
   },
   construcao_civil: {
@@ -2082,6 +2122,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
     cor: 'rgba(249,115,22,.15)',
     sugs: ['Quais os principais CNAEs?','Diferença entre construtora e empreiteira?','Como abordar uma construtora?'],
+    dicas: [
+      '🏢 Construtora: executa obra própria. Empreiteira: presta serviço pra construtora. Incorporadora: vende o imóvel.',
+      '📋 CNAEs-chave: 4120-4 (construção), 4330-4 (acabamento), 4391-6 (estruturas), 4744-0 (materiais).',
+      '👔 Decisor na construtora pequena = dono. Na média = diretor ou gerente de TI/operações.',
+      '📞 Melhor horário pra ligar: 8h-9h30 ou 16h-17h30 — evite horário de almoço e final de tarde.',
+      '🗓️ Setor tem sazonalidade: jan-fev mais lento (planejamento), mar-nov mais ativo em obras.',
+      '💡 Fale em termos deles: "gestão de obra", "controle de fornecedores", "orçamento de materiais" — não em termos de TI.'
+    ],
     prompt: 'Você é um especialista no mercado de construção civil brasileiro. Ensine sobre os segmentos do setor: construtoras, incorporadoras, empreiteiras, fornecedores de materiais, prestadores de serviço. Explique os principais CNAEs, como funciona o ciclo de compras do setor, quem são os decisores, como se comunicar com cada perfil. Ajude os funcionários a entender melhor o mercado que estão atendendo. Máximo 4 parágrafos por resposta.'
   },
   etica: {
@@ -2090,6 +2138,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
     cor: 'rgba(139,92,246,.15)',
     sugs: ['O que é conduta ética no trabalho?','Como tratar clientes e colegas?','O que nunca fazer no trabalho?'],
+    dicas: [
+      '🤝 Nunca prometa ao cliente algo que o produto não entrega — uma venda desonesta volta como cancelamento.',
+      '🔒 Dados de clientes são confidenciais — nunca compartilhe listas, contatos ou informações internas.',
+      '👥 Respeite colegas em público — discordâncias se resolvem em particular, nunca na frente de clientes.',
+      '⏰ Pontualidade é respeito: reunião marcada, reunião cumprida. Atrasos avisados com antecedência.',
+      '🚫 Jamais fale mal da concorrência diretamente — foque nos seus diferenciais, não nos defeitos deles.',
+      '📣 Se errou, assuma. Clientes perdoam erros assumidos; não perdoam mentiras descobertas.'
+    ],
     prompt: 'Você é um especialista em ética e conduta profissional. Ensine sobre comportamento ético no trabalho: integridade nas vendas, respeito a colegas e clientes, sigilo de informações, honestidade nas promessas ao cliente, como agir em situações difíceis, o que é e o que não é aceitável no ambiente profissional. Seja direto e use exemplos práticos do dia a dia comercial. Máximo 4 parágrafos por resposta.'
   },
   comunicacao: {
@@ -2098,6 +2154,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Como escrever um e-mail profissional?','Como falar bem ao telefone?','Erros de comunicação que afastam clientes'],
+    dicas: [
+      '✉️ E-mail: assunto claro, máximo 5 linhas, uma ação pedida por e-mail. Nunca mande parede de texto.',
+      '📱 WhatsApp profissional: sem abreviações, sem "oi sumiu", sem figurinhas em primeiro contato.',
+      '🎙️ Ao telefone: sorria ao falar — o cliente sente. Fale devagar, pronuncie bem o nome da empresa.',
+      '🔤 Revise antes de enviar — erro de português passa imagem de descuido, especialmente com clientes novos.',
+      '👂 Escuta ativa: não interrompa. Deixe o cliente terminar a ideia antes de responder.',
+      '📌 Confirme por escrito o que foi combinado verbalmente — evita desentendidos e mostra organização.'
+    ],
     prompt: 'Você é um especialista em comunicação profissional. Ensine como se comunicar bem no ambiente de trabalho: como escrever e-mails e mensagens profissionais, como falar bem ao telefone e no WhatsApp com clientes, como dar e receber feedback, como se expressar com clareza e confiança, erros comuns de comunicação que prejudicam vendas. Use exemplos práticos. Máximo 4 parágrafos por resposta.'
   },
   produtividade: {
@@ -2106,6 +2170,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como organizar meu dia de trabalho?','Como priorizar tarefas?','Como evitar procrastinação?'],
+    dicas: [
+      '🌅 Comece o dia revisando seus follow-ups pendentes — resolva o mais importante antes de abrir redes sociais.',
+      '📋 Liste no máximo 3 prioridades por dia — quem tem 10 prioridades não tem nenhuma.',
+      '⏱️ Use blocos de tempo: 90 min de foco → 15 min pausa. Evita cansaço e aumenta concentração.',
+      '🚫 Desative notificações em horário de prospecção — cada interrupção custa 23 min de reconcentração.',
+      '📊 Regra 80/20: 20% dos clientes geram 80% dos resultados. Identifique e priorize esses clientes.',
+      '✅ Termine o dia anotando o que fez e o que fica para amanhã — você dorme melhor e começa melhor.'
+    ],
     prompt: 'Você é um especialista em produtividade e gestão de tempo. Ensine técnicas práticas para organizar o dia de trabalho de um consultor de vendas: como criar uma rotina produtiva, como priorizar tarefas (matriz de Eisenhower, regra 80/20), como evitar distrações, como usar ferramentas simples de organização, como equilibrar prospecção e follow-up na agenda. Máximo 4 parágrafos por resposta.'
   },
   atendimento: {
@@ -2114,6 +2186,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
     cor: 'rgba(251,191,36,.15)',
     sugs: ['O que é escuta ativa?','Como resolver reclamações de clientes?','Como encantar um cliente?'],
+    dicas: [
+      '👂 Escuta ativa: olhos no cliente (ou atenção total), sem interromper, repita o que entendeu antes de responder.',
+      '😤 Cliente irritado? Primeiro reconheça o sentimento: "Entendo sua frustração, vou resolver isso agora."',
+      '⚡ Resolva rápido — 70% dos clientes que reclamam e têm solução rápida ficam mais fiéis do que antes.',
+      '🎁 Surpreender é simples: lembrar o nome, antecipar uma dúvida, mandar uma mensagem depois da reunião.',
+      '🔁 Peça feedback: "O que eu poderia ter feito melhor?" — clientes que respondem isso raramente cancelam.',
+      '📌 Clientes difíceis costumam ter razão — ouça com paciência e você vai descobrir o problema real.'
+    ],
     prompt: 'Você é um especialista em atendimento ao cliente e experiência do usuário. Ensine técnicas de atendimento de excelência: o que é escuta ativa e como praticar, como resolver reclamações sem perder o cliente, como surpreender positivamente, o que faz um cliente recomendar você, como lidar com clientes difíceis. Use exemplos práticos do setor comercial. Máximo 4 parágrafos por resposta.'
   },
   excel_basico: {
@@ -2122,6 +2202,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como criar uma planilha do zero?','Quais fórmulas básicas preciso saber?','Como organizar dados no Excel?'],
+    dicas: [
+      '📊 Fórmulas essenciais: =SOMA(A1:A10), =MÉDIA(A1:A10), =SE(A1>0,"Sim","Não"), =PROCV() para buscar dados.',
+      '🔒 Ctrl+S salva. Ctrl+Z desfaz. Ctrl+C copia. Ctrl+V cola. Aprenda esses atalhos primeiro.',
+      '🎨 Use negrito (Ctrl+B) para cabeçalhos e congele a primeira linha: Exibir → Congelar Painéis.',
+      '🔍 Filtros: selecione a tabela → Dados → Filtro. Clique na seta da coluna para filtrar por valor.',
+      '📋 Não misture tipos de dado na mesma coluna — datas com datas, números com números.',
+      '💡 Toda célula começa com = para ser uma fórmula. Sem o =, é só texto.'
+    ],
     prompt: 'Você é um instrutor de informática especialista em Excel. Ensine o básico de Excel de forma simples e prática: como criar e formatar planilhas, as fórmulas essenciais (SOMA, MÉDIA, SE, PROCV), como organizar dados, filtros, como criar um relatório simples. Explique passo a passo, como se estivesse ensinando alguém que nunca usou o programa. Use linguagem bem simples. Máximo 4 parágrafos por resposta.'
   },
   word_basico: {
@@ -2130,6 +2218,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Como criar um documento no Word?','Como formatar texto profissionalmente?','Como criar uma proposta comercial?'],
+    dicas: [
+      '💾 Salve sempre como .docx e ative o salvamento automático — nunca perca seu trabalho.',
+      '🔤 Use fonte Arial ou Calibri tamanho 11-12 para documentos profissionais. Nada de Comic Sans.',
+      '📐 Margens padrão: 2,5 cm em todos os lados. Ative em: Layout → Margens → Normal.',
+      '📋 Para propostas: cabeçalho com logo/nome da empresa, data, nome do cliente, valor e próximos passos.',
+      '📄 Salve em PDF antes de enviar: Arquivo → Salvar Como → PDF — evita problema de formatação.',
+      '⌨️ Ctrl+Enter cria uma nova página. Muito melhor que ficar apertando Enter várias vezes.'
+    ],
     prompt: 'Você é um instrutor de informática especialista em Word e documentos. Ensine como usar o Word de forma prática: criar e salvar documentos, formatar texto (fonte, tamanho, negrito, alinhamento), usar cabeçalho e rodapé, criar tabelas simples, como fazer uma proposta comercial ou e-mail formal no Word. Explique passo a passo com linguagem bem acessível para quem está aprendendo. Máximo 4 parágrafos por resposta.'
   },
   internet_segura: {
@@ -2138,6 +2234,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
     cor: 'rgba(139,92,246,.15)',
     sugs: ['Como pesquisar bem na internet?','Como identificar golpes online?','Como criar uma senha segura?'],
+    dicas: [
+      '🔐 Senha forte: mínimo 8 caracteres, misture letras maiúsculas, minúsculas, números e símbolos.',
+      '🚨 Golpe clássico: e-mail urgente pedindo clique em link ou dados bancários. Desconfie sempre.',
+      '🔗 Antes de clicar: passe o mouse sobre o link e veja o endereço real na barra inferior do navegador.',
+      '📧 E-mail profissional: assunto claro, sem gírias, sem "oi sumido", responda em até 24h úteis.',
+      '🌐 Para pesquisar: seja específico. "Excel fórmula PROCV passo a passo" é melhor que "Excel ajuda".',
+      '🛡️ Nunca compartilhe senha com ninguém — nem com o suporte técnico. Empresa séria não pede senha.'
+    ],
     prompt: 'Você é um especialista em segurança digital e uso profissional da internet. Ensine como usar a internet com segurança: como pesquisar informações confiáveis, como criar e gerenciar senhas seguras, como identificar e evitar golpes (phishing, links falsos), como usar o e-mail profissionalmente, o que nunca compartilhar online, boas práticas de segurança no celular e computador. Linguagem simples e exemplos práticos. Máximo 4 parágrafos por resposta.'
   },
   whatsapp_prof: {
@@ -2146,6 +2250,14 @@ const CURSOS_CONFIG = {
     icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como abordar um cliente no WhatsApp?','Como responder sem parecer robô?','Erros no WhatsApp que afastam clientes'],
+    dicas: [
+      '👋 Primeira mensagem: se apresente, diga de onde veio o contato e faça uma pergunta. Nunca mande só "oi".',
+      '⏰ Responda em até 1h em horário comercial — cliente sem resposta vai para o concorrente.',
+      '🎙️ Áudio com mais de 1 minuto: peça permissão antes. Muitos clientes não gostam de ouvir áudio no trabalho.',
+      '✅ Use listas de transmissão para avisos gerais, nunca grupos com clientes que não se conhecem.',
+      '🚫 Evite: emojis em excesso, texto em caixa alta, mensagem longa sem parágrafo e cobranças agressivas.',
+      '📊 WhatsApp Business: configure horário de atendimento, mensagem automática e catálogo — passa mais profissionalismo.'
+    ],
     prompt: 'Você é um especialista em comunicação digital e vendas pelo WhatsApp. Ensine como usar o WhatsApp de forma profissional: como estruturar uma abordagem inicial, como responder com agilidade e profissionalismo, como usar listas de transmissão, como criar mensagens que geram resposta, erros comuns que afastam clientes, uso do WhatsApp Business, horários e etiqueta profissional. Use exemplos práticos de mensagens. Máximo 4 parágrafos por resposta.'
   }
 };
@@ -2167,18 +2279,40 @@ function iniciarCurso(id) {
   const chat = document.getElementById('curso-chat');
   chat.innerHTML = '';
 
-  // Mensagem de abertura
-  const intro = document.createElement('div');
-  intro.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .3s ease;';
-  intro.innerHTML = `
-    <div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
-    </div>
-    <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%;">
-      Bem-vindo ao modulo <strong style="color:var(--accent);">${cfg.titulo}</strong>.<br>
-      Pode perguntar qualquer coisa sobre este tema — respondo na hora. Use as sugestoes abaixo para comecar ou escreva sua duvida diretamente.
-    </div>`;
-  chat.appendChild(intro);
+  // Bloco de dicas rápidas estáticas (sem IA)
+  if (cfg.dicas && cfg.dicas.length) {
+    const dicasDiv = document.createElement('div');
+    dicasDiv.style.cssText = 'animation:fadeIn .3s ease;';
+    dicasDiv.innerHTML = `
+      <div style="background:var(--surface2);border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px 18px;margin-bottom:4px;">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;">
+          <div style="width:26px;height:26px;background:${cfg.cor};border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${cfg.icon.replace('22px','14px').replace('22px','14px')}</div>
+          <span style="font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.03em;text-transform:uppercase;">⚡ Dicas Rápidas</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:9px;">
+          ${cfg.dicas.map(d => `
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:9px 12px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);line-height:1.55;">
+              <span style="flex-shrink:0;">${d.split(' ')[0]}</span>
+              <span style="color:var(--muted);">${d.split(' ').slice(1).join(' ')}</span>
+            </div>`).join('')}
+        </div>
+        <div style="margin-top:13px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--dim);">Tem dúvida sobre alguma dessas dicas ou quer se aprofundar? Use o chat abaixo. 👇</div>
+      </div>`;
+    chat.appendChild(dicasDiv);
+  } else {
+    // fallback: mensagem de abertura original
+    const intro = document.createElement('div');
+    intro.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .3s ease;';
+    intro.innerHTML = `
+      <div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%;">
+        Bem-vindo ao modulo <strong style="color:var(--accent);">${cfg.titulo}</strong>.<br>
+        Pode perguntar qualquer coisa sobre este tema — respondo na hora.
+      </div>`;
+    chat.appendChild(intro);
+  }
   chat.scrollTop = chat.scrollHeight;
 
   // Sugestões
