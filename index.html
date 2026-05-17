@@ -238,6 +238,26 @@ textarea.form-input{resize:vertical;min-height:90px;}
   .grid-2,.grid-3{grid-template-columns:1fr;}
   .stats-row{grid-template-columns:1fr 1fr;}
 }
+
+/* CURSO INTERNO CARD */
+.curso-interno-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:12px;transition:all .2s;cursor:pointer;}
+.curso-interno-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.25);}
+.ci-icon{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.ci-body{flex:1;min-width:0;}
+.ci-title{font-weight:700;font-size:13px;color:var(--text);margin-bottom:4px;}
+.ci-sub{font-size:12px;color:var(--muted);line-height:1.5;margin-bottom:8px;}
+.ci-meta{display:flex;align-items:center;gap:8px;}
+
+/* EVG CARD */
+.evg-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;gap:8px;}
+.evg-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3);}
+.evg-top{display:flex;justify-content:space-between;align-items:center;}
+.evg-cat{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;letter-spacing:.03em;}
+.evg-carga{font-size:11px;color:var(--dim);font-weight:600;background:var(--surface3);padding:3px 8px;border-radius:5px;}
+.evg-title{font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:var(--text);line-height:1.3;}
+.evg-desc{font-size:12.5px;color:var(--muted);line-height:1.6;flex:1;}
+.evg-footer{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;}
+
 </style>
 </head>
 <body>
@@ -1944,6 +1964,394 @@ function sendWexChip(text) {
   document.getElementById('wex-input').value = text;
   sendWexMessage();
 }
+
+
+// ════════════════════════════════════════════════════════════════
+//  CURSOS PRÁTICOS INTERNOS — powered by Groq (Llama 3.3)
+// ════════════════════════════════════════════════════════════════
+
+const CURSOS_CONFIG = {
+  vendas_b2b: {
+    titulo: 'Vendas Consultivas B2B',
+    sub: 'Como identificar a dor do cliente e vender a solução certa',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+    cor: 'rgba(249,115,22,.15)',
+    sugs: ['O que é venda consultiva?','Como identificar a dor do cliente','Como apresentar uma proposta de valor'],
+    prompt: 'Você é um instrutor especialista em vendas B2B. Ensine de forma prática sobre vendas consultivas para a construção civil: como descobrir a necessidade real do cliente, como apresentar valor, como conduzir uma conversa de vendas. Use exemplos concretos do setor de construção civil. Seja didático, direto e use linguagem acessível. Máximo 4 parágrafos por resposta.'
+  },
+  objecoes: {
+    titulo: 'Contornando Objeções',
+    sub: 'As 10 objeções mais comuns e como responder com confiança',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
+    cor: 'rgba(139,92,246,.15)',
+    sugs: ['Quais são as principais objeções?','Como responder "está caro"?','O cliente diz que vai pensar, e agora?'],
+    prompt: 'Você é um especialista em vendas e contorno de objeções. Ensine como lidar com as objeções mais comuns no contexto de vendas de software/SaaS para empresas de construção civil: preço alto, não tenho tempo, vou pensar, já tenho solução, não confio. Dê respostas práticas e scripts prontos. Máximo 4 parágrafos por resposta.'
+  },
+  followup: {
+    titulo: 'Follow-up que Fecha',
+    sub: 'Como fazer acompanhamento sem parecer inconveniente',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.03"/></svg>',
+    cor: 'rgba(59,130,246,.15)',
+    sugs: ['Quando fazer o primeiro follow-up?','Como abordar sem ser chato?','Scripts de follow-up por WhatsApp'],
+    prompt: 'Você é um especialista em follow-up e fechamento de vendas. Ensine técnicas práticas de acompanhamento de leads: quando contatar, como contatar (WhatsApp, e-mail, ligação), o que falar, quantas tentativas fazer, como nutrir um lead frio. Use exemplos reais do setor de construção civil. Máximo 4 parágrafos por resposta.'
+  },
+  leads_correto: {
+    titulo: 'Como Usar Leads Corretamente',
+    sub: 'Do score ao primeiro contato — o passo a passo do lead ideal',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+    cor: 'rgba(16,185,129,.15)',
+    sugs: ['O que é score de lead?','Como priorizar leads?','Como fazer o primeiro contato?'],
+    prompt: 'Você é um especialista em gestão de leads B2B. Ensine como trabalhar leads de forma estratégica: o que é lead qualificado, como funciona pontuação/score, como priorizar o atendimento, como estruturar a abordagem inicial, diferença entre leads quentes e frios, como usar o CRM para registrar tudo. Use exemplos do contexto de construção civil. Máximo 4 parágrafos por resposta.'
+  },
+  negociacao: {
+    titulo: 'Negociação e Fechamento',
+    sub: 'Técnicas para chegar ao "sim" sem dar desconto desnecessário',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    cor: 'rgba(251,191,36,.15)',
+    sugs: ['Como criar urgência na negociação?','Como defender o preço sem ceder?','Técnicas de fechamento eficazes'],
+    prompt: 'Você é um especialista em negociação e fechamento de vendas. Ensine técnicas práticas: como criar urgência, como defender preço sem dar desconto, como identificar o momento certo de fechar, gatilhos mentais éticos, técnicas de fechamento (alternativa, urgência, assumido). Use exemplos do setor de construção civil. Máximo 4 parágrafos por resposta.'
+  },
+  construcao_civil: {
+    titulo: 'Mercado de Construção Civil',
+    sub: 'CNAEs, segmentos, fornecedores, empreiteiros e construtoras',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>',
+    cor: 'rgba(249,115,22,.15)',
+    sugs: ['Quais os principais CNAEs?','Diferença entre construtora e empreiteira?','Como abordar uma construtora?'],
+    prompt: 'Você é um especialista no mercado de construção civil brasileiro. Ensine sobre os segmentos do setor: construtoras, incorporadoras, empreiteiras, fornecedores de materiais, prestadores de serviço. Explique os principais CNAEs, como funciona o ciclo de compras do setor, quem são os decisores, como se comunicar com cada perfil. Ajude os funcionários a entender melhor o mercado que estão atendendo. Máximo 4 parágrafos por resposta.'
+  },
+  etica: {
+    titulo: 'Ética no Trabalho',
+    sub: 'Conduta profissional, respeito e integridade no dia a dia',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+    cor: 'rgba(139,92,246,.15)',
+    sugs: ['O que é conduta ética no trabalho?','Como tratar clientes e colegas?','O que nunca fazer no trabalho?'],
+    prompt: 'Você é um especialista em ética e conduta profissional. Ensine sobre comportamento ético no trabalho: integridade nas vendas, respeito a colegas e clientes, sigilo de informações, honestidade nas promessas ao cliente, como agir em situações difíceis, o que é e o que não é aceitável no ambiente profissional. Seja direto e use exemplos práticos do dia a dia comercial. Máximo 4 parágrafos por resposta.'
+  },
+  comunicacao: {
+    titulo: 'Comunicação Profissional',
+    sub: 'Como escrever e falar bem no ambiente de trabalho e com clientes',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    cor: 'rgba(59,130,246,.15)',
+    sugs: ['Como escrever um e-mail profissional?','Como falar bem ao telefone?','Erros de comunicação que afastam clientes'],
+    prompt: 'Você é um especialista em comunicação profissional. Ensine como se comunicar bem no ambiente de trabalho: como escrever e-mails e mensagens profissionais, como falar bem ao telefone e no WhatsApp com clientes, como dar e receber feedback, como se expressar com clareza e confiança, erros comuns de comunicação que prejudicam vendas. Use exemplos práticos. Máximo 4 parágrafos por resposta.'
+  },
+  produtividade: {
+    titulo: 'Produtividade e Organização',
+    sub: 'Gestão do tempo, prioridades e rotina de alta performance',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    cor: 'rgba(16,185,129,.15)',
+    sugs: ['Como organizar meu dia de trabalho?','Como priorizar tarefas?','Como evitar procrastinação?'],
+    prompt: 'Você é um especialista em produtividade e gestão de tempo. Ensine técnicas práticas para organizar o dia de trabalho de um consultor de vendas: como criar uma rotina produtiva, como priorizar tarefas (matriz de Eisenhower, regra 80/20), como evitar distrações, como usar ferramentas simples de organização, como equilibrar prospecção e follow-up na agenda. Máximo 4 parágrafos por resposta.'
+  },
+  atendimento: {
+    titulo: 'Atendimento ao Cliente',
+    sub: 'Encantamento, escuta ativa e resolução de conflitos',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    cor: 'rgba(251,191,36,.15)',
+    sugs: ['O que é escuta ativa?','Como resolver reclamações de clientes?','Como encantar um cliente?'],
+    prompt: 'Você é um especialista em atendimento ao cliente e experiência do usuário. Ensine técnicas de atendimento de excelência: o que é escuta ativa e como praticar, como resolver reclamações sem perder o cliente, como surpreender positivamente, o que faz um cliente recomendar você, como lidar com clientes difíceis. Use exemplos práticos do setor comercial. Máximo 4 parágrafos por resposta.'
+  },
+  excel_basico: {
+    titulo: 'Excel Básico',
+    sub: 'Planilhas, fórmulas, organizar dados e criar relatórios simples',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="12" y1="3" x2="12" y2="21"/></svg>',
+    cor: 'rgba(16,185,129,.15)',
+    sugs: ['Como criar uma planilha do zero?','Quais fórmulas básicas preciso saber?','Como organizar dados no Excel?'],
+    prompt: 'Você é um instrutor de informática especialista em Excel. Ensine o básico de Excel de forma simples e prática: como criar e formatar planilhas, as fórmulas essenciais (SOMA, MÉDIA, SE, PROCV), como organizar dados, filtros, como criar um relatório simples. Explique passo a passo, como se estivesse ensinando alguém que nunca usou o programa. Use linguagem bem simples. Máximo 4 parágrafos por resposta.'
+  },
+  word_basico: {
+    titulo: 'Word e Documentos',
+    sub: 'Criar, formatar e enviar documentos profissionais',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+    cor: 'rgba(59,130,246,.15)',
+    sugs: ['Como criar um documento no Word?','Como formatar texto profissionalmente?','Como criar uma proposta comercial?'],
+    prompt: 'Você é um instrutor de informática especialista em Word e documentos. Ensine como usar o Word de forma prática: criar e salvar documentos, formatar texto (fonte, tamanho, negrito, alinhamento), usar cabeçalho e rodapé, criar tabelas simples, como fazer uma proposta comercial ou e-mail formal no Word. Explique passo a passo com linguagem bem acessível para quem está aprendendo. Máximo 4 parágrafos por resposta.'
+  },
+  internet_segura: {
+    titulo: 'Internet Segura',
+    sub: 'Pesquisar bem, usar e-mail profissional e evitar golpes online',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    cor: 'rgba(139,92,246,.15)',
+    sugs: ['Como pesquisar bem na internet?','Como identificar golpes online?','Como criar uma senha segura?'],
+    prompt: 'Você é um especialista em segurança digital e uso profissional da internet. Ensine como usar a internet com segurança: como pesquisar informações confiáveis, como criar e gerenciar senhas seguras, como identificar e evitar golpes (phishing, links falsos), como usar o e-mail profissionalmente, o que nunca compartilhar online, boas práticas de segurança no celular e computador. Linguagem simples e exemplos práticos. Máximo 4 parágrafos por resposta.'
+  },
+  whatsapp_prof: {
+    titulo: 'WhatsApp Profissional',
+    sub: 'Como usar o WhatsApp de forma eficaz no trabalho e com clientes',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    cor: 'rgba(16,185,129,.15)',
+    sugs: ['Como abordar um cliente no WhatsApp?','Como responder sem parecer robô?','Erros no WhatsApp que afastam clientes'],
+    prompt: 'Você é um especialista em comunicação digital e vendas pelo WhatsApp. Ensine como usar o WhatsApp de forma profissional: como estruturar uma abordagem inicial, como responder com agilidade e profissionalismo, como usar listas de transmissão, como criar mensagens que geram resposta, erros comuns que afastam clientes, uso do WhatsApp Business, horários e etiqueta profissional. Use exemplos práticos de mensagens. Máximo 4 parágrafos por resposta.'
+  }
+};
+
+let cursoAtual = null;
+let cursoHistorico = [];
+
+function iniciarCurso(id) {
+  const cfg = CURSOS_CONFIG[id];
+  if (!cfg) return;
+  cursoAtual = id;
+  cursoHistorico = [];
+
+  document.getElementById('curso-modal-icon').innerHTML = cfg.icon;
+  document.getElementById('curso-modal-icon').style.background = cfg.cor;
+  document.getElementById('curso-modal-title').textContent = cfg.titulo;
+  document.getElementById('curso-modal-sub').textContent = cfg.sub;
+
+  const chat = document.getElementById('curso-chat');
+  chat.innerHTML = '';
+
+  // Mensagem de abertura
+  const intro = document.createElement('div');
+  intro.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .3s ease;';
+  intro.innerHTML = `
+    <div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%;">
+      Bem-vindo ao modulo <strong style="color:var(--accent);">${cfg.titulo}</strong>.<br>
+      Pode perguntar qualquer coisa sobre este tema — respondo na hora. Use as sugestoes abaixo para comecar ou escreva sua duvida diretamente.
+    </div>`;
+  chat.appendChild(intro);
+  chat.scrollTop = chat.scrollHeight;
+
+  // Sugestões
+  const sugs = document.getElementById('curso-sugs');
+  sugs.innerHTML = cfg.sugs.map(s =>
+    `<span class="wex-chip" onclick="usarSugCurso('${s.replace(/'/g,"\\'")}')\" style="font-size:11.5px;cursor:pointer;">${s}</span>`
+  ).join('');
+
+  document.getElementById('curso-input').value = '';
+  openModal('modal-curso-interno');
+}
+
+function fecharCurso() {
+  closeModal('modal-curso-interno');
+  cursoAtual = null;
+  cursoHistorico = [];
+}
+
+function usarSugCurso(texto) {
+  document.getElementById('curso-input').value = texto;
+  enviarCurso();
+}
+
+async function enviarCurso() {
+  const input = document.getElementById('curso-input');
+  const texto = input.value.trim();
+  if (!texto || !cursoAtual) return;
+  input.value = '';
+
+  const chat = document.getElementById('curso-chat');
+  const cfg = CURSOS_CONFIG[cursoAtual];
+  document.getElementById('curso-sugs').innerHTML = '';
+
+  // Mensagem do usuário
+  const userDiv = document.createElement('div');
+  userDiv.style.cssText = 'display:flex;justify-content:flex-end;animation:fadeIn .2s ease;';
+  userDiv.innerHTML = `<div style="background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px 12px 4px 12px;font-size:13px;max-width:85%;line-height:1.5;">${texto.replace(/\n/g,'<br>')}</div>`;
+  chat.appendChild(userDiv);
+  chat.scrollTop = chat.scrollHeight;
+  cursoHistorico.push({ role: 'user', content: texto });
+
+  // Typing
+  const typingDiv = document.createElement('div');
+  typingDiv.id = 'curso-typing';
+  typingDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .2s ease;';
+  typingDiv.innerHTML = `
+    <div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;">
+      <div class="wex-thinking"><span></span><span></span><span></span></div>
+    </div>`;
+  chat.appendChild(typingDiv);
+  chat.scrollTop = chat.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: cfg.prompt },
+          ...cursoHistorico.slice(-8)
+        ],
+        max_tokens: 600,
+        temperature: 0.65
+      })
+    });
+    const data = await res.json();
+    document.getElementById('curso-typing')?.remove();
+    const resposta = data?.choices?.[0]?.message?.content || 'Nao foi possivel carregar o conteudo. Tente novamente.';
+    cursoHistorico.push({ role: 'assistant', content: resposta });
+
+    const botDiv = document.createElement('div');
+    botDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .25s ease;';
+    botDiv.innerHTML = `
+      <div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg>
+      </div>
+      <div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.65;max-width:90%;">${resposta.replace(/\n/g,'<br>')}</div>`;
+    chat.appendChild(botDiv);
+    chat.scrollTop = chat.scrollHeight;
+  } catch(e) {
+    document.getElementById('curso-typing')?.remove();
+    const errDiv = document.createElement('div');
+    errDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;';
+    errDiv.innerHTML = `<div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:12px 14px;border-radius:8px;font-size:12.5px;color:var(--red);">Erro ao conectar. Verifique sua conexao e tente novamente.</div>`;
+    chat.appendChild(errDiv);
+    chat.scrollTop = chat.scrollHeight;
+  }
+}
+
+// ════════════════════════════════════════════════════════════════
+//  CURSOS EV.G — Escola Virtual do Governo Federal
+// ════════════════════════════════════════════════════════════════
+
+const EVG_CURSOS = [
+  {
+    titulo: 'Ferramentas do Google para o Trabalho',
+    desc: 'Gmail, Google Drive, Docs, Sheets e Meet — como usar o pacote Google para ser mais produtivo no dia a dia profissional.',
+    cat: 'Informatica', catCor: 'rgba(16,185,129,.15)', catTxt: 'var(--green)',
+    carga: '15h', link: 'https://www.escolavirtual.gov.br/curso/602',
+    badges: ['Gratuito','Certificado EV.G','Informatica Basica']
+  },
+  {
+    titulo: 'Introducao ao Pacote Office',
+    desc: 'Word, Excel e PowerPoint: fundamentos essenciais para criar documentos, planilhas e apresentacoes de forma profissional.',
+    cat: 'Office', catCor: 'rgba(16,185,129,.15)', catTxt: 'var(--green)',
+    carga: '20h', link: 'https://www.escolavirtual.gov.br/curso/541',
+    badges: ['Gratuito','Certificado EV.G','Informatica Basica']
+  },
+  {
+    titulo: 'Construcao Civil: Fundamentos e Boas Praticas',
+    desc: 'Visao geral do setor, principais processos construtivos, normas tecnicas e tendencias do mercado de construcao civil no Brasil.',
+    cat: 'Construcao', catCor: 'rgba(249,115,22,.15)', catTxt: 'var(--accent)',
+    carga: '30h', link: 'https://www.escolavirtual.gov.br/catalogo',
+    badges: ['Gratuito','Certificado EV.G','Construcao Civil']
+  },
+  {
+    titulo: 'BIM — Introducao aos Fundamentos',
+    desc: 'Building Information Modeling: metodologia que esta transformando a construcao civil. Entenda o conceito, ferramentas e como aplicar no trabalho.',
+    cat: 'Construcao', catCor: 'rgba(249,115,22,.15)', catTxt: 'var(--accent)',
+    carga: '24h', link: 'https://www.escolavirtual.gov.br/curso/464',
+    badges: ['Gratuito','Certificado EV.G','Construcao Civil']
+  },
+  {
+    titulo: 'Seguranca e Saude no Trabalho',
+    desc: 'Prevencao de acidentes, normas regulamentadoras, EPIs e boas praticas de saude no ambiente de trabalho. Essencial para o setor de construcao.',
+    cat: 'Seguranca', catCor: 'rgba(239,68,68,.15)', catTxt: 'var(--red)',
+    carga: '11h', link: 'https://www.escolavirtual.gov.br/curso/309',
+    badges: ['Gratuito','Certificado EV.G','NR Seguranca']
+  },
+  {
+    titulo: 'Etica e Conduta Profissional',
+    desc: 'Principios de etica no ambiente de trabalho, integridade, responsabilidade e como construir uma reputacao profissional solida.',
+    cat: 'Etica', catCor: 'rgba(139,92,246,.15)', catTxt: 'var(--purple)',
+    carga: '15h', link: 'https://www.escolavirtual.gov.br/curso/366',
+    badges: ['Gratuito','Certificado EV.G','Profissional']
+  },
+  {
+    titulo: 'Comunicacao e Relacoes Interpessoais',
+    desc: 'Como se comunicar com clareza e empatia, construir relacionamentos no trabalho, resolver conflitos e desenvolver habilidades interpessoais.',
+    cat: 'Comunicacao', catCor: 'rgba(59,130,246,.15)', catTxt: 'var(--blue)',
+    carga: '20h', link: 'https://www.escolavirtual.gov.br/curso/382',
+    badges: ['Gratuito','Certificado EV.G','Soft Skills']
+  },
+  {
+    titulo: 'Gestao do Tempo e Produtividade',
+    desc: 'Tecnicas comprovadas para organizar a rotina, priorizar tarefas, eliminar desperdicio de tempo e entregar mais resultados.',
+    cat: 'Produtividade', catCor: 'rgba(251,191,36,.15)', catTxt: 'var(--accent2)',
+    carga: '10h', link: 'https://www.escolavirtual.gov.br/curso/391',
+    badges: ['Gratuito','Certificado EV.G','Produtividade']
+  },
+  {
+    titulo: 'Logistica e Cadeia de Suprimentos',
+    desc: 'Fundamentos de logistica aplicados ao setor de construcao: gestao de materiais, controle de estoque, fornecedores e fluxo de suprimentos.',
+    cat: 'Logistica', catCor: 'rgba(249,115,22,.15)', catTxt: 'var(--accent)',
+    carga: '20h', link: 'https://www.escolavirtual.gov.br/curso/357',
+    badges: ['Gratuito','Certificado EV.G','Construcao Civil']
+  },
+  {
+    titulo: 'Inteligencia Artificial — Introducao Pratica',
+    desc: 'O que e IA, como ela funciona, como ja esta no seu cotidiano e como usar ferramentas de IA para trabalhar com mais eficiencia.',
+    cat: 'Tecnologia', catCor: 'rgba(59,130,246,.15)', catTxt: 'var(--blue)',
+    carga: '10h', link: 'https://www.escolavirtual.gov.br/curso/559',
+    badges: ['Gratuito','Certificado EV.G','Tecnologia']
+  },
+  {
+    titulo: 'Lideranca e Trabalho em Equipe',
+    desc: 'Estilos de lideranca, como motivar pessoas, resolver conflitos, delegar tarefas e construir equipes de alto desempenho.',
+    cat: 'Lideranca', catCor: 'rgba(139,92,246,.15)', catTxt: 'var(--purple)',
+    carga: '20h', link: 'https://www.escolavirtual.gov.br/curso/394',
+    badges: ['Gratuito','Certificado EV.G','Lideranca']
+  },
+  {
+    titulo: 'Empreendedorismo e Inovacao',
+    desc: 'Mentalidade empreendedora, como identificar oportunidades, desenvolver ideias e aplicar inovacao no trabalho e na carreira.',
+    cat: 'Negocios', catCor: 'rgba(251,191,36,.15)', catTxt: 'var(--accent2)',
+    carga: '20h', link: 'https://www.escolavirtual.gov.br/curso/383',
+    badges: ['Gratuito','Certificado EV.G','Negocios']
+  }
+];
+
+let evgCursoAtual = null;
+
+function renderEvgGrid() {
+  const grid = document.getElementById('evg-cursos-grid');
+  if (!grid) return;
+  grid.innerHTML = EVG_CURSOS.map((c, i) => `
+    <div class="evg-card" onclick="abrirCursoEVG(${i})">
+      <div class="evg-top">
+        <span class="evg-cat" style="background:${c.catCor};color:${c.catTxt};">${c.cat}</span>
+        <span class="evg-carga">${c.carga}</span>
+      </div>
+      <div class="evg-title">${c.titulo}</div>
+      <div class="evg-desc">${c.desc}</div>
+      <div class="evg-footer">
+        ${c.badges.map(b => `<span class="badge ${b==='Gratuito'?'b-green':'b-gray'}">${b}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function abrirCursoEVG(idx) {
+  const c = EVG_CURSOS[idx];
+  if (!c) return;
+  evgCursoAtual = idx;
+
+  document.getElementById('evg-cat-badge').innerHTML = `<span class="evg-cat" style="background:${c.catCor};color:${c.catTxt};font-size:12px;padding:5px 12px;">${c.cat}</span>`;
+  document.getElementById('evg-modal-title').textContent = c.titulo;
+  document.getElementById('evg-modal-desc').textContent = c.desc;
+  document.getElementById('evg-modal-badges').innerHTML =
+    c.badges.map(b => `<span class="badge ${b==='Gratuito'?'b-green':'b-gray'}" style="font-size:11.5px;padding:4px 10px;">${b} — ${c.carga}</span>`).join('');
+
+  document.getElementById('modal-evg').classList.add('open');
+}
+
+function fecharEVG() {
+  document.getElementById('modal-evg').classList.remove('open');
+  evgCursoAtual = null;
+}
+
+function irParaInscricao() {
+  if (evgCursoAtual === null) return;
+  const url = EVG_CURSOS[evgCursoAtual]?.link || 'https://www.escolavirtual.gov.br/catalogo';
+  window.open(url, '_blank');
+}
+
+// Renderizar grid ao navegar para a pagina
+const _origNav = nav;
+function nav(page) {
+  _origNav(page);
+  if (page === 'treinamentos') {
+    renderEvgGrid();
+  }
+}
+
 </script>
 </body>
 </html>
