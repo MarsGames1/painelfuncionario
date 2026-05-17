@@ -29,8 +29,8 @@
   --glow-orange:0 0 20px rgba(249,115,22,.2);
   --glow-purple:0 0 20px rgba(139,92,246,.2);
 }
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;transition:color .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;}
-html{font-size:14px;}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:14px;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-weight:400;display:flex;min-height:100vh;-webkit-font-smoothing:antialiased;}
 
 /* SIDEBAR */
@@ -39,7 +39,7 @@ aside{width:230px;flex-shrink:0;border-right:1px solid var(--border);display:fle
 .logo-mark{width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#fff;flex-shrink:0;}
 .logo span{color:var(--accent);}
 .nav-section{padding:18px 16px 5px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:600;}
-nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:1px 8px;border-radius:9px;color:var(--muted);text-decoration:none;font-size:13px;transition:all .15s;cursor:pointer;user-select:none;}
+nav a{display:flex;align-items:center;gap:10px;padding:9px 12px;margin:1px 8px;border-radius:9px;color:var(--muted);text-decoration:none;font-size:13px;transition:background .15s,color .15s,transform .15s,border-color .15s;cursor:pointer;user-select:none;}
 nav a:hover{background:var(--surface2);color:var(--text);transform:translateX(2px);}
 nav a.active{background:rgba(249,115,22,.1);color:var(--accent);border:1px solid rgba(249,115,22,.25);box-shadow:inset 3px 0 0 var(--accent);}
 nav a svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;flex-shrink:0;}
@@ -76,7 +76,7 @@ main{flex:1;overflow-y:auto;height:100vh;min-width:0;}
 .topbar-right{display:flex;gap:8px;align-items:center;}
 
 /* BUTTONS */
-.btn{padding:8px 15px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:none;display:inline-flex;align-items:center;gap:6px;line-height:1;}
+.btn{padding:8px 15px;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:background .15s,color .15s,transform .15s,box-shadow .15s,border-color .15s;border:none;display:inline-flex;align-items:center;gap:6px;line-height:1;}
 .btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
 .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border);}
 .btn-ghost:hover{color:var(--text);border-color:var(--border2);background:var(--surface2);}
@@ -786,9 +786,36 @@ textarea.form-input{resize:vertical;min-height:90px;}
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════════════
-     MODAL — CURSO INTERNO (APRENDER COM A WEX)
-══════════════════════════════════════════════════════ -->
+<!-- MODAL — TUTORIAL RECURSOS DE VENDAS -->
+<div class="modal-overlay" id="modal-tutorial" style="align-items:center;justify-content:center;">
+  <div class="modal" style="width:680px;max-width:96vw;padding:0;overflow:hidden;border-radius:18px;">
+    <div style="padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(249,115,22,.06),var(--surface));">
+      <div id="tut-icon" style="width:46px;height:46px;border-radius:12px;background:rgba(249,115,22,.15);display:flex;align-items:center;justify-content:center;flex-shrink:0;"></div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:17px;margin-bottom:2px;" id="tut-title">Tutorial</div>
+        <div style="font-size:12px;color:var(--muted);" id="tut-sub">Conteudo interativo</div>
+      </div>
+      <button onclick="closeModal('modal-tutorial')" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0;">&#x2715;</button>
+    </div>
+
+    <!-- Abas de navegacao -->
+    <div id="tut-tabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface2);overflow-x:auto;"></div>
+
+    <!-- Conteudo estático da aba -->
+    <div id="tut-static" style="padding:20px 24px;max-height:340px;overflow-y:auto;font-size:13.5px;line-height:1.75;color:var(--text);display:none;"></div>
+
+    <!-- Chat interativo da aba -->
+    <div id="tut-chat" style="height:320px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--bg);display:none;"></div>
+
+    <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);">
+      <input id="tut-input" placeholder="Pergunte sobre este tema..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')enviarTutorial()">
+      <button onclick="enviarTutorial()" style="background:var(--accent);border:none;border-radius:10px;padding:10px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Enviar</button>
+    </div>
+    <div style="padding:6px 16px 12px;display:flex;gap:6px;flex-wrap:wrap;" id="tut-sugs"></div>
+  </div>
+</div>
+
+
 <div class="modal-overlay" id="modal-curso-interno" style="align-items:center;justify-content:center;">
   <div class="modal" style="width:640px;max-width:96vw;padding:0;overflow:hidden;border-radius:18px;">
     <div style="padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;">
@@ -2381,7 +2408,507 @@ function irParaInscricao() {
   window.open(url, '_blank');
 }
 
-// renderEvgGrid() chamado diretamente dentro de nav() acima.
+
+// ════════════════════════════════════════════════════════════════
+//  TUTORIAIS — Recursos de Vendas (abas dinamicas)
+// ════════════════════════════════════════════════════════════════
+
+const TUTORIAIS = {
+  apresentacao: {
+    titulo: 'Apresentacao Comercial',
+    sub: 'Roteiro completo para apresentar o WexioLead',
+    icorCor: 'rgba(249,115,22,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><rect x="3" y="3" width="18" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>',
+    abas: [
+      {
+        label: 'Introducao', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Como Apresentar o WexioLead</h3>
+<p>O WexioLead e uma plataforma de leads B2B focada no mercado de construcao civil. Sua missao e simples: conectar fornecedores e prestadores de servico com as empresas certas, no momento certo.</p>
+<br><p><strong>Estrutura basica da apresentacao (10-15 min):</strong></p>
+<ol style="padding-left:20px;margin-top:8px;display:flex;flex-direction:column;gap:8px;">
+  <li><strong style="color:var(--accent);">1. Quebra-gelo (2 min)</strong> — Pergunte sobre o maior desafio de prospectar clientes hoje</li>
+  <li><strong style="color:var(--accent);">2. Problema (3 min)</strong> — "Prospectar manualmente custa caro e nao escala"</li>
+  <li><strong style="color:var(--accent);">3. Solucao (4 min)</strong> — Mostre o painel, o score de leads e os filtros</li>
+  <li><strong style="color:var(--accent);">4. Prova (3 min)</strong> — Cases de clientes que aumentaram vendas</li>
+  <li><strong style="color:var(--accent);">5. Proposta (3 min)</strong> — Indique o plano ideal para o perfil do cliente</li>
+</ol>
+<br><p style="color:var(--muted);font-size:12.5px;">Use a aba "Objecoes Comuns" para se preparar para as perguntas dificeis.</p>`
+      },
+      {
+        label: 'Script Completo', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Script de Apresentacao — Passo a Passo</h3>
+<div style="display:flex;flex-direction:column;gap:16px;">
+  <div style="background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">Abertura</div>
+    <p style="color:var(--muted);font-style:italic;">"Boa tarde, [nome]! Voce tem uns 15 minutos? Quero te mostrar como empresas como a sua estao encontrando clientes novos sem precisar ficar pedindo indicacao."</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;">Problema</div>
+    <p style="color:var(--muted);font-style:italic;">"A maioria dos fornecedores da construcao civil depende de indicacao ou de procurar obra em obra. Isso e lento, imprevisivel e nao escala. O que acontece quando a indicacao seca?"</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;">Solucao</div>
+    <p style="color:var(--muted);font-style:italic;">"O WexioLead tem uma base de [X mil] empresas da construcao civil com dados atualizados: telefone, e-mail, socio, faturamento estimado e score de qualificacao. Em vez de prospectar no escuro, voce foca em quem realmente tem potencial."</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Fechamento</div>
+    <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97/mes e da acesso a 300 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos no primeiro mes. Um contrato seu vale quanto? Vale testar por um mes?"</p>
+  </div>
+</div>`
+      },
+      {
+        label: 'Objecoes Comuns', tipo: 'chat',
+        sugs: ['Como responder "e caro"?', 'O cliente quer pensar, e agora?', 'Ja tenho clientes por indicacao', 'Como provar que funciona?'],
+        prompt: 'Voce e um especialista em vendas do WexioLead, plataforma de leads B2B para construcao civil. Ajude o vendedor a responder objecoes da apresentacao comercial. Planos: Starter R$97 (300 leads), Pro R$197 (1000 leads), Agency R$397 (ilimitado). De respostas diretas, praticas e scripts prontos para usar. Maximo 3 paragrafos.'
+      },
+      {
+        label: 'Perguntar a IA', tipo: 'chat',
+        sugs: ['Como personalizar a apresentacao?', 'O que mostrar primeiro no demo?', 'Como fechar na primeira reuniao?'],
+        prompt: 'Voce e um coach especialista em apresentacoes comerciais de software SaaS para construcao civil. Ajude o vendedor a melhorar sua apresentacao do WexioLead. De dicas praticas, scripts e tecnicas. Maximo 3 paragrafos.'
+      }
+    ]
+  },
+
+  precos: {
+    titulo: 'Tabela de Precos',
+    sub: 'Planos Free, Starter, Pro e Agency',
+    icorCor: 'rgba(59,130,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+    abas: [
+      {
+        label: 'Planos e Precos', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:16px;color:var(--blue);">Tabela de Precos Atual</h3>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;">Free</div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);">R$ 0<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
+      <li>10 leads por mes</li><li>Filtros basicos</li><li>Sem exportacao</li>
+    </ul>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(249,115,22,.3);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">Starter</div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent);">R$ 97<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
+      <li>300 leads por mes</li><li>Exportacao CSV</li><li>Suporte por e-mail</li>
+    </ul>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.3);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Pro — MAIS VENDIDO</div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--purple);">R$ 197<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
+      <li>1.000 leads por mes</li><li>CRM integrado</li><li>Alertas e filtros avancados</li>
+    </ul>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(251,191,36,.3);">
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent2);margin-bottom:6px;">Agency</div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent2);">R$ 397<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
+      <li>Leads ilimitados</li><li>API de integracao</li><li>SLA e suporte dedicado</li>
+    </ul>
+  </div>
+</div>`
+      },
+      {
+        label: 'Como Recomendar', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--blue);">Qual Plano Indicar para Cada Perfil?</h3>
+<div style="display:flex;flex-direction:column;gap:12px;">
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">Autonomo / Prestador individual</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Comece com <strong style="color:var(--accent);">Starter R$97</strong>. 300 leads sao mais que suficientes para validar o negocio e comecar a prospectar.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">Pequena empresa com equipe comercial</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Indique o <strong style="color:var(--purple);">Pro R$197</strong>. O CRM integrado e os 1.000 leads justificam facilmente o investimento com 1 ou 2 fechamentos.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">Agencia de vendas / Grande equipe</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">O <strong style="color:var(--accent2);">Agency R$397</strong> paga o custo com o primeiro cliente novo que fechar. API para integracao com CRM proprio.</p>
+  </div>
+</div>`
+      },
+      {
+        label: 'Tirar Duvidas com IA', tipo: 'chat',
+        sugs: ['Como justificar o preco Pro?', 'Quando oferecer upgrade?', 'Como comparar com concorrente mais barato?'],
+        prompt: 'Voce e um especialista em vendas do WexioLead. Ajude o vendedor a defender e recomendar os planos: Free (gratis, 10 leads), Starter (R$97, 300 leads), Pro (R$197, 1000 leads + CRM), Agency (R$397, ilimitado + API). De argumentos de valor, ROI e tecnicas de upsell. Maximo 3 paragrafos.'
+      }
+    ]
+  },
+
+  cases: {
+    titulo: 'Cases de Sucesso',
+    sub: 'Historias reais de clientes WexioLead',
+    icorCor: 'rgba(16,185,129,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89L17 22l-5-3-5 3 1.523-9.11"/></svg>',
+    abas: [
+      {
+        label: 'Cases', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:16px;color:var(--green);">Casos de Sucesso</h3>
+<div style="display:flex;flex-direction:column;gap:14px;">
+  <div style="background:var(--surface2);border-radius:10px;padding:16px;border:1px solid rgba(16,185,129,.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:14px;">Fornecedor de Materiais — SP</strong>
+      <span class="badge b-green">Plano Pro</span>
+    </div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6;">"Em 3 semanas de uso do WexioLead, encontrei 8 construtoras que eu nao conhecia na minha regiao. Fechei 2 contratos no primeiro mes. O plano se pagou 10 vezes."</p>
+    <div style="font-size:11px;color:var(--dim);margin-top:8px;">Resultado: +R$4.200 em contratos novos no mes 1</div>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:16px;border:1px solid rgba(16,185,129,.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:14px;">Prestador de Servicos Eletricos — RJ</strong>
+      <span class="badge b-orange">Plano Starter</span>
+    </div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6;">"Antes eu ficava pedindo indicacao. Agora uso o filtro de construtoras com obras em andamento e ja entro em contato direto com o socio. Economizei horas de pesquisa."</p>
+    <div style="font-size:11px;color:var(--dim);margin-top:8px;">Resultado: Pipeline de 15 leads qualificados na primeira semana</div>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:16px;border:1px solid rgba(16,185,129,.2);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+      <strong style="font-size:14px;">Construtora Pequena — MG</strong>
+      <span class="badge b-purple">Plano Agency</span>
+    </div>
+    <p style="color:var(--muted);font-size:13px;line-height:1.6;">"Usamos o WexioLead para encontrar subempreiteiros e fornecedores locais. A base de dados e muito mais completa do que qualquer lista que tinhamos antes."</p>
+    <div style="font-size:11px;color:var(--dim);margin-top:8px;">Resultado: Reducao de 40% no tempo de qualificacao de fornecedores</div>
+  </div>
+</div>`
+      },
+      {
+        label: 'Como Usar Cases', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--green);">Como Usar Cases na Venda</h3>
+<p>Cases de sucesso sao a prova social mais poderosa em vendas B2B. Veja como usar de forma estrategica:</p>
+<div style="display:flex;flex-direction:column;gap:12px;margin-top:14px;">
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;">
+    <strong style="color:var(--green);">Momento certo:</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Use o case depois de apresentar a solucao, antes do fechamento. O cliente precisa primeiro entender o que e, depois acreditar que funciona.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;">
+    <strong style="color:var(--green);">Escolha o case certo:</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Use sempre o case mais parecido com o perfil do cliente. Fornecedor fala com fornecedor. Prestador fala com prestador. A identificacao aumenta a credibilidade.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;">
+    <strong style="color:var(--green);">Pergunta poderosa:</strong>
+    <p style="color:var(--muted);font-style:italic;font-size:12.5px;margin-top:4px;">"Esse fornecedor de SP tinha o mesmo desafio que voce. Ele assinou o Starter e fechou 2 contratos no mes 1. O que voce acha que conseguiria com 300 leads qualificados?"</p>
+  </div>
+</div>`
+      },
+      {
+        label: 'Criar Case com IA', tipo: 'chat',
+        sugs: ['Crie um case para fornecedor de aco', 'Case para empresa de impermeabilizacao', 'Como apresentar ROI de forma convincente?'],
+        prompt: 'Voce e um especialista em marketing de conteudo e vendas B2B. Ajude o vendedor a criar e adaptar cases de sucesso para o WexioLead. Crie historias credíveis, com numeros e resultados concretos, para diferentes perfis do mercado de construcao civil. Maximo 3 paragrafos por caso.'
+      }
+    ]
+  },
+
+  scripts: {
+    titulo: 'Scripts de Abordagem',
+    sub: 'Mensagens prontas para WhatsApp e LinkedIn',
+    icorCor: 'rgba(139,92,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    abas: [
+      {
+        label: 'WhatsApp', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--purple);">Scripts de WhatsApp</h3>
+<div style="display:flex;flex-direction:column;gap:14px;">
+  <div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:8px;">Primeiro Contato — Direto</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.2);font-size:13px;color:var(--muted);line-height:1.7;">
+      Ola [nome], tudo bem?<br><br>
+      Vi que a [empresa] atua com [segmento] em [cidade]. Trabalho com uma plataforma que ajuda empresas como a sua a encontrar clientes novos na construcao civil sem depender de indicacao.<br><br>
+      Tem 10 minutos essa semana para eu te mostrar como funciona?
+    </div>
+  </div>
+  <div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:8px;">Primeiro Contato — Com Gancho</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.2);font-size:13px;color:var(--muted);line-height:1.7;">
+      Ola [nome]! Encontrei a [empresa] numa base de construtoras da regiao.<br><br>
+      Muitas empresas do seu segmento estao usando dados de mercado para prospectar de forma mais rapida. Ja ouviu falar em plataforma de leads B2B para construcao civil?<br><br>
+      Posso te mostrar como em 15 minutos — sem compromisso.
+    </div>
+  </div>
+  <div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:8px;">Follow-up Apos Demonstracao</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.2);font-size:13px;color:var(--muted);line-height:1.7;">
+      Ola [nome], boa tarde!<br><br>
+      So passando para ver se ficou alguma duvida sobre o WexioLead depois da nossa conversa. Tenho reservado o plano Starter por mais 48h com o preco de R$97.<br><br>
+      O que voce decidiu?
+    </div>
+  </div>
+</div>`
+      },
+      {
+        label: 'LinkedIn', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--purple);">Scripts de LinkedIn</h3>
+<div style="display:flex;flex-direction:column;gap:14px;">
+  <div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:8px;">Conexao — Mensagem de Solicitacao</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.2);font-size:13px;color:var(--muted);line-height:1.7;">
+      Ola [nome]! Vi que voce atua no mercado de construcao civil. Trabalho com uma plataforma de prospeccao B2B focada nesse setor e acredito que posso agregar valor para [empresa]. Posso compartilhar?
+    </div>
+  </div>
+  <div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:8px;">Apos Aceitar Conexao</div>
+    <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.2);font-size:13px;color:var(--muted);line-height:1.7;">
+      [nome], obrigado pela conexao!<br><br>
+      Trabalho com o WexioLead — base de dados B2B para o mercado de construcao civil. Ajudamos fornecedores e prestadores a encontrar clientes novos usando filtros de CNAE, regiao e score de qualificacao.<br><br>
+      Voce toparia ver uma demonstracao rapida de como isso funciona na pratica?
+    </div>
+  </div>
+</div>`
+      },
+      {
+        label: 'Criar Script com IA', tipo: 'chat',
+        sugs: ['Crie script para fornecedor de esquadrias', 'Script para empresa de pintura predial', 'Como personalizar a abordagem por segmento?'],
+        prompt: 'Voce e um copywriter especialista em vendas B2B e prospeccao pelo WhatsApp e LinkedIn. Crie scripts de abordagem personalizados para o WexioLead — plataforma de leads para construcao civil. Scripts devem ser diretos, humanizados e gerar resposta. Maximo 3 paragrafos, inclua o script pronto.'
+      }
+    ]
+  },
+
+  mercado: {
+    titulo: 'Dados do Mercado',
+    sub: 'Estatísticas da construcao civil brasileira',
+    icorCor: 'rgba(251,191,36,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    abas: [
+      {
+        label: 'Numeros do Setor', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--accent2);">Construcao Civil em Numeros</h3>
+<div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px;">
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--accent);">R$ 600 bi</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;">PIB da construcao civil por ano</div>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--blue);">14%</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;">Participacao no PIB nacional</div>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--green);">2,6 mi</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;">Empresas ativas no setor</div>
+  </div>
+  <div style="background:var(--surface2);border-radius:10px;padding:14px;text-align:center;">
+    <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:var(--purple);">8,9 mi</div>
+    <div style="font-size:12px;color:var(--muted);margin-top:4px;">Empregos gerados</div>
+  </div>
+</div>
+<p style="color:var(--muted);font-size:12.5px;line-height:1.6;">Fonte: CBIC — Camara Brasileira da Industria da Construcao. Dados 2024.</p>
+<br><p style="font-size:13px;line-height:1.7;"><strong style="color:var(--text);">Por que isso importa para a venda?</strong> O mercado de construcao civil e gigante e fragmentado — sao milhoes de empresas que precisam de fornecedores e prestadores. Esse e exatamente o problema que o WexioLead resolve: ajudar a encontrar quem compra dentro desse universo imenso.</p>`
+      },
+      {
+        label: 'Segmentos Chave', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--accent2);">Segmentos Prioritarios</h3>
+<div style="display:flex;flex-direction:column;gap:10px;">
+  ${[
+    ['Construtoras de edificios (CNAE 41)', 'accent', 'Maior volume de contratos. Decisor e o engenheiro ou diretor de suprimentos.'],
+    ['Obras de infraestrutura (CNAE 42)', 'blue', 'Rodovias, saneamento, energia. Contratos maiores e mais longos.'],
+    ['Servicos especializados (CNAE 43)', 'green', 'Instalacoes eletricas, hidraulicas, revestimentos. Alta demanda por fornecedores locais.'],
+    ['Incorporadoras', 'purple', 'Constroem para vender. Compradores regulares de insumos e servicos.'],
+    ['Fornecedores de materiais', 'accent2', 'Tambem sao seus potenciais clientes — precisam de leads de construtoras para vender mais.']
+  ].map(([titulo, cor, desc]) => `
+    <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border-left:3px solid var(--${cor});">
+      <strong style="color:var(--text);font-size:13px;">${titulo}</strong>
+      <p style="color:var(--muted);font-size:12.5px;margin-top:3px;">${desc}</p>
+    </div>`).join('')}
+</div>`
+      },
+      {
+        label: 'Consultar IA', tipo: 'chat',
+        sugs: ['Qual o tamanho do mercado de fornecedores?', 'Quais segmentos crescem mais em 2025?', 'Como usar dados de mercado para vender?'],
+        prompt: 'Voce e um analista de mercado especialista no setor de construcao civil brasileiro. Responda perguntas sobre dados, tendencias, segmentos, CNAEs e oportunidades do mercado. Use dados reais e recentes quando possivel. Ajude o vendedor a usar informacoes de mercado como argumento de venda do WexioLead. Maximo 3 paragrafos.'
+      }
+    ]
+  },
+
+  email_prosp: {
+    titulo: 'E-mail de Prospeccao',
+    sub: 'Modelos prontos para envio',
+    icorCor: 'rgba(249,115,22,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    abas: [
+      {
+        label: 'E-mail Frio', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--accent);">E-mail de Prospeccao — Modelo Frio</h3>
+<div style="background:var(--surface2);border-radius:10px;padding:18px;border:1px solid rgba(249,115,22,.2);font-size:13px;line-height:1.8;">
+  <div style="margin-bottom:10px;"><strong style="color:var(--muted);font-size:11px;text-transform:uppercase;">Assunto:</strong><br>
+  <span style="color:var(--text);">Como [empresa] pode encontrar mais clientes em [cidade/estado]</span></div>
+  <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+  <p style="color:var(--muted);">Ola, [nome]!</p><br>
+  <p style="color:var(--muted);">Encontrei a <strong style="color:var(--text);">[empresa]</strong> pesquisando fornecedores de [segmento] na regiao de [cidade].</p><br>
+  <p style="color:var(--muted);">Trabalho com o <strong style="color:var(--accent);">WexioLead</strong> — uma plataforma que conecta fornecedores e prestadores de servico com construtoras e empreiteiras que estao comprando agora.</p><br>
+  <p style="color:var(--muted);">Em vez de depender de indicacao, voce acessa uma base de [X mil] empresas com dados de contato, CNPJ, socio e score de qualificacao — e entra em contato direto.</p><br>
+  <p style="color:var(--muted);">Podemos conversar 15 minutos essa semana? Vou mostrar leads da sua regiao em tempo real.</p><br>
+  <p style="color:var(--muted);">Att,<br><strong style="color:var(--text);">[seu nome]</strong></p>
+</div>`
+      },
+      {
+        label: 'E-mail de Follow-up', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:14px;color:var(--accent);">E-mail de Follow-up — Apos Sem Resposta</h3>
+<div style="background:var(--surface2);border-radius:10px;padding:18px;border:1px solid rgba(249,115,22,.2);font-size:13px;line-height:1.8;">
+  <div style="margin-bottom:10px;"><strong style="color:var(--muted);font-size:11px;text-transform:uppercase;">Assunto:</strong><br>
+  <span style="color:var(--text);">Re: Como [empresa] pode encontrar mais clientes em [cidade]</span></div>
+  <hr style="border:none;border-top:1px solid var(--border);margin:12px 0;">
+  <p style="color:var(--muted);">Ola, [nome]!</p><br>
+  <p style="color:var(--muted);">Sei que a caixa de entrada lotada — mando esse e-mail rapido so para perguntar: faz sentido conversar sobre prospeccao para [empresa]?</p><br>
+  <p style="color:var(--muted);">Se nao for o momento certo, so me fala — sem problema. Se quiser ver como o WexioLead funciona, tenho um horario disponivel [dia] as [hora].</p><br>
+  <p style="color:var(--muted);">Att,<br><strong style="color:var(--text);">[seu nome]</strong></p>
+</div>`
+      },
+      {
+        label: 'Criar E-mail com IA', tipo: 'chat',
+        sugs: ['Crie e-mail para construtora de SP', 'E-mail para empresa de instalacoes eletricas', 'Como personalizar o assunto do e-mail?'],
+        prompt: 'Voce e um copywriter especialista em cold email e prospeccao B2B. Crie e-mails de prospeccao personalizados para o WexioLead — plataforma de leads para construcao civil. E-mails devem ter assunto que gera abertura, corpo curto e claro, e CTA especifico. Use linguagem profissional mas acessivel. Maximo 3 paragrafos.'
+      }
+    ]
+  }
+};
+
+let tutorialAtual = null;
+let tutorialAbaAtual = 0;
+let tutorialHistorico = [];
+
+function abrirTutorial(id) {
+  const cfg = TUTORIAIS[id];
+  if (!cfg) return;
+  tutorialAtual = id;
+  tutorialAbaAtual = 0;
+  tutorialHistorico = [];
+
+  // Icone e titulo
+  document.getElementById('tut-icon').innerHTML = cfg.icon;
+  document.getElementById('tut-icon').style.background = cfg.icorCor;
+  document.getElementById('tut-title').textContent = cfg.titulo;
+  document.getElementById('tut-sub').textContent = cfg.sub;
+
+  // Abas
+  const tabsEl = document.getElementById('tut-tabs');
+  tabsEl.innerHTML = cfg.abas.map((a, i) =>
+    '<button onclick="mudarAba(' + i + ')" id="tut-tab-' + i + '" style="padding:11px 18px;background:none;border:none;cursor:pointer;font-family:\'DM Sans\',sans-serif;font-size:13px;font-weight:500;color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:color .15s,border-color .15s;">' + a.label + '</button>'
+  ).join('');
+
+  mudarAba(0);
+  openModal('modal-tutorial');
+}
+
+function mudarAba(idx) {
+  const cfg = TUTORIAIS[tutorialAtual];
+  if (!cfg) return;
+  tutorialAbaAtual = idx;
+  tutorialHistorico = [];
+
+  // Estilo das abas
+  cfg.abas.forEach((_, i) => {
+    const t = document.getElementById('tut-tab-' + i);
+    if (!t) return;
+    if (i === idx) {
+      t.style.color = 'var(--accent)';
+      t.style.borderBottomColor = 'var(--accent)';
+      t.style.background = 'rgba(249,115,22,.06)';
+    } else {
+      t.style.color = 'var(--muted)';
+      t.style.borderBottomColor = 'transparent';
+      t.style.background = 'none';
+    }
+  });
+
+  const aba = cfg.abas[idx];
+  const staticEl = document.getElementById('tut-static');
+  const chatEl = document.getElementById('tut-chat');
+  const inputEl = document.getElementById('tut-input');
+  const sugsEl = document.getElementById('tut-sugs');
+
+  if (aba.tipo === 'estatico') {
+    staticEl.style.display = 'block';
+    chatEl.style.display = 'none';
+    staticEl.innerHTML = aba.conteudo;
+    inputEl.placeholder = 'Pergunte sobre este conteudo...';
+    sugsEl.innerHTML = '';
+    // Input ainda funciona para perguntas sobre o conteudo estatico
+    tutorialHistorico = [{ role: 'user', content: 'Estou lendo sobre: ' + aba.label }];
+  } else {
+    staticEl.style.display = 'none';
+    chatEl.style.display = 'flex';
+    chatEl.innerHTML = '';
+    // Mensagem de abertura do chat
+    const intro = document.createElement('div');
+    intro.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .3s ease;';
+    intro.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:11px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%;">Ola! Use as sugestoes abaixo ou escreva sua duvida sobre <strong style="color:var(--accent);">' + aba.label + '</strong>.</div>';
+    chatEl.appendChild(intro);
+    inputEl.placeholder = 'Pergunte sobre ' + aba.label.toLowerCase() + '...';
+    sugsEl.innerHTML = (aba.sugs || []).map(s =>
+      '<span class="wex-chip" onclick="usarSugTutorial(\'' + s.replace(/'/g, "\\'") + '\')" style="font-size:11.5px;cursor:pointer;">' + s + '</span>'
+    ).join('');
+  }
+}
+
+function usarSugTutorial(texto) {
+  document.getElementById('tut-input').value = texto;
+  enviarTutorial();
+}
+
+async function enviarTutorial() {
+  const input = document.getElementById('tut-input');
+  const texto = input.value.trim();
+  if (!texto || !tutorialAtual) return;
+  input.value = '';
+
+  const cfg = TUTORIAIS[tutorialAtual];
+  const aba = cfg.abas[tutorialAbaAtual];
+  const staticEl = document.getElementById('tut-static');
+  const chatEl = document.getElementById('tut-chat');
+  document.getElementById('tut-sugs').innerHTML = '';
+
+  // Garante que o chat esta visível para a resposta
+  staticEl.style.display = 'none';
+  chatEl.style.display = 'flex';
+
+  // Mensagem do usuario
+  const userDiv = document.createElement('div');
+  userDiv.style.cssText = 'display:flex;justify-content:flex-end;animation:fadeIn .2s ease;';
+  userDiv.innerHTML = '<div style="background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px 12px 4px 12px;font-size:13px;max-width:85%;line-height:1.5;">' + texto.replace(/\n/g,'<br>') + '</div>';
+  chatEl.appendChild(userDiv);
+  chatEl.scrollTop = chatEl.scrollHeight;
+  tutorialHistorico.push({ role: 'user', content: texto });
+
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.id = 'tut-typing';
+  typingDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .2s ease;';
+  typingDiv.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;"><div class="wex-thinking"><span></span><span></span><span></span></div></div>';
+  chatEl.appendChild(typingDiv);
+  chatEl.scrollTop = chatEl.scrollHeight;
+
+  try {
+    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+      body: JSON.stringify({
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: aba.prompt || cfg.abas.find(a => a.tipo === 'chat')?.prompt || 'Voce e um especialista em vendas do WexioLead. Responda de forma direta e pratica. Maximo 3 paragrafos.' },
+          ...tutorialHistorico.slice(-8)
+        ],
+        max_tokens: 600,
+        temperature: 0.65
+      })
+    });
+    const data = await res.json();
+    document.getElementById('tut-typing')?.remove();
+    const resposta = data?.choices?.[0]?.message?.content || 'Nao foi possivel carregar a resposta. Tente novamente.';
+    tutorialHistorico.push({ role: 'assistant', content: resposta });
+
+    const botDiv = document.createElement('div');
+    botDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .25s ease;';
+    botDiv.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.65;max-width:90%;">' + resposta.replace(/\n/g,'<br>') + '</div>';
+    chatEl.appendChild(botDiv);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  } catch(e) {
+    document.getElementById('tut-typing')?.remove();
+    const errDiv = document.createElement('div');
+    errDiv.innerHTML = '<div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:12px 14px;border-radius:8px;font-size:12.5px;color:var(--red);">Erro ao conectar. Verifique sua conexao e tente novamente.</div>';
+    chatEl.appendChild(errDiv);
+    chatEl.scrollTop = chatEl.scrollHeight;
+  }
+}
+
+
 
 </script>
 </body>
