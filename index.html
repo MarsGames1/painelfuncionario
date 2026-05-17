@@ -515,91 +515,433 @@ textarea.form-input{resize:vertical;min-height:90px;}
 </div>
 
 <!--  MATERIAIS  -->
+<!-- ══════════════════════════════════════════════════════
+     MATERIAIS
+══════════════════════════════════════════════════════ -->
 <div class="page" id="page-materiais">
   <div class="topbar">
-    <div><div class="page-title">Materiais</div><div class="page-sub">Recursos de vendas disponíveis</div></div>
+    <div>
+      <div class="page-title">Materiais de Apoio</div>
+      <div class="page-sub">Recursos de vendas, scripts e ferramentas para o seu dia a dia</div>
+    </div>
   </div>
-  <div id="materiais-grid" class="grid-3">
-    <div class="mat-card">
-      <div class="mat-icon" style="background:rgba(249,115,22,.15);"></div>
+
+  <!-- ── Recursos de Vendas ── -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-head">
       <div>
-        <div style="font-weight:600;font-size:13px;">Apresentação Comercial</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Slides para apresentar o wexiolead</div>
+        <div class="card-title">📁 Recursos de Vendas</div>
+        <div class="card-sub">Materiais prontos para usar com seus clientes</div>
       </div>
     </div>
-    <div class="mat-card">
-      <div class="mat-icon" style="background:rgba(59,130,246,.15);"></div>
-      <div>
-        <div style="font-weight:600;font-size:13px;">Tabela de Preços</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Planos Free, Starter, Pro e Agency</div>
+    <div class="card-body">
+      <div class="grid-3" style="gap:12px;">
+        <div class="mat-card" onclick="openWexWithMsg('Me dê um roteiro completo de apresentação comercial do wexiolead para uma construtora')">
+          <div class="mat-icon" style="background:rgba(249,115,22,.15);font-size:20px;">📊</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Apresentação Comercial</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Roteiro completo para apresentar o wexiolead</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="openWexWithMsg('Me mostre a tabela de preços detalhada dos planos Free, Starter, Pro e Agency do wexiolead com os benefícios de cada um')">
+          <div class="mat-icon" style="background:rgba(59,130,246,.15);font-size:20px;">💰</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Tabela de Preços</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Planos Free, Starter, Pro e Agency</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="openWexWithMsg('Crie um case de sucesso fictício realista de um fornecedor de materiais de construção que usou o wexiolead e aumentou suas vendas')">
+          <div class="mat-icon" style="background:rgba(16,185,129,.15);font-size:20px;">🏆</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Cases de Sucesso</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Histórias reais de clientes</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="openWexWithMsg('Me dê scripts de abordagem para WhatsApp e LinkedIn para vender o wexiolead para construtoras e fornecedores de construção civil')">
+          <div class="mat-icon" style="background:rgba(139,92,246,.15);font-size:20px;">💬</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Scripts de Abordagem</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Mensagens prontas para WhatsApp e LinkedIn</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="openWexWithMsg('Me dê dados e estatísticas do mercado de construção civil brasileiro que posso usar para convencer um cliente a assinar o wexiolead')">
+          <div class="mat-icon" style="background:rgba(251,191,36,.15);font-size:20px;">🏗️</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Dados do Mercado</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Estatísticas da construção civil BR</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="openWexWithMsg('Crie um e-mail de prospecção personalizado e profissional para enviar para uma construtora de médio porte em São Paulo')">
+          <div class="mat-icon" style="background:rgba(249,115,22,.15);font-size:20px;">✨</div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Gerar com Wex</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">E-mail de prospecção personalizado com IA</div>
+          </div>
+        </div>
       </div>
     </div>
-    <div class="mat-card">
-      <div class="mat-icon" style="background:rgba(16,185,129,.15);"></div>
+  </div>
+
+  <!-- ── Cursos Práticos Internos ── -->
+  <div class="card">
+    <div class="card-head">
       <div>
-        <div style="font-weight:600;font-size:13px;">Cases de Sucesso</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Histórias reais de clientes</div>
+        <div class="card-title">🎓 Cursos Práticos — Estude e Aprenda na Hora</div>
+        <div class="card-sub">Conteúdo interativo com a Wex. Clique em qualquer módulo e comece agora.</div>
       </div>
+      <span class="badge b-orange">Novo</span>
     </div>
-    <div class="mat-card">
-      <div class="mat-icon" style="background:rgba(139,92,246,.15);"></div>
-      <div>
-        <div style="font-weight:600;font-size:13px;">Scripts de Abordagem</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Textos para WhatsApp e LinkedIn</div>
+    <div class="card-body" style="padding:16px;">
+
+      <!-- Vendas -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <span style="width:18px;height:2px;background:var(--accent);display:inline-block;border-radius:2px;"></span> Técnicas de Vendas
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">
+
+          <div class="curso-interno-card" onclick="iniciarCurso('vendas_b2b')">
+            <div class="ci-icon" style="background:rgba(249,115,22,.15);">🎯</div>
+            <div class="ci-body">
+              <div class="ci-title">Vendas Consultivas B2B</div>
+              <div class="ci-sub">Como identificar a dor do cliente e vender a solução certa</div>
+              <div class="ci-meta"><span class="badge b-orange">Vendas</span> <span style="font-size:11px;color:var(--dim);">~15 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('objecoes')">
+            <div class="ci-icon" style="background:rgba(139,92,246,.15);">🛡️</div>
+            <div class="ci-body">
+              <div class="ci-title">Contornando Objeções</div>
+              <div class="ci-sub">As 10 objeções mais comuns e como responder com confiança</div>
+              <div class="ci-meta"><span class="badge b-purple">Comunicação</span> <span style="font-size:11px;color:var(--dim);">~20 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('followup')">
+            <div class="ci-icon" style="background:rgba(59,130,246,.15);">🔁</div>
+            <div class="ci-body">
+              <div class="ci-title">Follow-up que Fecha</div>
+              <div class="ci-sub">Como fazer acompanhamento sem parecer inconveniente</div>
+              <div class="ci-meta"><span class="badge b-blue">Estratégia</span> <span style="font-size:11px;color:var(--dim);">~12 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('leads_correto')">
+            <div class="ci-icon" style="background:rgba(16,185,129,.15);">🗂️</div>
+            <div class="ci-body">
+              <div class="ci-title">Como Usar Leads Corretamente</div>
+              <div class="ci-sub">Do score ao primeiro contato — o passo a passo do lead ideal</div>
+              <div class="ci-meta"><span class="badge b-green">Leads</span> <span style="font-size:11px;color:var(--dim);">~18 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('negociacao')">
+            <div class="ci-icon" style="background:rgba(251,191,36,.15);">🤝</div>
+            <div class="ci-body">
+              <div class="ci-title">Negociação e Fechamento</div>
+              <div class="ci-sub">Técnicas para chegar ao "sim" sem dar desconto desnecessário</div>
+              <div class="ci-meta"><span class="badge b-yellow">Negociação</span> <span style="font-size:11px;color:var(--dim);">~25 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('construcao_civil')">
+            <div class="ci-icon" style="background:rgba(249,115,22,.15);">🏗️</div>
+            <div class="ci-body">
+              <div class="ci-title">Mercado de Construção Civil</div>
+              <div class="ci-sub">CNAEs, segmentos, fornecedores, empreiteiros e construtoras</div>
+              <div class="ci-meta"><span class="badge b-orange">Setor</span> <span style="font-size:11px;color:var(--dim);">~20 min</span></div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
-    <div class="mat-card">
-      <div class="mat-icon" style="background:rgba(251,191,36,.15);"></div>
-      <div>
-        <div style="font-weight:600;font-size:13px;">Sobre o Mercado</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">Dados da construção civil BR</div>
+
+      <!-- Profissional -->
+      <div style="margin-bottom:20px;">
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--purple);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <span style="width:18px;height:2px;background:var(--purple);display:inline-block;border-radius:2px;"></span> Desenvolvimento Profissional
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">
+
+          <div class="curso-interno-card" onclick="iniciarCurso('etica')">
+            <div class="ci-icon" style="background:rgba(139,92,246,.15);">⚖️</div>
+            <div class="ci-body">
+              <div class="ci-title">Ética no Trabalho</div>
+              <div class="ci-sub">Conduta profissional, respeito e integridade no dia a dia</div>
+              <div class="ci-meta"><span class="badge b-purple">Ética</span> <span style="font-size:11px;color:var(--dim);">~15 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('comunicacao')">
+            <div class="ci-icon" style="background:rgba(59,130,246,.15);">🗣️</div>
+            <div class="ci-body">
+              <div class="ci-title">Comunicação Profissional</div>
+              <div class="ci-sub">Como escrever e falar bem no ambiente de trabalho e com clientes</div>
+              <div class="ci-meta"><span class="badge b-blue">Comunicação</span> <span style="font-size:11px;color:var(--dim);">~18 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('produtividade')">
+            <div class="ci-icon" style="background:rgba(16,185,129,.15);">⏱️</div>
+            <div class="ci-body">
+              <div class="ci-title">Produtividade e Organização</div>
+              <div class="ci-sub">Gestão do tempo, prioridades e rotina de alta performance</div>
+              <div class="ci-meta"><span class="badge b-green">Produtividade</span> <span style="font-size:11px;color:var(--dim);">~20 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('atendimento')">
+            <div class="ci-icon" style="background:rgba(251,191,36,.15);">⭐</div>
+            <div class="ci-body">
+              <div class="ci-title">Atendimento ao Cliente</div>
+              <div class="ci-sub">Encantamento, escuta ativa e resolução de conflitos</div>
+              <div class="ci-meta"><span class="badge b-yellow">Atendimento</span> <span style="font-size:11px;color:var(--dim);">~15 min</span></div>
+            </div>
+          </div>
+
+        </div>
       </div>
-    </div>
-    <div class="mat-card" onclick="openWexWithMsg('Criar e-mail de prospecção para construtora')">
-      <div class="mat-icon" style="background:rgba(249,115,22,.15);"></div>
+
+      <!-- Informática -->
       <div>
-        <div style="font-weight:600;font-size:13px;">Gerar com Wex</div>
-        <div style="font-size:11px;color:var(--muted);margin-top:2px;">E-mail personalizado com IA</div>
+        <div style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+          <span style="width:18px;height:2px;background:var(--blue);display:inline-block;border-radius:2px;"></span> Informática Básica
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;">
+
+          <div class="curso-interno-card" onclick="iniciarCurso('excel_basico')">
+            <div class="ci-icon" style="background:rgba(16,185,129,.15);">📊</div>
+            <div class="ci-body">
+              <div class="ci-title">Excel Básico</div>
+              <div class="ci-sub">Planilhas, fórmulas, organizar dados e criar relatórios simples</div>
+              <div class="ci-meta"><span class="badge b-green">Excel</span> <span style="font-size:11px;color:var(--dim);">~25 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('word_basico')">
+            <div class="ci-icon" style="background:rgba(59,130,246,.15);">📝</div>
+            <div class="ci-body">
+              <div class="ci-title">Word e Documentos</div>
+              <div class="ci-sub">Criar, formatar e enviar documentos profissionais</div>
+              <div class="ci-meta"><span class="badge b-blue">Word</span> <span style="font-size:11px;color:var(--dim);">~20 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('internet_segura')">
+            <div class="ci-icon" style="background:rgba(139,92,246,.15);">🌐</div>
+            <div class="ci-body">
+              <div class="ci-title">Internet Segura</div>
+              <div class="ci-sub">Pesquisar bem, usar e-mail profissional e evitar golpes online</div>
+              <div class="ci-meta"><span class="badge b-purple">Internet</span> <span style="font-size:11px;color:var(--dim);">~15 min</span></div>
+            </div>
+          </div>
+
+          <div class="curso-interno-card" onclick="iniciarCurso('whatsapp_prof')">
+            <div class="ci-icon" style="background:rgba(16,185,129,.15);">📱</div>
+            <div class="ci-body">
+              <div class="ci-title">WhatsApp Profissional</div>
+              <div class="ci-sub">Como usar o WhatsApp de forma eficaz no trabalho e com clientes</div>
+              <div class="ci-meta"><span class="badge b-green">Digital</span> <span style="font-size:11px;color:var(--dim);">~12 min</span></div>
+            </div>
+          </div>
+
+        </div>
       </div>
+
     </div>
   </div>
 </div>
 
-<!--  TREINAMENTOS  -->
+<!-- ══════════════════════════════════════════════════════
+     MODAL — CURSO INTERNO (APRENDER COM A WEX)
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-curso-interno" style="align-items:center;justify-content:center;">
+  <div class="modal" style="width:640px;max-width:96vw;padding:0;overflow:hidden;border-radius:18px;">
+    <div style="padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;">
+      <div id="curso-modal-icon" style="width:46px;height:46px;border-radius:12px;background:rgba(249,115,22,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🎯</div>
+      <div>
+        <div class="modal-title" style="margin-bottom:2px;font-size:17px;" id="curso-modal-title">Carregando...</div>
+        <div style="font-size:12px;color:var(--muted);" id="curso-modal-sub">Treinamento interativo com a Wex</div>
+      </div>
+      <button onclick="fecharCurso()" style="margin-left:auto;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;">✕</button>
+    </div>
+    <div id="curso-chat" style="padding:16px;height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg);"></div>
+    <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);">
+      <input id="curso-input" placeholder="Pergunte algo sobre o tema..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')enviarCurso()">
+      <button onclick="enviarCurso()" style="background:var(--accent);border:none;border-radius:10px;padding:10px 16px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">Enviar</button>
+    </div>
+    <div style="padding:8px 16px 14px;display:flex;gap:6px;flex-wrap:wrap;" id="curso-sugs"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TREINAMENTOS
+══════════════════════════════════════════════════════ -->
 <div class="page" id="page-treinamentos">
   <div class="topbar">
-    <div><div class="page-title">Treinamentos</div><div class="page-sub">Capacitação e desenvolvimento</div></div>
+    <div>
+      <div class="page-title">Cursos com Diploma</div>
+      <div class="page-sub">Escola Virtual do Governo Federal (EV.G) — gratuitos, com certificado válido em todo o Brasil</div>
+    </div>
+    <button class="btn btn-ghost btn-sm" onclick="window.open('https://www.escolavirtual.gov.br/catalogo','_blank')">
+      <svg viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+      Ver todos os cursos
+    </button>
   </div>
-  <div id="treinamentos-content">
-    <div class="grid-2">
-      <div class="card">
-        <div class="card-head"><div class="card-title"> Introdução ao wexiolead</div><span class="badge b-green">Disponível</span></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;">Aprenda a usar a plataforma e como apresentar para seus clientes. Entenda os planos, funcionalidades e diferenciais competitivos.</p>
-          <button class="btn btn-accent btn-sm" style="margin-top:14px;" onclick="openWexWithMsg('Me explique as principais funcionalidades do wexiolead para eu apresentar aos clientes')">Aprender com a Wex</button>
-        </div>
+
+  <!-- Aviso importante -->
+  <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:14px;padding:16px 20px;margin-bottom:22px;display:flex;gap:14px;align-items:flex-start;">
+    <div style="font-size:22px;flex-shrink:0;">ℹ️</div>
+    <div>
+      <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:5px;">Sobre os certificados da EV.G</div>
+      <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">
+        Os cursos da <strong style="color:var(--text);">Escola Virtual Gov (EV.G)</strong> são classificados como <strong style="color:var(--text);">capacitação e educação continuada (cursos livres)</strong>, portanto não são submetidos ao reconhecimento do MEC. A certificação do MEC é exclusiva para graduações, pós-graduações e cursos técnicos.<br>
+        <span style="margin-top:6px;display:block;">✅ Apesar disso, os certificados emitidos pela EV.G (geridos pela <strong style="color:var(--text);">Enap — Escola Nacional de Administração Pública</strong>) são <strong style="color:var(--green);">válidos em todo o país</strong> e amplamente aceitos no mercado e em concursos públicos como comprovação de qualificação profissional.</span>
       </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title"> Técnicas de Vendas B2B</div><span class="badge b-green">Disponível</span></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;">Abordagem consultiva para o setor de construção civil. Como identificar a dor do cliente e conectar com a solução.</p>
-          <button class="btn btn-accent btn-sm" style="margin-top:14px;" onclick="openWexWithMsg('Me dê dicas de técnicas de vendas B2B para o setor de construção civil')">Aprender com a Wex</button>
-        </div>
+    </div>
+  </div>
+
+  <!-- Cards de cursos -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;" id="evg-cursos-grid">
+
+    <!-- Informática -->
+    <div class="evg-card" onclick="abrirCursoEVG(0)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">💻 Informática</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Primeiros Passos com o Microsoft 365</div>
+      <div class="evg-desc">Word, Excel, PowerPoint, Outlook e OneNote — tudo que você precisa para trabalhar bem em ambiente digital.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(1)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">📊 Excel</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Introdução ao Excel</div>
+      <div class="evg-desc">Fórmulas básicas, organização de dados, filtros e gráficos. Curso fundamental para quem quer dominar planilhas.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(2)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">📈 Excel</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Excel Intermediário</div>
+      <div class="evg-desc">Tabelas dinâmicas, gráficos avançados, funções de pesquisa e formatação condicional para relatórios profissionais.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <!-- Construção Civil -->
+    <div class="evg-card" onclick="abrirCursoEVG(3)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">🏗️ Construção</span><span class="evg-carga">3h</span></div>
+      <div class="evg-title">Fundamentos de Construção Industrializada</div>
+      <div class="evg-desc">Conceitos, classificações e panorama histórico da construção industrializada. Tendências no Brasil e no mundo.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(4)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">🏗️ Construção</span><span class="evg-carga">24h</span></div>
+      <div class="evg-title">Introdução aos Fundamentos do BIM</div>
+      <div class="evg-desc">Building Information Modeling — metodologia que está revolucionando a construção civil. Entenda o BIM na prática.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <!-- Ética e Comunicação -->
+    <div class="evg-card" onclick="abrirCursoEVG(5)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">⚖️ Ética</span><span class="evg-carga">15h</span></div>
+      <div class="evg-title">Ética e Valores no Trabalho</div>
+      <div class="evg-desc">Fundamentos de ética profissional, conduta íntegra e responsabilidade no ambiente de trabalho e com clientes.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(6)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">🗣️ Comunicação</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Comunicação Estratégica</div>
+      <div class="evg-desc">Como comunicar com clareza e persuasão, construir narrativas, falar bem com clientes e colegas com confiança.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <!-- Desenvolvimento Pessoal -->
+    <div class="evg-card" onclick="abrirCursoEVG(7)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">🌱 Desenvolvimento</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Autoconhecimento e Desenvolvimento Pessoal</div>
+      <div class="evg-desc">Inteligência emocional, autogestão e habilidades interpessoais para crescer profissional e pessoalmente.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(8)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">⏱️ Produtividade</span><span class="evg-carga">10h</span></div>
+      <div class="evg-title">Gestão do Tempo e Produtividade</div>
+      <div class="evg-desc">Técnicas para organizar sua rotina, priorizar tarefas e atingir metas com mais eficiência no dia a dia.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <div class="evg-card" onclick="abrirCursoEVG(9)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">🤝 Liderança</span><span class="evg-carga">20h</span></div>
+      <div class="evg-title">Liderança e Trabalho em Equipe</div>
+      <div class="evg-desc">Estilos de liderança, resolução de conflitos, como motivar pessoas e trabalhar em colaboração.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <!-- Segurança -->
+    <div class="evg-card" onclick="abrirCursoEVG(10)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(239,68,68,.15);color:var(--red);">⛑️ Segurança</span><span class="evg-carga">11h</span></div>
+      <div class="evg-title">Segurança e Saúde no Trabalho — NR-38</div>
+      <div class="evg-desc">Prevenção de riscos, práticas seguras e promoção da saúde no trabalho. Essencial para quem atua em campo.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+    <!-- Digital -->
+    <div class="evg-card" onclick="abrirCursoEVG(11)">
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">🤖 Digital</span><span class="evg-carga">10h</span></div>
+      <div class="evg-title">Inteligência Artificial — Introdução</div>
+      <div class="evg-desc">O que é IA, como ela já está no seu cotidiano e como usar ferramentas de IA para trabalhar melhor.</div>
+      <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
+    </div>
+
+  </div>
+
+  <div style="text-align:center;margin-top:24px;">
+    <button class="btn btn-ghost" onclick="window.open('https://www.escolavirtual.gov.br/catalogo','_blank')" style="font-size:13px;padding:10px 24px;">
+      <svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      Explorar todos os 886 cursos da EV.G
+    </button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     MODAL — CURSO EV.G (INSCRIÇÃO)
+══════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-evg" style="align-items:center;justify-content:center;">
+  <div class="modal" style="width:560px;max-width:96vw;padding:0;overflow:hidden;border-radius:18px;">
+    <div style="padding:24px 24px 0;">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+        <div id="evg-cat-badge"></div>
+        <button onclick="fecharEVG()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0;">✕</button>
       </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title"> Contornando Objeções</div><span class="badge b-green">Disponível</span></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;">As objeções mais comuns no mercado de SaaS para construção civil e como responder de forma consultiva.</p>
-          <button class="btn btn-accent btn-sm" style="margin-top:14px;" onclick="openWexWithMsg('Quais são as objeções mais comuns quando vendo o wexiolead e como contorná-las?')">Aprender com a Wex</button>
-        </div>
-      </div>
-      <div class="card">
-        <div class="card-head"><div class="card-title"> Mercado de Construção Civil</div><span class="badge b-green">Disponível</span></div>
-        <div class="card-body">
-          <p style="font-size:13px;color:var(--muted);line-height:1.6;">Entenda o setor, os CNAEs, segmentos e como o wexiolead se posiciona neste mercado de R$200 bilhões.</p>
-          <button class="btn btn-accent btn-sm" style="margin-top:14px;" onclick="openWexWithMsg('Me explique o mercado de construção civil brasileiro e como o wexiolead se posiciona nele')">Aprender com a Wex</button>
-        </div>
-      </div>
+      <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2;" id="evg-modal-title"></div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:18px;" id="evg-modal-desc"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;" id="evg-modal-badges"></div>
+    </div>
+
+    <div style="margin:0 24px 20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:14px 16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;">✅ Como funciona</div>
+      <ol style="font-size:12.5px;color:var(--muted);line-height:1.8;padding-left:16px;">
+        <li>Clique em <strong style="color:var(--text);">Ir para inscrição</strong> — o site do Gov abrirá</li>
+        <li>Crie sua conta gratuita em <strong style="color:var(--text);">gov.br</strong> (ou faça login)</li>
+        <li>Clique em <strong style="color:var(--text);">Inscrever-se</strong> no site da EV.G</li>
+        <li>Faça o curso no seu ritmo — 100% online e gratuito</li>
+        <li>Ao terminar, <strong style="color:var(--text);">baixe seu certificado</strong> diretamente na plataforma</li>
+      </ol>
+    </div>
+
+    <div style="margin:0 24px 20px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:14px 16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:5px;">ℹ️ Sobre o certificado</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.65;">Curso livre (não reconhecido pelo MEC), mas com <strong style="color:var(--text);">certificado válido em todo o Brasil</strong>, emitido pela Enap. Aceito no mercado de trabalho e em concursos públicos como comprovação de qualificação profissional.</div>
+    </div>
+
+    <div style="padding:16px 24px 24px;display:flex;gap:10px;">
+      <button id="evg-btn-inscricao" onclick="irParaInscricao()" class="btn btn-accent" style="flex:1;justify-content:center;font-size:14px;padding:12px;">
+        <svg viewBox="0 0 24 24" style="width:15px;height:15px;stroke:#fff;fill:none;stroke-width:2;"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        Ir para inscrição no EV.G
+      </button>
+      <button onclick="fecharEVG()" class="btn btn-ghost" style="padding:12px 18px;">Fechar</button>
     </div>
   </div>
 </div>
