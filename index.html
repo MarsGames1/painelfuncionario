@@ -15,8 +15,8 @@
   --border:rgba(255,255,255,.07);
   --border2:rgba(255,255,255,.12);
   --text:#FFFFFF;
-  --muted:#B0B5CC;
-  --dim:#7A7FA0;
+  --muted:#D4D8EE;
+  --dim:#9BA3C0;
   --accent:#F97316;
   --accent2:#FBBF24;
   --accent-glow:rgba(249,115,22,.15);
@@ -1197,10 +1197,31 @@ const CLIENTES_PER_PAGE = 10;
 // 
 window.addEventListener('load', async () => {
   SB = supabase.createClient(SB_URL, SB_KEY);
-  // Setar avatar da Wex já na tela de login
   const loginImg = document.getElementById('login-wex-img');
   if (loginImg) loginImg.src = WEX_AVATAR_SRC;
-  // Sem sessão persistente — login manual a cada acesso
+
+  // Tentar restaurar sessão salva
+  try {
+    const saved = sessionStorage.getItem('wexio_session');
+    if (saved) {
+      const sess = JSON.parse(saved);
+      if (sess && sess.emp && sess.emp.id) {
+        // Revalidar rápido — busca o funcionário pelo id
+        const { data: emps, error } = await SB.from('employees').select('*').eq('id', sess.emp.id).limit(1);
+        if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
+          currentEmployee = emps[0];
+          currentUser = { id: emps[0].id, email: emps[0].email };
+          await loadAll();
+          initUI();
+          document.getElementById('login-screen').style.display = 'none';
+          return;
+        }
+      }
+      sessionStorage.removeItem('wexio_session');
+    }
+  } catch(e) {
+    sessionStorage.removeItem('wexio_session');
+  }
 });
 
 // Helper SDK API
@@ -1313,6 +1334,8 @@ async function doLogin() {
     console.log('Acesso liberado:', emp.nome);
     currentEmployee = emp;
     currentUser = { id: emp.id, email: emp.email };
+    // Salvar sessão para recargas da página
+    try { sessionStorage.setItem('wexio_session', JSON.stringify({ emp })); } catch(e) {}
     await loadAll();
     initUI();
     document.getElementById('login-screen').style.display = 'none';
@@ -1354,6 +1377,7 @@ function initUI() {
 }
 
 async function doLogout() {
+  try { sessionStorage.removeItem('wexio_session'); } catch(e) {}
   window.location.reload();
 }
 
@@ -1749,6 +1773,7 @@ function nav(page) {
   document.getElementById('page-' + page).classList.add('active');
   const navEl = document.getElementById('nav-' + page);
   if (navEl) navEl.classList.add('active');
+  if (page === 'treinamentos') renderEvgGrid();
 }
 
 // 
@@ -2343,14 +2368,7 @@ function irParaInscricao() {
   window.open(url, '_blank');
 }
 
-// Renderizar grid ao navegar para a pagina
-const _origNav = nav;
-function nav(page) {
-  _origNav(page);
-  if (page === 'treinamentos') {
-    renderEvgGrid();
-  }
-}
+// renderEvgGrid() chamado diretamente dentro de nav() acima.
 
 </script>
 </body>
