@@ -1251,7 +1251,7 @@ window.addEventListener('load', async () => {
       // JWT válido — restaurar dados locais do funcionário
       const sess = JSON.parse(saved);
       if (sess && sess.emp && sess.emp.id) {
-        const { data: emps, error } = await SB.from('employees').select('*').eq('id', sess.emp.id).limit(1);
+        const { data: emps, error } = await SB.rpc('find_employee_by_id', { p_id: sess.emp.id });
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
           currentUser = { id: emps[0].id, email: emps[0].email };
@@ -1339,14 +1339,9 @@ async function doLogin() {
   btn.textContent = 'Verificando...';
 
   try {
-    // Usa SDK do Supabase
+    // Usa função segura (sem expor tabela employees publicamente)
     const { data: emps, error: fetchError } = await SB
-      .from('employees')
-      .select('*')
-      .ilike('email', email)
-      .limit(1);
-
-    console.log('Funcionários encontrados:', emps, 'Erro:', fetchError);
+      .rpc('find_employee', { p_email: email });
 
     if (fetchError) {
       console.error('Erro SDK:', fetchError);
