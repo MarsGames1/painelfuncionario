@@ -1218,7 +1218,8 @@ const WEX_AVATAR_SRC = 'data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSU
 // 
 const SB_URL = 'https://tbnoiwkproawwncuorpw.supabase.co';
 const SB_KEY = 'sb_publishable_6sJeXecAy_M6gBP_b-j0QQ_0Ybgx_ng';
-const GROQ_KEY = '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';
+// GROQ_KEY removida — chamadas via Edge Function /functions/v1/wex-chat
+const WEX_CHAT_URL = SB_URL + '/functions/v1/wex-chat';
 
 // Role que identifica funcionários na tabela employees
 const EMPLOYEE_ROLE = 'funcionario';
@@ -1240,13 +1241,16 @@ window.addEventListener('load', async () => {
   const loginImg = document.getElementById('login-wex-img');
   if (loginImg) loginImg.src = WEX_AVATAR_SRC;
 
-  // Tentar restaurar sessão salva
+  // Tentar restaurar sessão salva — SEMPRE validar JWT Supabase primeiro
   try {
+    // 1. Verificar se o token JWT do Supabase ainda é válido
+    const { data: { session: sbSession } } = await SB.auth.getSession();
+
     const saved = sessionStorage.getItem('wexio_session');
-    if (saved) {
+    if (saved && sbSession) {
+      // JWT válido — restaurar dados locais do funcionário
       const sess = JSON.parse(saved);
       if (sess && sess.emp && sess.emp.id) {
-        // Revalidar rápido — busca o funcionário pelo id
         const { data: emps, error } = await SB.from('employees').select('*').eq('id', sess.emp.id).limit(1);
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
@@ -1257,11 +1261,21 @@ window.addEventListener('load', async () => {
           return;
         }
       }
-      sessionStorage.removeItem('wexio_session');
     }
+    // JWT expirado ou sessionStorage sem dados — limpar e pedir login
+    sessionStorage.removeItem('wexio_session');
+    if (sbSession) await SB.auth.signOut(); // limpar token expirado/inválido
   } catch(e) {
     sessionStorage.removeItem('wexio_session');
   }
+
+  // Monitorar expiração de token em tempo real
+  SB.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT' || !session) {
+      sessionStorage.removeItem('wexio_session');
+      document.getElementById('login-screen').style.display = 'flex';
+    }
+  });
 });
 
 // Helper SDK API
@@ -1418,7 +1432,8 @@ function initUI() {
 
 async function doLogout() {
   try { sessionStorage.removeItem('wexio_session'); } catch(e) {}
-  window.location.reload();
+  await SB.auth.signOut();
+  window.location.href = 'index.html';
 }
 
 // 
@@ -1907,9 +1922,10 @@ async function sendWexDash() {
   wexDashAddMsg('user', text);
   wexDashThinking(true);
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const { data: { session: _s } } = await SB.auth.getSession();
+    const res = await fetch(WEX_CHAT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_s?.access_token || SB_KEY) },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'system', content: buildWexContext() }, ...wexDashHistory.slice(-6), { role: 'user', content: text }],
@@ -2001,9 +2017,10 @@ async function sendWexMessage() {
   wexShowThinking();
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const { data: { session: _s } } = await SB.auth.getSession();
+    const res = await fetch(WEX_CHAT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_s?.access_token || SB_KEY) },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [
@@ -2369,9 +2386,10 @@ async function enviarCurso() {
   chat.scrollTop = chat.scrollHeight;
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const { data: { session: _s } } = await SB.auth.getSession();
+    const res = await fetch(WEX_CHAT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${GROQ_KEY}` },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_s?.access_token || SB_KEY) },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [
@@ -3010,9 +3028,10 @@ async function enviarTutorial() {
   chatEl.scrollTop = chatEl.scrollHeight;
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    const { data: { session: _s4 } } = await SB.auth.getSession();
+    const res = await fetch(WEX_CHAT_URL, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + GROQ_KEY },
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_s4?.access_token || SB_KEY) },
       body: JSON.stringify({
         model: 'llama-3.3-70b-versatile',
         messages: [
