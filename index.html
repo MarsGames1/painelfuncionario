@@ -1824,6 +1824,15 @@ function nav(page) {
   const navEl = document.getElementById('nav-' + page);
   if (navEl) navEl.classList.add('active');
   if (page === 'treinamentos') renderEvgGrid();
+  // Sempre rebusca do banco ao entrar em comissões ou dashboard
+  if (page === 'comissoes' || page === 'dashboard' || page === 'clientes') {
+    loadClientes().then(() => {
+      updateDashStats();
+      renderClientes();
+      renderComissoes();
+      renderMetas();
+    });
+  }
 }
 
 // 
