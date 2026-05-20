@@ -1917,6 +1917,84 @@ function wexDashThinking(show) {
   }
 }
 
+// ════════════════════════════════════════════════════════════════
+//  WEX FALLBACK OFFLINE — respostas pré-programadas sobre o sistema
+// ════════════════════════════════════════════════════════════════
+const WEX_OFFLINE_FAQ = [
+  {
+    keys: ['lead', 'leads', 'buscar lead', 'encontrar lead', 'pesquisar'],
+    answer: '🔍 Para buscar leads, acesse a seção <strong>Leads</strong> no menu lateral. Você pode filtrar por segmento (construtoras, empreiteiras, fornecedores), estado, score e situação cadastral. Clique em qualquer lead para ver os detalhes completos.'
+  },
+  {
+    keys: ['score', 'pontuação', 'pontuacao', 'qualidade'],
+    answer: '📊 O <strong>Score do Lead</strong> vai de 0 a 100 e indica a qualidade do contato. Score acima de 70 = lead quente (priorize!). Entre 40-70 = lead morno. Abaixo de 40 = lead frio. Considere também o Selo Verificado para priorizar leads com dados confirmados.'
+  },
+  {
+    keys: ['verificado', 'selo', 'badge', 'confirmado'],
+    answer: '✅ O <strong>Selo Verificado</strong> indica que o lead possui pelo menos um dado de contato confirmado (telefone ou e-mail comercial). Leads verificados têm taxa de resposta muito maior — sempre priorize-os na prospecção!'
+  },
+  {
+    keys: ['crm', 'status', 'etapa', 'pipeline', 'funil'],
+    answer: '🗂️ O <strong>CRM</strong> do WexioLead tem 4 etapas:<br>• <strong>Novo</strong> — lead recém adicionado<br>• <strong>Contatado</strong> — primeiro contato feito<br>• <strong>Negociando</strong> — proposta em andamento<br>• <strong>Fechado</strong> — negócio concluído<br><br>Atualize o status sempre após cada interação com o cliente.'
+  },
+  {
+    keys: ['exportar', 'exportação', 'csv', 'excel', 'planilha', 'baixar'],
+    answer: '📥 Para exportar leads, acesse a seção <strong>Leads</strong>, aplique os filtros desejados e clique no botão <strong>Exportar CSV</strong>. O arquivo abre em qualquer planilha (Excel, Google Sheets). Disponível nos planos Starter, Pro e Agency.'
+  },
+  {
+    keys: ['plano', 'planos', 'starter', 'pro', 'agency', 'free', 'preço', 'preco', 'valor', 'assinar'],
+    answer: '💳 Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 300 leads/mês<br>• <strong>Pro R$197</strong> — 1.000 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
+  },
+  {
+    keys: ['quota', 'cota', 'limite', 'crédito', 'credito', 'quantos leads'],
+    answer: '📈 Sua cota de leads é renovada todo mês. Você pode ver quanto já usou no card de <strong>Cota Mensal</strong> no topo do painel. Ao atingir o limite, faça upgrade de plano para continuar prospectando.'
+  },
+  {
+    keys: ['cnae', 'segmento', 'construtora', 'empreiteira', 'fornecedor', 'civil', 'categoria'],
+    answer: '🏗️ Principais segmentos no WexioLead:<br>• <strong>CNAE 41</strong> — Construção de edifícios (construtoras)<br>• <strong>CNAE 42</strong> — Obras de infraestrutura<br>• <strong>CNAE 43</strong> — Serviços especializados (empreiteiras)<br><br>Use o filtro <strong>Segmento</strong> na busca de leads para refinar os resultados.'
+  },
+  {
+    keys: ['follow', 'followup', 'follow-up', 'lembrete', 'agendar', 'agendamento'],
+    answer: '📅 Para criar um follow-up, abra o detalhe de um lead e use a seção <strong>Próximos Follow-ups</strong>. Você pode agendar uma data e deixar uma anotação. Os follow-ups pendentes aparecem no seu painel principal para você não perder nenhum.'
+  },
+  {
+    keys: ['comissão', 'comissao', 'ganho', 'pagamento', 'meta'],
+    answer: '💰 Suas comissões são calculadas com base nos clientes ativos da sua carteira. Acesse a seção <strong>Comissões</strong> no menu para ver o detalhamento por mês. Em caso de dúvidas sobre valores, fale com seu gestor.'
+  },
+  {
+    keys: ['cliente', 'carteira', 'meu cliente', 'clientes ativos'],
+    answer: '👥 Sua <strong>carteira de clientes</strong> fica na seção <strong>Clientes</strong> do menu. Lá você vê todos os clientes ativos vinculados a você, pode registrar contatos e acompanhar o status de cada conta.'
+  },
+  {
+    keys: ['senha', 'login', 'acesso', 'entrar', 'esqueci'],
+    answer: '🔑 Problema de acesso? Fale com seu gestor ou administrador do sistema. Eles conseguem resetar sua senha pelo painel de administração. Não compartilhe suas credenciais com ninguém.'
+  },
+  {
+    keys: ['curso', 'treinamento', 'aprender', 'tutorial', 'material'],
+    answer: '📚 Acesse a seção <strong>Materiais</strong> no menu para ver os cursos práticos disponíveis: vendas B2B, contorno de objeções, follow-up, gestão de leads e muito mais. Todo o conteúdo funciona sem precisar de internet extra.'
+  },
+  {
+    keys: ['sugestão', 'sugestao', 'ideia', 'feedback', 'melhoria'],
+    answer: '💡 Tem uma ideia para melhorar o sistema? Acesse a seção <strong>Sugestão do Mês</strong> no menu e envie sua contribuição. A equipe analisa todas as sugestões!'
+  },
+  {
+    keys: ['wex', 'ajuda', 'help', 'como usar', 'o que você faz', 'o que voce faz'],
+    answer: '🤖 Sou a <strong>Wex</strong>, sua assistente no WexioLead! Posso te ajudar com:<br>• Dúvidas sobre o sistema<br>• Estratégias de prospecção e vendas<br>• Abordagem de leads por perfil<br>• Dicas sobre o mercado de construção civil<br><br>É só perguntar! 😊'
+  }
+];
+
+function wexOfflineFallback(text) {
+  const norm = t => t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  const q = norm(text);
+  let best = null, bestScore = 0;
+  for (const faq of WEX_OFFLINE_FAQ) {
+    const score = faq.keys.filter(k => q.includes(norm(k))).length;
+    if (score > bestScore) { bestScore = score; best = faq; }
+  }
+  if (best && bestScore > 0) return best.answer;
+  return '⚠️ Estou sem conexão com a IA agora. Tente novamente em instantes ou reformule sua pergunta sobre o sistema que faço o possível para te ajudar!';
+}
+
 async function sendWexDash() {
   const input = document.getElementById('wex-dash-input');
   const text = (input?.value || '').trim();
@@ -1938,10 +2016,10 @@ async function sendWexDash() {
     });
     const data = await res.json();
     wexDashThinking(false);
-    wexDashAddMsg('bot', data?.choices?.[0]?.message?.content || 'Não consegui processar. Tente novamente.');
+    wexDashAddMsg('bot', data?.choices?.[0]?.message?.content || wexOfflineFallback(text));
   } catch(e) {
     wexDashThinking(false);
-    wexDashAddMsg('bot', 'Erro ao conectar. Verifique sua conexão.');
+    wexDashAddMsg('bot', wexOfflineFallback(text));
   }
 }
 
