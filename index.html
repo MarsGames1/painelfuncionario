@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WexioLead — Painel do Funcionário</title>
+<link rel="icon" type="image/png" href="https://raw.githubusercontent.com/MarsGames1/painelfuncionario/main/favicon.png">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.49.0"></script>
 <style>
@@ -480,7 +481,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     <div class="tbl-wrap">
       <table>
         <thead><tr>
-          <th>Cliente</th><th>Plano</th><th>Status CRM</th><th>Follow-up</th><th>Anotações</th><th>Desde</th><th></th>
+          <th>Cliente</th><th>Plano / Vencimento</th><th>Status CRM</th><th>Follow-up</th><th>Venc. Plano</th><th>Anotações</th><th>Desde</th><th></th>
         </tr></thead>
         <tbody id="clientes-tbody"></tbody>
       </table>
@@ -1180,29 +1181,87 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
 <!--  MODAL EDITAR CLIENTE  -->
 <div class="modal-overlay" id="modal-edit-cliente">
-  <div class="modal">
-    <div class="modal-title"> Editar cliente</div>
+  <div class="modal" style="width:560px;max-width:95vw;">
+    <div class="modal-title">✏️ Editar cliente</div>
     <input type="hidden" id="edit-cli-id">
-    <div class="form-group">
-      <label class="form-label">Status CRM</label>
-      <select class="form-input" id="edit-cli-crm">
-        <option value="novo">Novo</option>
-        <option value="contatado">Contatado</option>
-        <option value="negociando">Negociando</option>
-        <option value="fechado">Fechado</option>
-      </select>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Nome / Empresa</label>
+        <input class="form-input" id="edit-cli-nome" placeholder="Nome do cliente">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Telefone / WhatsApp</label>
+        <input class="form-input" id="edit-cli-tel" placeholder="(21) 99999-9999">
+      </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Data de follow-up</label>
-      <input class="form-input" id="edit-cli-followup" type="date">
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">E-mail</label>
+        <input class="form-input" id="edit-cli-email" type="email" placeholder="contato@empresa.com.br">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Plano</label>
+        <select class="form-input" id="edit-cli-plano">
+          <option value="free">Free</option>
+          <option value="starter">Starter — R$97/mês</option>
+          <option value="pro">Pro — R$197/mês</option>
+          <option value="agency">Agency — R$397/mês</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Status CRM</label>
+        <select class="form-input" id="edit-cli-crm">
+          <option value="novo">Novo</option>
+          <option value="contatado">Contatado</option>
+          <option value="negociando">Negociando</option>
+          <option value="fechado">Fechado</option>
+          <option value="perdido">Perdido</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Origem do lead</label>
+        <select class="form-input" id="edit-cli-origem">
+          <option value="">Selecionar...</option>
+          <option value="indicacao">Indicação</option>
+          <option value="wexiolead">WexioLead</option>
+          <option value="instagram">Instagram</option>
+          <option value="google">Google</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="outros">Outros</option>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label class="form-label">Data de follow-up</label>
+        <input class="form-input" id="edit-cli-followup" type="date">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Vencimento do plano</label>
+        <input class="form-input" id="edit-cli-vencimento" type="date">
+      </div>
     </div>
     <div class="form-group">
       <label class="form-label">Anotações</label>
-      <textarea class="form-input" id="edit-cli-notas" placeholder="Observações sobre este cliente..."></textarea>
+      <textarea class="form-input" id="edit-cli-notas" placeholder="Observações, histórico de contatos, próximos passos..." style="min-height:90px;"></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-edit-cliente')">Cancelar</button>
       <button class="btn btn-accent" onclick="saveEditCliente()">Salvar alterações</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL VER DETALHES CLIENTE -->
+<div class="modal-overlay" id="modal-view-cliente">
+  <div class="modal" style="width:600px;max-width:95vw;">
+    <div class="modal-title">👤 Detalhes do Cliente</div>
+    <div id="view-cli-content"></div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeModal('modal-view-cliente')">Fechar</button>
+      <button class="btn btn-accent" onclick="closeModal('modal-view-cliente');editCliente(currentViewId)">✏️ Editar</button>
     </div>
   </div>
 </div>
@@ -1520,20 +1579,40 @@ function renderClientes() {
   const crmColors = {novo:'b-blue', contatado:'b-yellow', negociando:'b-orange', fechado:'b-green'};
   const crmLabels = {novo:'Novo', contatado:'Contatado', negociando:'Negociando', fechado:'Fechado'};
 
-  document.getElementById('clientes-tbody').innerHTML = slice.map(c => `
-    <tr>
-      <td><div style="font-weight:500;">${c.nome_cliente}</div><div style="font-size:11px;color:var(--muted);">${c.email_cliente||''}</div></td>
-      <td><span class="badge b-orange">${(c.plano||'free').toUpperCase()}</span></td>
-      <td><span class="badge ${crmColors[c.status_crm]||'b-gray'}">${crmLabels[c.status_crm]||c.status_crm}</span></td>
-      <td class="td-muted" style="font-size:12px;">${c.data_followup ? new Date(c.data_followup+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</td>
-      <td class="td-muted" style="font-size:12px;max-width:180px;overflow:hidden;text-overflow:ellipsis;">${c.notas||'—'}</td>
-      <td class="td-muted" style="font-size:12px;">${new Date(c.created_at).toLocaleDateString('pt-BR')}</td>
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  document.getElementById('clientes-tbody').innerHTML = slice.map(c => {
+    // Alerta de vencimento
+    let vencBadge = '';
+    if (c.vencimento_plano) {
+      const venc = new Date(c.vencimento_plano + 'T12:00:00');
+      const diff = Math.ceil((venc - hoje) / (1000*60*60*24));
+      if (diff < 0) vencBadge = '<span class="badge b-red" style="font-size:10px;">VENCIDO</span>';
+      else if (diff <= 7) vencBadge = `<span class="badge b-yellow" style="font-size:10px;">Vence em ${diff}d</span>`;
+    }
+    // Alerta follow-up atrasado
+    let followBadge = '';
+    if (c.data_followup) {
+      const fup = new Date(c.data_followup + 'T12:00:00');
+      if (fup < hoje) followBadge = '<span class="badge b-red" style="font-size:10px;">⚠ Atrasado</span>';
+    }
+    return `<tr style="cursor:pointer;" onclick="viewCliente('${c.id}')">
       <td>
-        <button class="btn btn-ghost btn-sm" onclick="editCliente('${c.id}')">Editar</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="removeCliente('${c.id}')"></button>
+        <div style="font-weight:500;">${c.nome_cliente}</div>
+        <div style="font-size:11px;color:var(--muted);">${c.email_cliente||''}</div>
+        <div style="font-size:11px;color:var(--muted);">${c.telefone_cliente||''}</div>
       </td>
-    </tr>
-  `).join('') || '<tr><td colspan="7"><div class="empty"><p>Nenhum cliente na sua carteira ainda</p></div></td></tr>';
+      <td><span class="badge b-orange">${(c.plano||'free').toUpperCase()}</span>${vencBadge}</td>
+      <td><span class="badge ${crmColors[c.status_crm]||'b-gray'}">${crmLabels[c.status_crm]||c.status_crm}</span></td>
+      <td class="td-muted" style="font-size:12px;">${c.data_followup ? new Date(c.data_followup+'T12:00:00').toLocaleDateString('pt-BR') : '—'} ${followBadge}</td>
+      <td class="td-muted" style="font-size:12px;">${c.vencimento_plano ? new Date(c.vencimento_plano+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</td>
+      <td class="td-muted" style="font-size:12px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${c.notas||'—'}</td>
+      <td class="td-muted" style="font-size:12px;">${new Date(c.created_at).toLocaleDateString('pt-BR')}</td>
+      <td onclick="event.stopPropagation()">
+        <button class="btn btn-ghost btn-sm" onclick="editCliente('${c.id}')">Editar</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="removeCliente('${c.id}')">🗑</button>
+      </td>
+    </tr>`;
+  }).join('') || '<tr><td colspan="8"><div class="empty"><p>Nenhum cliente na sua carteira ainda</p></div></td></tr>';
 }
 
 function clientesPage(dir) { clientesPage_n = Math.max(1, clientesPage_n + dir); renderClientes(); }
@@ -1570,24 +1649,111 @@ async function addCliente() {
   updateDashStats();
 }
 
+let currentViewId = null;
+
+function viewCliente(id) {
+  const c = myClientes.find(x => x.id === id);
+  if (!c) return;
+  currentViewId = id;
+  const hoje = new Date(); hoje.setHours(0,0,0,0);
+  const crmLabels = {novo:'Novo', contatado:'Contatado', negociando:'Negociando', fechado:'Fechado', perdido:'Perdido'};
+  const crmColors = {novo:'b-blue', contatado:'b-yellow', negociando:'b-orange', fechado:'b-green', perdido:'b-red'};
+  const origemLabel = {indicacao:'Indicação', wexiolead:'WexioLead', instagram:'Instagram', google:'Google', linkedin:'LinkedIn', outros:'Outros'};
+
+  let vencAlert = '';
+  if (c.vencimento_plano) {
+    const venc = new Date(c.vencimento_plano + 'T12:00:00');
+    const diff = Math.ceil((venc - hoje) / (1000*60*60*24));
+    if (diff < 0) vencAlert = `<div style="background:#ff3b3b22;border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;">🚨 Plano <strong>VENCIDO</strong> há ${Math.abs(diff)} dia(s). Entre em contato para renovar.</div>`;
+    else if (diff <= 7) vencAlert = `<div style="background:#ffb30022;border:1px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:14px;">⚠️ Plano vence em <strong>${diff} dia(s)</strong> (${new Date(c.vencimento_plano+'T12:00:00').toLocaleDateString('pt-BR')}). Hora de renovar!</div>`;
+  }
+  let followAlert = '';
+  if (c.data_followup) {
+    const fup = new Date(c.data_followup + 'T12:00:00');
+    if (fup < hoje) followAlert = `<div style="background:#ff3b3b22;border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;">⏰ Follow-up estava agendado para <strong>${fup.toLocaleDateString('pt-BR')}</strong> e está atrasado!</div>`;
+  }
+
+  document.getElementById('view-cli-content').innerHTML = `
+    ${vencAlert}${followAlert}
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Cliente</div>
+        <div style="font-weight:600;font-size:15px;">${c.nome_cliente}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Status CRM</div>
+        <span class="badge ${crmColors[c.status_crm]||'b-gray'}">${crmLabels[c.status_crm]||c.status_crm}</span>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">E-mail</div>
+        <div style="font-size:13px;">${c.email_cliente||'—'}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Telefone</div>
+        <div style="font-size:13px;">${c.telefone_cliente ? `<a href="https://wa.me/55${c.telefone_cliente.replace(/\D/g,'')}" target="_blank" style="color:var(--green);">📱 ${c.telefone_cliente}</a>` : '—'}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Plano</div>
+        <span class="badge b-orange">${(c.plano||'free').toUpperCase()}</span>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Vencimento do plano</div>
+        <div style="font-size:13px;">${c.vencimento_plano ? new Date(c.vencimento_plano+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Follow-up</div>
+        <div style="font-size:13px;">${c.data_followup ? new Date(c.data_followup+'T12:00:00').toLocaleDateString('pt-BR') : '—'}</div>
+      </div>
+      <div style="background:var(--surface2);border-radius:8px;padding:14px;">
+        <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Origem</div>
+        <div style="font-size:13px;">${origemLabel[c.origem]||c.origem||'—'}</div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:14px;margin-bottom:14px;">
+      <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Anotações</div>
+      <div style="font-size:13px;line-height:1.6;white-space:pre-wrap;">${c.notas||'Nenhuma anotação registrada.'}</div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);text-align:right;">Cadastrado em ${new Date(c.created_at).toLocaleDateString('pt-BR')}</div>
+  `;
+  openModal('modal-view-cliente');
+}
+
 function editCliente(id) {
   const c = myClientes.find(x => x.id === id);
   if (!c) return;
   document.getElementById('edit-cli-id').value = id;
+  document.getElementById('edit-cli-nome').value = c.nome_cliente || '';
+  document.getElementById('edit-cli-email').value = c.email_cliente || '';
+  document.getElementById('edit-cli-tel').value = c.telefone_cliente || '';
+  document.getElementById('edit-cli-plano').value = c.plano || 'free';
   document.getElementById('edit-cli-crm').value = c.status_crm || 'novo';
+  document.getElementById('edit-cli-origem').value = c.origem || '';
   document.getElementById('edit-cli-followup').value = c.data_followup || '';
+  document.getElementById('edit-cli-vencimento').value = c.vencimento_plano || '';
   document.getElementById('edit-cli-notas').value = c.notas || '';
   openModal('modal-edit-cliente');
 }
 
 async function saveEditCliente() {
   const id = document.getElementById('edit-cli-id').value;
+  const nome = document.getElementById('edit-cli-nome').value.trim();
+  const email = document.getElementById('edit-cli-email').value.trim();
+  const tel = document.getElementById('edit-cli-tel').value.trim();
+  const plano = document.getElementById('edit-cli-plano').value;
   const crm = document.getElementById('edit-cli-crm').value;
+  const origem = document.getElementById('edit-cli-origem').value;
   const followup = document.getElementById('edit-cli-followup').value;
+  const vencimento = document.getElementById('edit-cli-vencimento').value;
   const notas = document.getElementById('edit-cli-notas').value.trim();
 
   const error = await sbPatch('employee_clients', 'id=eq.' + id, {
+    nome_cliente: nome || undefined,
+    email_cliente: email || null,
+    telefone_cliente: tel || null,
+    plano: plano,
     status_crm: crm,
+    origem: origem || null,
+    vencimento_plano: vencimento || null,
     data_followup: followup || null,
     notas: notas || null,
   });
