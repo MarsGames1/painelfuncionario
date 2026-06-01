@@ -1316,6 +1316,7 @@ window.addEventListener('load', async () => {
           currentUser = { id: emps[0].id, email: emps[0].email };
           await loadAll();
           initUI();
+          setupRealtime(); // ← sincronização em tempo real com admin
           document.getElementById('login-screen').style.display = 'none';
           return;
         }
@@ -1339,22 +1340,27 @@ window.addEventListener('load', async () => {
 
 // Helper SDK API
 async function sbGet(table, params = '') {
-  let query = SB.from(table).select('*');
-  // Parse simple filter params like "employee_id=eq.X&order=created_at.desc"
+  // Parse select separately to apply it first (Supabase JS v2 requires select before filters)
+  let selectFields = '*';
+  const otherParams = [];
   if (params) {
     params.split('&').forEach(p => {
-      const eqMatch = p.match(/^([^=]+)=eq\.(.+)$/);
-      const ilikeMatch = p.match(/^([^=]+)=ilike\.(.+)$/);
-      const orderMatch = p.match(/^order=(.+)\.(.+)$/);
       const selectMatch = p.match(/^select=(.+)$/);
-      const limitMatch = p.match(/^limit=(\d+)$/);
-      if (eqMatch) query = query.eq(eqMatch[1], decodeURIComponent(eqMatch[2]));
-      else if (ilikeMatch) query = query.ilike(ilikeMatch[1], decodeURIComponent(ilikeMatch[2]));
-      else if (orderMatch) query = query.order(orderMatch[1], { ascending: orderMatch[2] === 'asc' });
-      else if (limitMatch) query = query.limit(parseInt(limitMatch[1]));
-      else if (selectMatch) query = query.select(selectMatch[1]);
+      if (selectMatch) selectFields = selectMatch[1];
+      else otherParams.push(p);
     });
   }
+  let query = SB.from(table).select(selectFields);
+  otherParams.forEach(p => {
+    const eqMatch    = p.match(/^([^=]+)=eq\.(.+)$/);
+    const ilikeMatch = p.match(/^([^=]+)=ilike\.(.+)$/);
+    const orderMatch = p.match(/^order=(.+)\.(asc|desc)$/);
+    const limitMatch = p.match(/^limit=(\d+)$/);
+    if      (eqMatch)    query = query.eq(eqMatch[1], decodeURIComponent(eqMatch[2]));
+    else if (ilikeMatch) query = query.ilike(ilikeMatch[1], decodeURIComponent(ilikeMatch[2]));
+    else if (orderMatch) query = query.order(orderMatch[1], { ascending: orderMatch[2] === 'asc' });
+    else if (limitMatch) query = query.limit(parseInt(limitMatch[1]));
+  });
   const { data, error } = await query;
   if (error) { console.error('sbGet error:', error); return []; }
   return data || [];
@@ -1446,6 +1452,7 @@ async function doLogin() {
     try { sessionStorage.setItem('wexio_session', JSON.stringify({ emp })); } catch(e) {}
     await loadAll();
     initUI();
+    setupRealtime(); // ← sincronização em tempo real com admin
     document.getElementById('login-screen').style.display = 'none';
 
   } catch(e) {
@@ -1495,6 +1502,44 @@ async function doLogout() {
 // 
 async function loadAll() {
   await loadClientes();
+}
+
+// ── Realtime: mantém ranking e dados do próprio funcionário sincronizados com o admin ──
+function setupRealtime() {
+  // Canal 1: qualquer mudança em employee_clients → atualiza ranking + dados próprios
+  SB.channel('rt-employee-clients')
+    .on('postgres_changes', {
+      event: '*',          // INSERT, UPDATE, DELETE
+      schema: 'public',
+      table: 'employee_clients'
+    }, async () => {
+      // Recarrega os clientes do próprio usuário
+      await loadClientes();
+      updateDashStats();
+      renderClientes();
+      renderComissoes();
+      renderMetas();
+      // Atualiza ranking se a página estiver visível
+      const rankingPage = document.getElementById('page-ranking');
+      if (rankingPage && rankingPage.classList.contains('active')) {
+        renderRanking();
+      }
+    })
+    .subscribe();
+
+  // Canal 2: mudança no cadastro dos funcionários → atualiza ranking (ex: admin adiciona funcionário)
+  SB.channel('rt-employees')
+    .on('postgres_changes', {
+      event: '*',
+      schema: 'public',
+      table: 'employees'
+    }, async () => {
+      const rankingPage = document.getElementById('page-ranking');
+      if (rankingPage && rankingPage.classList.contains('active')) {
+        renderRanking();
+      }
+    })
+    .subscribe();
 }
 
 async function loadClientes() {
@@ -1998,6 +2043,10 @@ function nav(page) {
       renderComissoes();
       renderMetas();
     });
+  }
+  // Rebusca ranking ao entrar na página (dados de todos os funcionários)
+  if (page === 'ranking') {
+    renderRanking();
   }
 }
 
