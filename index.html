@@ -214,10 +214,10 @@ textarea.form-input{resize:vertical;min-height:90px;}
 /* RANKING */
 .rank-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;margin-bottom:8px;background:var(--surface2);border:1px solid var(--border);transition:all .2s;}
 .rank-item:hover{border-color:var(--border2);}
-.rank-num{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;width:28px;color:var(--dim);}
-.rank-num.gold{color:var(--accent2);}
-.rank-num.silver{color:#C0C0C0;}
-.rank-num.bronze{color:#CD7F32;}
+.rank-num{font-family:'Syne',sans-serif;font-weight:800;font-size:13px;width:32px;height:32px;min-width:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--surface3);color:var(--dim);letter-spacing:0;}
+.rank-num.gold{background:rgba(251,191,36,.15);color:var(--accent2);border:1px solid rgba(251,191,36,.3);}
+.rank-num.silver{background:rgba(192,192,192,.12);color:#C0C0C0;border:1px solid rgba(192,192,192,.25);}
+.rank-num.bronze{background:rgba(205,127,50,.12);color:#CD7F32;border:1px solid rgba(205,127,50,.25);}
 
 /* MATERIAL CARD */
 .mat-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
@@ -1901,13 +1901,12 @@ async function renderRanking() {
     return { ...e, clientes: clientesFechados.length, mrr };
   }).sort((a, b) => b.clientes - a.clientes || b.mrr - a.mrr);
 
-  const medalhas = ['', '', ''];
   const numColors = ['gold', 'silver', 'bronze'];
 
   document.getElementById('ranking-list').innerHTML = ranking.slice(0, 10).map((e, i) => {
     const isMe = e.id === currentEmployee.id;
     return `<div class="rank-item" style="${isMe ? 'border-color:var(--accent);background:rgba(249,115,22,.08);' : ''}">
-      <div class="rank-num ${numColors[i] || ''}">${i < 3 ? medalhas[i] : '#' + (i+1)}</div>
+      <div class="rank-num ${numColors[i] || ''}">${i + 1}</div>
       <div style="flex:1;">
         <div style="font-weight:600;font-size:13px;">${e.nome}${isMe ? ' <span class="badge b-orange" style="font-size:9px;">você</span>' : ''}</div>
         <div style="font-size:11px;color:var(--muted);">${e.cargo || 'Consultor'}</div>
