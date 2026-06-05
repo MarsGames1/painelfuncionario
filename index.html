@@ -820,12 +820,12 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <div class="modal-overlay" id="modal-curso-interno" style="align-items:center;justify-content:center;">
   <div class="modal" style="width:640px;max-width:96vw;padding:0;overflow:hidden;border-radius:18px;">
     <div style="padding:22px 24px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;">
-      <div id="curso-modal-icon" style="width:46px;height:46px;border-radius:12px;background:rgba(249,115,22,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;">🎯</div>
+      <div id="curso-modal-icon" style="width:46px;height:46px;border-radius:12px;background:rgba(249,115,22,.15);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;"></div>
       <div>
         <div class="modal-title" style="margin-bottom:2px;font-size:17px;" id="curso-modal-title">Carregando...</div>
         <div style="font-size:12px;color:var(--muted);" id="curso-modal-sub">Treinamento interativo com a Wex</div>
       </div>
-      <button onclick="fecharCurso()" style="margin-left:auto;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;">✕</button>
+      <button data-x="1" onclick="fecharCurso()" style="margin-left:auto;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
     <div id="curso-chat" style="padding:16px;height:400px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;background:var(--bg);"></div>
     <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);">
@@ -853,12 +853,12 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
   <!-- Aviso importante -->
   <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.25);border-radius:14px;padding:16px 20px;margin-bottom:22px;display:flex;gap:14px;align-items:flex-start;">
-    <div style="font-size:22px;flex-shrink:0;">ℹ️</div>
+    
     <div>
       <div style="font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:5px;">Sobre os certificados da EV.G</div>
       <div style="font-size:12.5px;color:var(--muted);line-height:1.7;">
         Os cursos da <strong style="color:var(--text);">Escola Virtual Gov (EV.G)</strong> são classificados como <strong style="color:var(--text);">capacitação e educação continuada (cursos livres)</strong>, portanto não são submetidos ao reconhecimento do MEC. A certificação do MEC é exclusiva para graduações, pós-graduações e cursos técnicos.<br>
-        <span style="margin-top:6px;display:block;">✅ Apesar disso, os certificados emitidos pela EV.G (geridos pela <strong style="color:var(--text);">Enap — Escola Nacional de Administração Pública</strong>) são <strong style="color:var(--green);">válidos em todo o país</strong> e amplamente aceitos no mercado e em concursos públicos como comprovação de qualificação profissional.</span>
+        <span style="margin-top:6px;display:block;">Apesar disso, os certificados emitidos pela EV.G (geridos pela <strong style="color:var(--text);">Enap — Escola Nacional de Administração Pública</strong>) são <strong style="color:var(--green);">válidos em todo o país</strong> e amplamente aceitos no mercado e em concursos públicos como comprovação de qualificação profissional.</span>
       </div>
     </div>
   </div>
@@ -868,21 +868,21 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Informática -->
     <div class="evg-card" onclick="abrirCursoEVG(0)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">💻 Informática</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">Informática</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Primeiros Passos com o Microsoft 365</div>
       <div class="evg-desc">Word, Excel, PowerPoint, Outlook e OneNote — tudo que você precisa para trabalhar bem em ambiente digital.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(1)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">📊 Excel</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">Excel</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Introdução ao Excel</div>
       <div class="evg-desc">Fórmulas básicas, organização de dados, filtros e gráficos. Curso fundamental para quem quer dominar planilhas.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(2)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">📈 Excel</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(16,185,129,.15);color:var(--green);">Excel</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Excel Intermediário</div>
       <div class="evg-desc">Tabelas dinâmicas, gráficos avançados, funções de pesquisa e formatação condicional para relatórios profissionais.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -890,14 +890,14 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Construção Civil -->
     <div class="evg-card" onclick="abrirCursoEVG(3)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">🏗️ Construção</span><span class="evg-carga">3h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">Construção</span><span class="evg-carga">3h</span></div>
       <div class="evg-title">Fundamentos de Construção Industrializada</div>
       <div class="evg-desc">Conceitos, classificações e panorama histórico da construção industrializada. Tendências no Brasil e no mundo.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(4)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">🏗️ Construção</span><span class="evg-carga">24h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(249,115,22,.15);color:var(--accent);">Construção</span><span class="evg-carga">24h</span></div>
       <div class="evg-title">Introdução aos Fundamentos do BIM</div>
       <div class="evg-desc">Building Information Modeling — metodologia que está revolucionando a construção civil. Entenda o BIM na prática.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -905,14 +905,14 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Ética e Comunicação -->
     <div class="evg-card" onclick="abrirCursoEVG(5)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">⚖️ Ética</span><span class="evg-carga">15h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">Ética</span><span class="evg-carga">15h</span></div>
       <div class="evg-title">Ética e Valores no Trabalho</div>
       <div class="evg-desc">Fundamentos de ética profissional, conduta íntegra e responsabilidade no ambiente de trabalho e com clientes.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(6)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">🗣️ Comunicação</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">Comunicação</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Comunicação Estratégica</div>
       <div class="evg-desc">Como comunicar com clareza e persuasão, construir narrativas, falar bem com clientes e colegas com confiança.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -920,21 +920,21 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Desenvolvimento Pessoal -->
     <div class="evg-card" onclick="abrirCursoEVG(7)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">🌱 Desenvolvimento</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">Desenvolvimento</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Autoconhecimento e Desenvolvimento Pessoal</div>
       <div class="evg-desc">Inteligência emocional, autogestão e habilidades interpessoais para crescer profissional e pessoalmente.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(8)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">⏱️ Produtividade</span><span class="evg-carga">10h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(251,191,36,.15);color:var(--accent2);">Produtividade</span><span class="evg-carga">10h</span></div>
       <div class="evg-title">Gestão do Tempo e Produtividade</div>
       <div class="evg-desc">Técnicas para organizar sua rotina, priorizar tarefas e atingir metas com mais eficiência no dia a dia.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
     </div>
 
     <div class="evg-card" onclick="abrirCursoEVG(9)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">🤝 Liderança</span><span class="evg-carga">20h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(139,92,246,.15);color:var(--purple);">Liderança</span><span class="evg-carga">20h</span></div>
       <div class="evg-title">Liderança e Trabalho em Equipe</div>
       <div class="evg-desc">Estilos de liderança, resolução de conflitos, como motivar pessoas e trabalhar em colaboração.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -942,7 +942,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Segurança -->
     <div class="evg-card" onclick="abrirCursoEVG(10)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(239,68,68,.15);color:var(--red);">⛑️ Segurança</span><span class="evg-carga">11h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(239,68,68,.15);color:var(--red);">Segurança</span><span class="evg-carga">11h</span></div>
       <div class="evg-title">Segurança e Saúde no Trabalho — NR-38</div>
       <div class="evg-desc">Prevenção de riscos, práticas seguras e promoção da saúde no trabalho. Essencial para quem atua em campo.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -950,7 +950,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
     <!-- Digital -->
     <div class="evg-card" onclick="abrirCursoEVG(11)">
-      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">🤖 Digital</span><span class="evg-carga">10h</span></div>
+      <div class="evg-top"><span class="evg-cat" style="background:rgba(59,130,246,.15);color:var(--blue);">Digital</span><span class="evg-carga">10h</span></div>
       <div class="evg-title">Inteligência Artificial — Introdução</div>
       <div class="evg-desc">O que é IA, como ela já está no seu cotidiano e como usar ferramentas de IA para trabalhar melhor.</div>
       <div class="evg-footer"><span class="badge b-green">Gratuito</span><span class="badge b-gray">Certificado EV.G</span></div>
@@ -974,7 +974,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     <div style="padding:24px 24px 0;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
         <div id="evg-cat-badge"></div>
-        <button onclick="fecharEVG()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0;">✕</button>
+        <button onclick="fecharEVG()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--muted);font-size:18px;line-height:1;flex-shrink:0;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       </div>
       <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:20px;letter-spacing:-.02em;margin-bottom:8px;line-height:1.2;" id="evg-modal-title"></div>
       <div style="font-size:13px;color:var(--muted);line-height:1.65;margin-bottom:18px;" id="evg-modal-desc"></div>
@@ -982,7 +982,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     </div>
 
     <div style="margin:0 24px 20px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.2);border-radius:12px;padding:14px 16px;">
-      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;">✅ Como funciona</div>
+      <div style="font-size:12px;font-weight:700;color:var(--green);margin-bottom:6px;">Como funciona</div>
       <ol style="font-size:12.5px;color:var(--muted);line-height:1.8;padding-left:16px;">
         <li>Clique em <strong style="color:var(--text);">Ir para inscrição</strong> — o site do Gov abrirá</li>
         <li>Crie sua conta gratuita em <strong style="color:var(--text);">gov.br</strong> (ou faça login)</li>
@@ -993,7 +993,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     </div>
 
     <div style="margin:0 24px 20px;background:rgba(251,191,36,.07);border:1px solid rgba(251,191,36,.2);border-radius:12px;padding:14px 16px;">
-      <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:5px;">ℹ️ Sobre o certificado</div>
+      <div style="font-size:12px;font-weight:700;color:var(--accent2);margin-bottom:5px;">Sobre o certificado</div>
       <div style="font-size:12px;color:var(--muted);line-height:1.65;">Curso livre (não reconhecido pelo MEC), mas com <strong style="color:var(--text);">certificado válido em todo o Brasil</strong>, emitido pela Enap. Aceito no mercado de trabalho e em concursos públicos como comprovação de qualificação profissional.</div>
     </div>
 
@@ -1182,7 +1182,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <!--  MODAL EDITAR CLIENTE  -->
 <div class="modal-overlay" id="modal-edit-cliente">
   <div class="modal" style="width:560px;max-width:95vw;">
-    <div class="modal-title">✏️ Editar cliente</div>
+    <div class="modal-title">Editar cliente</div>
     <input type="hidden" id="edit-cli-id">
     <div class="grid-2">
       <div class="form-group">
@@ -1257,11 +1257,11 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <!-- MODAL VER DETALHES CLIENTE -->
 <div class="modal-overlay" id="modal-view-cliente">
   <div class="modal" style="width:600px;max-width:95vw;">
-    <div class="modal-title">👤 Detalhes do Cliente</div>
+    <div class="modal-title">Detalhes do Cliente</div>
     <div id="view-cli-content"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeModal('modal-view-cliente')">Fechar</button>
-      <button class="btn btn-accent" onclick="closeModal('modal-view-cliente');editCliente(currentViewId)">✏️ Editar</button>
+      <button class="btn btn-accent" onclick="closeModal('modal-view-cliente');editCliente(currentViewId)">Editar</button>
     </div>
   </div>
 </div>
@@ -1638,7 +1638,7 @@ function renderClientes() {
     let followBadge = '';
     if (c.data_followup) {
       const fup = new Date(c.data_followup + 'T12:00:00');
-      if (fup < hoje) followBadge = '<span class="badge b-red" style="font-size:10px;">⚠ Atrasado</span>';
+      if (fup < hoje) followBadge = '<span class="badge b-red" style="font-size:10px;">Atrasado</span>';
     }
     return `<tr style="cursor:pointer;" onclick="viewCliente('${c.id}')">
       <td>
@@ -1654,7 +1654,7 @@ function renderClientes() {
       <td class="td-muted" style="font-size:12px;">${new Date(c.created_at).toLocaleDateString('pt-BR')}</td>
       <td onclick="event.stopPropagation()">
         <button class="btn btn-ghost btn-sm" onclick="editCliente('${c.id}')">Editar</button>
-        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="removeCliente('${c.id}')">🗑</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red);" onclick="removeCliente('${c.id}')"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></button>
       </td>
     </tr>`;
   }).join('') || '<tr><td colspan="8"><div class="empty"><p>Nenhum cliente na sua carteira ainda</p></div></td></tr>';
@@ -1709,8 +1709,8 @@ function viewCliente(id) {
   if (c.vencimento_plano) {
     const venc = new Date(c.vencimento_plano + 'T12:00:00');
     const diff = Math.ceil((venc - hoje) / (1000*60*60*24));
-    if (diff < 0) vencAlert = `<div style="background:#ff3b3b22;border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;">🚨 Plano <strong>VENCIDO</strong> há ${Math.abs(diff)} dia(s). Entre em contato para renovar.</div>`;
-    else if (diff <= 7) vencAlert = `<div style="background:#ffb30022;border:1px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:14px;">⚠️ Plano vence em <strong>${diff} dia(s)</strong> (${new Date(c.vencimento_plano+'T12:00:00').toLocaleDateString('pt-BR')}). Hora de renovar!</div>`;
+    if (diff < 0) vencAlert = `<div style="background:#ff3b3b22;border:1px solid var(--red);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--red);margin-bottom:14px;">Plano <strong>VENCIDO</strong> há ${Math.abs(diff)} dia(s). Entre em contato para renovar.</div>`;
+    else if (diff <= 7) vencAlert = `<div style="background:#ffb30022;border:1px solid var(--accent);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--accent);margin-bottom:14px;">Plano vence em <strong>${diff} dia(s)</strong> (${new Date(c.vencimento_plano+'T12:00:00').toLocaleDateString('pt-BR')}). Hora de renovar!</div>`;
   }
   let followAlert = '';
   if (c.data_followup) {
@@ -1735,7 +1735,7 @@ function viewCliente(id) {
       </div>
       <div style="background:var(--surface2);border-radius:8px;padding:14px;">
         <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Telefone</div>
-        <div style="font-size:13px;">${c.telefone_cliente ? `<a href="https://wa.me/55${c.telefone_cliente.replace(/\D/g,'')}" target="_blank" style="color:var(--green);">📱 ${c.telefone_cliente}</a>` : '—'}</div>
+        <div style="font-size:13px;">${c.telefone_cliente ? `<a href="https://wa.me/55${c.telefone_cliente.replace(/\D/g,'')}" target="_blank" style="color:var(--green);">${c.telefone_cliente}</a>` : '—'}</div>
       </div>
       <div style="background:var(--surface2);border-radius:8px;padding:14px;">
         <div style="font-size:10px;color:var(--muted);text-transform:uppercase;margin-bottom:4px;">Plano</div>
@@ -2092,7 +2092,7 @@ function initWexDash() {
   bubble.innerHTML = `
     <img src="${WEX_AVATAR_SRC}" style="width:28px;height:28px;border-radius:8px;object-fit:cover;flex-shrink:0;">
     <div style="background:var(--surface2);border:1px solid var(--border);padding:11px 14px;border-radius:12px 12px 12px 4px;font-size:13px;line-height:1.55;max-width:90%;color:var(--text);">
-      Olá, <strong>${nome}</strong>! 👋<br>Sou a <strong style="color:var(--accent);">Wex</strong>, sua assistente comercial.<br>Posso te ajudar com abordagens, e-mails, scripts de vendas e muito mais. Como posso te ajudar hoje?
+      Olá, <strong>${nome}</strong>! <br>Sou a <strong style="color:var(--accent);">Wex</strong>, sua assistente comercial.<br>Posso te ajudar com abordagens, e-mails, scripts de vendas e muito mais. Como posso te ajudar hoje?
     </div>`;
   msgs.appendChild(bubble);
   msgs.scrollTop = msgs.scrollHeight;
@@ -2137,63 +2137,63 @@ function wexDashThinking(show) {
 const WEX_OFFLINE_FAQ = [
   {
     keys: ['lead', 'leads', 'buscar lead', 'encontrar lead', 'pesquisar'],
-    answer: '🔍 Para buscar leads, acesse a seção <strong>Leads</strong> no menu lateral. Você pode filtrar por segmento (construtoras, empreiteiras, fornecedores), estado, score e situação cadastral. Clique em qualquer lead para ver os detalhes completos.'
+    answer: 'Para buscar leads, acesse a seção <strong>Leads</strong> no menu lateral. Você pode filtrar por segmento (construtoras, empreiteiras, fornecedores), estado, score e situação cadastral. Clique em qualquer lead para ver os detalhes completos.'
   },
   {
     keys: ['score', 'pontuação', 'pontuacao', 'qualidade'],
-    answer: '📊 O <strong>Score do Lead</strong> vai de 0 a 100 e indica a qualidade do contato. Score acima de 70 = lead quente (priorize!). Entre 40-70 = lead morno. Abaixo de 40 = lead frio. Considere também o Selo Verificado para priorizar leads com dados confirmados.'
+    answer: 'O <strong>Score do Lead</strong> vai de 0 a 100 e indica a qualidade do contato. Score acima de 70 = lead quente (priorize!). Entre 40-70 = lead morno. Abaixo de 40 = lead frio. Considere também o Selo Verificado para priorizar leads com dados confirmados.'
   },
   {
     keys: ['verificado', 'selo', 'badge', 'confirmado'],
-    answer: '✅ O <strong>Selo Verificado</strong> indica que o lead possui pelo menos um dado de contato confirmado (telefone ou e-mail comercial). Leads verificados têm taxa de resposta muito maior — sempre priorize-os na prospecção!'
+    answer: 'O <strong>Selo Verificado</strong> indica que o lead possui pelo menos um dado de contato confirmado (telefone ou e-mail comercial). Leads verificados têm taxa de resposta muito maior — sempre priorize-os na prospecção!'
   },
   {
     keys: ['crm', 'status', 'etapa', 'pipeline', 'funil'],
-    answer: '🗂️ O <strong>CRM</strong> do WexioLead tem 4 etapas:<br>• <strong>Novo</strong> — lead recém adicionado<br>• <strong>Contatado</strong> — primeiro contato feito<br>• <strong>Negociando</strong> — proposta em andamento<br>• <strong>Fechado</strong> — negócio concluído<br><br>Atualize o status sempre após cada interação com o cliente.'
+    answer: 'O <strong>CRM</strong> do WexioLead tem 4 etapas:<br>• <strong>Novo</strong> — lead recém adicionado<br>• <strong>Contatado</strong> — primeiro contato feito<br>• <strong>Negociando</strong> — proposta em andamento<br>• <strong>Fechado</strong> — negócio concluído<br><br>Atualize o status sempre após cada interação com o cliente.'
   },
   {
     keys: ['exportar', 'exportação', 'csv', 'excel', 'planilha', 'baixar'],
-    answer: '📥 Para exportar leads, acesse a seção <strong>Leads</strong>, aplique os filtros desejados e clique no botão <strong>Exportar CSV</strong>. O arquivo abre em qualquer planilha (Excel, Google Sheets). Disponível nos planos Starter, Pro e Agency.'
+    answer: 'Para exportar leads, acesse a seção <strong>Leads</strong>, aplique os filtros desejados e clique no botão <strong>Exportar CSV</strong>. O arquivo abre em qualquer planilha (Excel, Google Sheets). Disponível nos planos Starter, Pro e Agency.'
   },
   {
     keys: ['plano', 'planos', 'starter', 'pro', 'agency', 'free', 'preço', 'preco', 'valor', 'assinar'],
-    answer: '💳 Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 300 leads/mês<br>• <strong>Pro R$197</strong> — 1.000 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
+    answer: 'Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 300 leads/mês<br>• <strong>Pro R$197</strong> — 1.000 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
   },
   {
     keys: ['quota', 'cota', 'limite', 'crédito', 'credito', 'quantos leads'],
-    answer: '📈 Sua cota de leads é renovada todo mês. Você pode ver quanto já usou no card de <strong>Cota Mensal</strong> no topo do painel. Ao atingir o limite, faça upgrade de plano para continuar prospectando.'
+    answer: 'Sua cota de leads é renovada todo mês. Você pode ver quanto já usou no card de <strong>Cota Mensal</strong> no topo do painel. Ao atingir o limite, faça upgrade de plano para continuar prospectando.'
   },
   {
     keys: ['cnae', 'segmento', 'construtora', 'empreiteira', 'fornecedor', 'civil', 'categoria'],
-    answer: '🏗️ Principais segmentos no WexioLead:<br>• <strong>CNAE 41</strong> — Construção de edifícios (construtoras)<br>• <strong>CNAE 42</strong> — Obras de infraestrutura<br>• <strong>CNAE 43</strong> — Serviços especializados (empreiteiras)<br><br>Use o filtro <strong>Segmento</strong> na busca de leads para refinar os resultados.'
+    answer: 'Principais segmentos no WexioLead:<br>• <strong>CNAE 41</strong> — Construção de edifícios (construtoras)<br>• <strong>CNAE 42</strong> — Obras de infraestrutura<br>• <strong>CNAE 43</strong> — Serviços especializados (empreiteiras)<br><br>Use o filtro <strong>Segmento</strong> na busca de leads para refinar os resultados.'
   },
   {
     keys: ['follow', 'followup', 'follow-up', 'lembrete', 'agendar', 'agendamento'],
-    answer: '📅 Para criar um follow-up, abra o detalhe de um lead e use a seção <strong>Próximos Follow-ups</strong>. Você pode agendar uma data e deixar uma anotação. Os follow-ups pendentes aparecem no seu painel principal para você não perder nenhum.'
+    answer: 'Para criar um follow-up, abra o detalhe de um lead e use a seção <strong>Próximos Follow-ups</strong>. Você pode agendar uma data e deixar uma anotação. Os follow-ups pendentes aparecem no seu painel principal para você não perder nenhum.'
   },
   {
     keys: ['comissão', 'comissao', 'ganho', 'pagamento', 'meta'],
-    answer: '💰 Suas comissões são calculadas com base nos clientes ativos da sua carteira. Acesse a seção <strong>Comissões</strong> no menu para ver o detalhamento por mês. Em caso de dúvidas sobre valores, fale com seu gestor.'
+    answer: 'Suas comissões são calculadas com base nos clientes ativos da sua carteira. Acesse a seção <strong>Comissões</strong> no menu para ver o detalhamento por mês. Em caso de dúvidas sobre valores, fale com seu gestor.'
   },
   {
     keys: ['cliente', 'carteira', 'meu cliente', 'clientes ativos'],
-    answer: '👥 Sua <strong>carteira de clientes</strong> fica na seção <strong>Clientes</strong> do menu. Lá você vê todos os clientes ativos vinculados a você, pode registrar contatos e acompanhar o status de cada conta.'
+    answer: 'Sua <strong>carteira de clientes</strong> fica na seção <strong>Clientes</strong> do menu. Lá você vê todos os clientes ativos vinculados a você, pode registrar contatos e acompanhar o status de cada conta.'
   },
   {
     keys: ['senha', 'login', 'acesso', 'entrar', 'esqueci'],
-    answer: '🔑 Problema de acesso? Fale com seu gestor ou administrador do sistema. Eles conseguem resetar sua senha pelo painel de administração. Não compartilhe suas credenciais com ninguém.'
+    answer: 'Problema de acesso? Fale com seu gestor ou administrador do sistema. Eles conseguem resetar sua senha pelo painel de administração. Não compartilhe suas credenciais com ninguém.'
   },
   {
     keys: ['curso', 'treinamento', 'aprender', 'tutorial', 'material'],
-    answer: '📚 Acesse a seção <strong>Materiais</strong> no menu para ver os cursos práticos disponíveis: vendas B2B, contorno de objeções, follow-up, gestão de leads e muito mais. Todo o conteúdo funciona sem precisar de internet extra.'
+    answer: 'Acesse a seção <strong>Materiais</strong> no menu para ver os cursos práticos disponíveis: vendas B2B, contorno de objeções, follow-up, gestão de leads e muito mais. Todo o conteúdo funciona sem precisar de internet extra.'
   },
   {
     keys: ['sugestão', 'sugestao', 'ideia', 'feedback', 'melhoria'],
-    answer: '💡 Tem uma ideia para melhorar o sistema? Acesse a seção <strong>Sugestão do Mês</strong> no menu e envie sua contribuição. A equipe analisa todas as sugestões!'
+    answer: 'Tem uma ideia para melhorar o sistema? Acesse a seção <strong>Sugestão do Mês</strong> no menu e envie sua contribuição. A equipe analisa todas as sugestões!'
   },
   {
     keys: ['wex', 'ajuda', 'help', 'como usar', 'o que você faz', 'o que voce faz'],
-    answer: '🤖 Sou a <strong>Wex</strong>, sua assistente no WexioLead! Posso te ajudar com:<br>• Dúvidas sobre o sistema<br>• Estratégias de prospecção e vendas<br>• Abordagem de leads por perfil<br>• Dicas sobre o mercado de construção civil<br><br>É só perguntar! 😊'
+    answer: 'Sou a <strong>Wex</strong>, sua assistente no WexioLead! Posso te ajudar com:<br>• Dúvidas sobre o sistema<br>• Estratégias de prospecção e vendas<br>• Abordagem de leads por perfil<br>• Dicas sobre o mercado de construção civil<br><br>É só perguntar! '
   }
 ];
 
@@ -2206,7 +2206,7 @@ function wexOfflineFallback(text) {
     if (score > bestScore) { bestScore = score; best = faq; }
   }
   if (best && bestScore > 0) return best.answer;
-  return '⚠️ Estou sem conexão com a IA agora. Tente novamente em instantes ou reformule sua pergunta sobre o sistema que faço o possível para te ajudar!';
+  return 'Estou sem conexão com a IA agora. Tente novamente em instantes ou reformule sua pergunta sobre o sistema que faço o possível para te ajudar!';
 }
 
 async function sendWexDash() {
@@ -2356,12 +2356,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(249,115,22,.15)',
     sugs: ['O que é venda consultiva?','Como identificar a dor do cliente','Como apresentar uma proposta de valor'],
     dicas: [
-      '🎯 Pergunte antes de apresentar — entenda o problema antes de falar do produto.',
-      '🔍 Use a pergunta: "Qual é o maior desafio hoje na gestão dos seus leads/obras?" para abrir a conversa.',
-      '💡 Venda o resultado, não a ferramenta: "Você vai economizar tempo e fechar mais contratos" em vez de "temos esse recurso".',
-      '📋 Anote o que o cliente disse e repita no fechamento — mostra que você ouviu de verdade.',
-      '⏱️ Limite sua apresentação inicial a 3 minutos. Quem fala demais perde o cliente.',
-      '✅ Ao final de toda reunião, defina o próximo passo com data e hora marcada.'
+      'Pergunte antes de apresentar — entenda o problema antes de falar do produto.',
+      'Use a pergunta: "Qual é o maior desafio hoje na gestão dos seus leads/obras?" para abrir a conversa.',
+      'Venda o resultado, não a ferramenta: "Você vai economizar tempo e fechar mais contratos" em vez de "temos esse recurso".',
+      'Anote o que o cliente disse e repita no fechamento — mostra que você ouviu de verdade.',
+      'Limite sua apresentação inicial a 3 minutos. Quem fala demais perde o cliente.',
+      'Ao final de toda reunião, defina o próximo passo com data e hora marcada.'
     ],
     prompt: 'Você é um instrutor especialista em vendas B2B. Ensine de forma prática sobre vendas consultivas para a construção civil: como descobrir a necessidade real do cliente, como apresentar valor, como conduzir uma conversa de vendas. Use exemplos concretos do setor de construção civil. Seja didático, direto e use linguagem acessível. Máximo 4 parágrafos por resposta.'
   },
@@ -2372,12 +2372,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(139,92,246,.15)',
     sugs: ['Quais são as principais objeções?','Como responder "está caro"?','O cliente diz que vai pensar, e agora?'],
     dicas: [
-      '💰 "Tá caro" → "Entendo. Em relação a quê você está comparando?" — descubra a referência dele.',
-      '🤔 "Vou pensar" → "Claro! O que falta pra você tomar a decisão hoje?" — identifique a dúvida real.',
-      '⏳ "Não tenho tempo" → "Leva só 15 minutos. Posso na segunda às 9h ou na terça às 14h?" — dê opções.',
-      '🔄 "Já tenho solução" → "Legal! O que você acha que ainda falta na solução atual?" — abra brecha.',
-      '🚫 Nunca discuta com o cliente. Concorde primeiro, depois apresente seu ponto.',
-      '📌 Toda objeção é uma dúvida disfarçada — trate com curiosidade, não com defesa.'
+      '"Tá caro" → "Entendo. Em relação a quê você está comparando?" — descubra a referência dele.',
+      '"Vou pensar" → "Claro! O que falta pra você tomar a decisão hoje?" — identifique a dúvida real.',
+      '"Não tenho tempo" → "Leva só 15 minutos. Posso na segunda às 9h ou na terça às 14h?" — dê opções.',
+      '"Já tenho solução" → "Legal! O que você acha que ainda falta na solução atual?" — abra brecha.',
+      'Nunca discuta com o cliente. Concorde primeiro, depois apresente seu ponto.',
+      'Toda objeção é uma dúvida disfarçada — trate com curiosidade, não com defesa.'
     ],
     prompt: 'Você é um especialista em vendas e contorno de objeções. Ensine como lidar com as objeções mais comuns no contexto de vendas de software/SaaS para empresas de construção civil: preço alto, não tenho tempo, vou pensar, já tenho solução, não confio. Dê respostas práticas e scripts prontos. Máximo 4 parágrafos por resposta.'
   },
@@ -2388,12 +2388,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Quando fazer o primeiro follow-up?','Como abordar sem ser chato?','Scripts de follow-up por WhatsApp'],
     dicas: [
-      '⏰ Primeiro follow-up: 24h após o contato inicial — enquanto você ainda está fresco na memória.',
-      '📅 Padrão ideal: contato D+1, D+3, D+7, D+14 e D+30 para leads frios.',
-      '💬 Nunca comece com "Só passando pra ver..." — traga algo novo: uma dica, um dado, uma novidade.',
-      '📲 WhatsApp > E-mail para resposta rápida. Use áudio curto (30 seg) para parecer mais humano.',
-      '🔁 Se não respondeu em 3 tentativas, mude o canal: WhatsApp → ligação → e-mail.',
-      '🗓️ Sempre termine com uma pergunta aberta: "Quando seria melhor pra você?"'
+      'Primeiro follow-up: 24h após o contato inicial — enquanto você ainda está fresco na memória.',
+      'Padrão ideal: contato D+1, D+3, D+7, D+14 e D+30 para leads frios.',
+      'Nunca comece com "Só passando pra ver..." — traga algo novo: uma dica, um dado, uma novidade.',
+      'WhatsApp > E-mail para resposta rápida. Use áudio curto (30 seg) para parecer mais humano.',
+      'Se não respondeu em 3 tentativas, mude o canal: WhatsApp → ligação → e-mail.',
+      'Sempre termine com uma pergunta aberta: "Quando seria melhor pra você?"'
     ],
     prompt: 'Você é um especialista em follow-up e fechamento de vendas. Ensine técnicas práticas de acompanhamento de leads: quando contatar, como contatar (WhatsApp, e-mail, ligação), o que falar, quantas tentativas fazer, como nutrir um lead frio. Use exemplos reais do setor de construção civil. Máximo 4 parágrafos por resposta.'
   },
@@ -2404,12 +2404,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(16,185,129,.15)',
     sugs: ['O que é score de lead?','Como priorizar leads?','Como fazer o primeiro contato?'],
     dicas: [
-      '🔥 Priorize leads com score alto — são os que mais demonstraram interesse e têm perfil certo.',
-      '📞 Entre em contato em até 5 minutos após o lead chegar — a taxa de conversão cai 80% depois de 1h.',
-      '🏗️ Verifique o CNAE do lead antes de ligar — adapte a conversa para construtoras, fornecedores ou empreiteiros.',
-      '📝 Sempre registre no CRM o que foi falado, status e data do próximo contato — não confie na memória.',
-      '🧊 Lead frio (sem resposta há 15+ dias)? Mude a abordagem: envie um conteúdo útil antes de tentar vender.',
-      '✅ Lead qualificado = tem CNPJ ativo, perfil de construção civil e capacidade de pagar o plano.'
+      'Priorize leads com score alto — são os que mais demonstraram interesse e têm perfil certo.',
+      'Entre em contato em até 5 minutos após o lead chegar — a taxa de conversão cai 80% depois de 1h.',
+      'Verifique o CNAE do lead antes de ligar — adapte a conversa para construtoras, fornecedores ou empreiteiros.',
+      'Sempre registre no CRM o que foi falado, status e data do próximo contato — não confie na memória.',
+      'Lead frio (sem resposta há 15+ dias)? Mude a abordagem: envie um conteúdo útil antes de tentar vender.',
+      'Lead qualificado = tem CNPJ ativo, perfil de construção civil e capacidade de pagar o plano.'
     ],
     prompt: 'Você é um especialista em gestão de leads B2B. Ensine como trabalhar leads de forma estratégica: o que é lead qualificado, como funciona pontuação/score, como priorizar o atendimento, como estruturar a abordagem inicial, diferença entre leads quentes e frios, como usar o CRM para registrar tudo. Use exemplos do contexto de construção civil. Máximo 4 parágrafos por resposta.'
   },
@@ -2420,12 +2420,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(251,191,36,.15)',
     sugs: ['Como criar urgência na negociação?','Como defender o preço sem ceder?','Técnicas de fechamento eficazes'],
     dicas: [
-      '🎯 Fechamento por alternativa: "Você prefere começar pelo Starter ou já ir pro Pro?" — nunca "Vai fechar?"',
-      '⏳ Urgência real: "Essa condição é válida até sexta" — use só quando for verdade, senão perde credibilidade.',
-      '💪 Defenda o preço com valor: "O que você paga por mês em planilhas e horas perdidas hoje?"',
-      '🤝 Se der desconto, peça algo em troca: "Se eu conseguir isso pra você, podemos fechar agora?"',
-      '🔇 Após apresentar o preço, fique em silêncio — quem fala primeiro, perde.',
-      '📊 Mostre o ROI: "Com o plano Pro, em 3 meses você recupera o investimento só no tempo economizado."'
+      'Fechamento por alternativa: "Você prefere começar pelo Starter ou já ir pro Pro?" — nunca "Vai fechar?"',
+      'Urgência real: "Essa condição é válida até sexta" — use só quando for verdade, senão perde credibilidade.',
+      'Defenda o preço com valor: "O que você paga por mês em planilhas e horas perdidas hoje?"',
+      'Se der desconto, peça algo em troca: "Se eu conseguir isso pra você, podemos fechar agora?"',
+      'Após apresentar o preço, fique em silêncio — quem fala primeiro, perde.',
+      'Mostre o ROI: "Com o plano Pro, em 3 meses você recupera o investimento só no tempo economizado."'
     ],
     prompt: 'Você é um especialista em negociação e fechamento de vendas. Ensine técnicas práticas: como criar urgência, como defender preço sem dar desconto, como identificar o momento certo de fechar, gatilhos mentais éticos, técnicas de fechamento (alternativa, urgência, assumido). Use exemplos do setor de construção civil. Máximo 4 parágrafos por resposta.'
   },
@@ -2436,12 +2436,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(249,115,22,.15)',
     sugs: ['Quais os principais CNAEs?','Diferença entre construtora e empreiteira?','Como abordar uma construtora?'],
     dicas: [
-      '🏢 Construtora: executa obra própria. Empreiteira: presta serviço pra construtora. Incorporadora: vende o imóvel.',
-      '📋 CNAEs-chave: 4120-4 (construção), 4330-4 (acabamento), 4391-6 (estruturas), 4744-0 (materiais).',
-      '👔 Decisor na construtora pequena = dono. Na média = diretor ou gerente de TI/operações.',
-      '📞 Melhor horário pra ligar: 8h-9h30 ou 16h-17h30 — evite horário de almoço e final de tarde.',
-      '🗓️ Setor tem sazonalidade: jan-fev mais lento (planejamento), mar-nov mais ativo em obras.',
-      '💡 Fale em termos deles: "gestão de obra", "controle de fornecedores", "orçamento de materiais" — não em termos de TI.'
+      'Construtora: executa obra própria. Empreiteira: presta serviço pra construtora. Incorporadora: vende o imóvel.',
+      'CNAEs-chave: 4120-4 (construção), 4330-4 (acabamento), 4391-6 (estruturas), 4744-0 (materiais).',
+      'Decisor na construtora pequena = dono. Na média = diretor ou gerente de TI/operações.',
+      'Melhor horário pra ligar: 8h-9h30 ou 16h-17h30 — evite horário de almoço e final de tarde.',
+      'Setor tem sazonalidade: jan-fev mais lento (planejamento), mar-nov mais ativo em obras.',
+      'Fale em termos deles: "gestão de obra", "controle de fornecedores", "orçamento de materiais" — não em termos de TI.'
     ],
     prompt: 'Você é um especialista no mercado de construção civil brasileiro. Ensine sobre os segmentos do setor: construtoras, incorporadoras, empreiteiras, fornecedores de materiais, prestadores de serviço. Explique os principais CNAEs, como funciona o ciclo de compras do setor, quem são os decisores, como se comunicar com cada perfil. Ajude os funcionários a entender melhor o mercado que estão atendendo. Máximo 4 parágrafos por resposta.'
   },
@@ -2452,12 +2452,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(139,92,246,.15)',
     sugs: ['O que é conduta ética no trabalho?','Como tratar clientes e colegas?','O que nunca fazer no trabalho?'],
     dicas: [
-      '🤝 Nunca prometa ao cliente algo que o produto não entrega — uma venda desonesta volta como cancelamento.',
-      '🔒 Dados de clientes são confidenciais — nunca compartilhe listas, contatos ou informações internas.',
-      '👥 Respeite colegas em público — discordâncias se resolvem em particular, nunca na frente de clientes.',
-      '⏰ Pontualidade é respeito: reunião marcada, reunião cumprida. Atrasos avisados com antecedência.',
-      '🚫 Jamais fale mal da concorrência diretamente — foque nos seus diferenciais, não nos defeitos deles.',
-      '📣 Se errou, assuma. Clientes perdoam erros assumidos; não perdoam mentiras descobertas.'
+      'Nunca prometa ao cliente algo que o produto não entrega — uma venda desonesta volta como cancelamento.',
+      'Dados de clientes são confidenciais — nunca compartilhe listas, contatos ou informações internas.',
+      'Respeite colegas em público — discordâncias se resolvem em particular, nunca na frente de clientes.',
+      'Pontualidade é respeito: reunião marcada, reunião cumprida. Atrasos avisados com antecedência.',
+      'Jamais fale mal da concorrência diretamente — foque nos seus diferenciais, não nos defeitos deles.',
+      'Se errou, assuma. Clientes perdoam erros assumidos; não perdoam mentiras descobertas.'
     ],
     prompt: 'Você é um especialista em ética e conduta profissional. Ensine sobre comportamento ético no trabalho: integridade nas vendas, respeito a colegas e clientes, sigilo de informações, honestidade nas promessas ao cliente, como agir em situações difíceis, o que é e o que não é aceitável no ambiente profissional. Seja direto e use exemplos práticos do dia a dia comercial. Máximo 4 parágrafos por resposta.'
   },
@@ -2468,12 +2468,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Como escrever um e-mail profissional?','Como falar bem ao telefone?','Erros de comunicação que afastam clientes'],
     dicas: [
-      '✉️ E-mail: assunto claro, máximo 5 linhas, uma ação pedida por e-mail. Nunca mande parede de texto.',
-      '📱 WhatsApp profissional: sem abreviações, sem "oi sumiu", sem figurinhas em primeiro contato.',
-      '🎙️ Ao telefone: sorria ao falar — o cliente sente. Fale devagar, pronuncie bem o nome da empresa.',
-      '🔤 Revise antes de enviar — erro de português passa imagem de descuido, especialmente com clientes novos.',
-      '👂 Escuta ativa: não interrompa. Deixe o cliente terminar a ideia antes de responder.',
-      '📌 Confirme por escrito o que foi combinado verbalmente — evita desentendidos e mostra organização.'
+      'E-mail: assunto claro, máximo 5 linhas, uma ação pedida por e-mail. Nunca mande parede de texto.',
+      'WhatsApp profissional: sem abreviações, sem "oi sumiu", sem figurinhas em primeiro contato.',
+      'Ao telefone: sorria ao falar — o cliente sente. Fale devagar, pronuncie bem o nome da empresa.',
+      'Revise antes de enviar — erro de português passa imagem de descuido, especialmente com clientes novos.',
+      'Escuta ativa: não interrompa. Deixe o cliente terminar a ideia antes de responder.',
+      'Confirme por escrito o que foi combinado verbalmente — evita desentendidos e mostra organização.'
     ],
     prompt: 'Você é um especialista em comunicação profissional. Ensine como se comunicar bem no ambiente de trabalho: como escrever e-mails e mensagens profissionais, como falar bem ao telefone e no WhatsApp com clientes, como dar e receber feedback, como se expressar com clareza e confiança, erros comuns de comunicação que prejudicam vendas. Use exemplos práticos. Máximo 4 parágrafos por resposta.'
   },
@@ -2484,12 +2484,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como organizar meu dia de trabalho?','Como priorizar tarefas?','Como evitar procrastinação?'],
     dicas: [
-      '🌅 Comece o dia revisando seus follow-ups pendentes — resolva o mais importante antes de abrir redes sociais.',
-      '📋 Liste no máximo 3 prioridades por dia — quem tem 10 prioridades não tem nenhuma.',
-      '⏱️ Use blocos de tempo: 90 min de foco → 15 min pausa. Evita cansaço e aumenta concentração.',
-      '🚫 Desative notificações em horário de prospecção — cada interrupção custa 23 min de reconcentração.',
-      '📊 Regra 80/20: 20% dos clientes geram 80% dos resultados. Identifique e priorize esses clientes.',
-      '✅ Termine o dia anotando o que fez e o que fica para amanhã — você dorme melhor e começa melhor.'
+      'Comece o dia revisando seus follow-ups pendentes — resolva o mais importante antes de abrir redes sociais.',
+      'Liste no máximo 3 prioridades por dia — quem tem 10 prioridades não tem nenhuma.',
+      'Use blocos de tempo: 90 min de foco → 15 min pausa. Evita cansaço e aumenta concentração.',
+      'Desative notificações em horário de prospecção — cada interrupção custa 23 min de reconcentração.',
+      'Regra 80/20: 20% dos clientes geram 80% dos resultados. Identifique e priorize esses clientes.',
+      'Termine o dia anotando o que fez e o que fica para amanhã — você dorme melhor e começa melhor.'
     ],
     prompt: 'Você é um especialista em produtividade e gestão de tempo. Ensine técnicas práticas para organizar o dia de trabalho de um consultor de vendas: como criar uma rotina produtiva, como priorizar tarefas (matriz de Eisenhower, regra 80/20), como evitar distrações, como usar ferramentas simples de organização, como equilibrar prospecção e follow-up na agenda. Máximo 4 parágrafos por resposta.'
   },
@@ -2500,12 +2500,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(251,191,36,.15)',
     sugs: ['O que é escuta ativa?','Como resolver reclamações de clientes?','Como encantar um cliente?'],
     dicas: [
-      '👂 Escuta ativa: olhos no cliente (ou atenção total), sem interromper, repita o que entendeu antes de responder.',
-      '😤 Cliente irritado? Primeiro reconheça o sentimento: "Entendo sua frustração, vou resolver isso agora."',
-      '⚡ Resolva rápido — 70% dos clientes que reclamam e têm solução rápida ficam mais fiéis do que antes.',
-      '🎁 Surpreender é simples: lembrar o nome, antecipar uma dúvida, mandar uma mensagem depois da reunião.',
-      '🔁 Peça feedback: "O que eu poderia ter feito melhor?" — clientes que respondem isso raramente cancelam.',
-      '📌 Clientes difíceis costumam ter razão — ouça com paciência e você vai descobrir o problema real.'
+      'Escuta ativa: olhos no cliente (ou atenção total), sem interromper, repita o que entendeu antes de responder.',
+      'Cliente irritado? Primeiro reconheça o sentimento: "Entendo sua frustração, vou resolver isso agora."',
+      'Resolva rápido — 70% dos clientes que reclamam e têm solução rápida ficam mais fiéis do que antes.',
+      'Surpreender é simples: lembrar o nome, antecipar uma dúvida, mandar uma mensagem depois da reunião.',
+      'Peça feedback: "O que eu poderia ter feito melhor?" — clientes que respondem isso raramente cancelam.',
+      'Clientes difíceis costumam ter razão — ouça com paciência e você vai descobrir o problema real.'
     ],
     prompt: 'Você é um especialista em atendimento ao cliente e experiência do usuário. Ensine técnicas de atendimento de excelência: o que é escuta ativa e como praticar, como resolver reclamações sem perder o cliente, como surpreender positivamente, o que faz um cliente recomendar você, como lidar com clientes difíceis. Use exemplos práticos do setor comercial. Máximo 4 parágrafos por resposta.'
   },
@@ -2516,12 +2516,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como criar uma planilha do zero?','Quais fórmulas básicas preciso saber?','Como organizar dados no Excel?'],
     dicas: [
-      '📊 Fórmulas essenciais: =SOMA(A1:A10), =MÉDIA(A1:A10), =SE(A1>0,"Sim","Não"), =PROCV() para buscar dados.',
-      '🔒 Ctrl+S salva. Ctrl+Z desfaz. Ctrl+C copia. Ctrl+V cola. Aprenda esses atalhos primeiro.',
-      '🎨 Use negrito (Ctrl+B) para cabeçalhos e congele a primeira linha: Exibir → Congelar Painéis.',
-      '🔍 Filtros: selecione a tabela → Dados → Filtro. Clique na seta da coluna para filtrar por valor.',
-      '📋 Não misture tipos de dado na mesma coluna — datas com datas, números com números.',
-      '💡 Toda célula começa com = para ser uma fórmula. Sem o =, é só texto.'
+      'Fórmulas essenciais: =SOMA(A1:A10), =MÉDIA(A1:A10), =SE(A1>0,"Sim","Não"), =PROCV() para buscar dados.',
+      'Ctrl+S salva. Ctrl+Z desfaz. Ctrl+C copia. Ctrl+V cola. Aprenda esses atalhos primeiro.',
+      'Use negrito (Ctrl+B) para cabeçalhos e congele a primeira linha: Exibir → Congelar Painéis.',
+      'Filtros: selecione a tabela → Dados → Filtro. Clique na seta da coluna para filtrar por valor.',
+      'Não misture tipos de dado na mesma coluna — datas com datas, números com números.',
+      'Toda célula começa com = para ser uma fórmula. Sem o =, é só texto.'
     ],
     prompt: 'Você é um instrutor de informática especialista em Excel. Ensine o básico de Excel de forma simples e prática: como criar e formatar planilhas, as fórmulas essenciais (SOMA, MÉDIA, SE, PROCV), como organizar dados, filtros, como criar um relatório simples. Explique passo a passo, como se estivesse ensinando alguém que nunca usou o programa. Use linguagem bem simples. Máximo 4 parágrafos por resposta.'
   },
@@ -2532,12 +2532,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(59,130,246,.15)',
     sugs: ['Como criar um documento no Word?','Como formatar texto profissionalmente?','Como criar uma proposta comercial?'],
     dicas: [
-      '💾 Salve sempre como .docx e ative o salvamento automático — nunca perca seu trabalho.',
-      '🔤 Use fonte Arial ou Calibri tamanho 11-12 para documentos profissionais. Nada de Comic Sans.',
-      '📐 Margens padrão: 2,5 cm em todos os lados. Ative em: Layout → Margens → Normal.',
-      '📋 Para propostas: cabeçalho com logo/nome da empresa, data, nome do cliente, valor e próximos passos.',
-      '📄 Salve em PDF antes de enviar: Arquivo → Salvar Como → PDF — evita problema de formatação.',
-      '⌨️ Ctrl+Enter cria uma nova página. Muito melhor que ficar apertando Enter várias vezes.'
+      'Salve sempre como .docx e ative o salvamento automático — nunca perca seu trabalho.',
+      'Use fonte Arial ou Calibri tamanho 11-12 para documentos profissionais. Nada de Comic Sans.',
+      'Margens padrão: 2,5 cm em todos os lados. Ative em: Layout → Margens → Normal.',
+      'Para propostas: cabeçalho com logo/nome da empresa, data, nome do cliente, valor e próximos passos.',
+      'Salve em PDF antes de enviar: Arquivo → Salvar Como → PDF — evita problema de formatação.',
+      'Ctrl+Enter cria uma nova página. Muito melhor que ficar apertando Enter várias vezes.'
     ],
     prompt: 'Você é um instrutor de informática especialista em Word e documentos. Ensine como usar o Word de forma prática: criar e salvar documentos, formatar texto (fonte, tamanho, negrito, alinhamento), usar cabeçalho e rodapé, criar tabelas simples, como fazer uma proposta comercial ou e-mail formal no Word. Explique passo a passo com linguagem bem acessível para quem está aprendendo. Máximo 4 parágrafos por resposta.'
   },
@@ -2548,12 +2548,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(139,92,246,.15)',
     sugs: ['Como pesquisar bem na internet?','Como identificar golpes online?','Como criar uma senha segura?'],
     dicas: [
-      '🔐 Senha forte: mínimo 8 caracteres, misture letras maiúsculas, minúsculas, números e símbolos.',
-      '🚨 Golpe clássico: e-mail urgente pedindo clique em link ou dados bancários. Desconfie sempre.',
-      '🔗 Antes de clicar: passe o mouse sobre o link e veja o endereço real na barra inferior do navegador.',
-      '📧 E-mail profissional: assunto claro, sem gírias, sem "oi sumido", responda em até 24h úteis.',
-      '🌐 Para pesquisar: seja específico. "Excel fórmula PROCV passo a passo" é melhor que "Excel ajuda".',
-      '🛡️ Nunca compartilhe senha com ninguém — nem com o suporte técnico. Empresa séria não pede senha.'
+      'Senha forte: mínimo 8 caracteres, misture letras maiúsculas, minúsculas, números e símbolos.',
+      'Golpe clássico: e-mail urgente pedindo clique em link ou dados bancários. Desconfie sempre.',
+      'Antes de clicar: passe o mouse sobre o link e veja o endereço real na barra inferior do navegador.',
+      'E-mail profissional: assunto claro, sem gírias, sem "oi sumido", responda em até 24h úteis.',
+      'Para pesquisar: seja específico. "Excel fórmula PROCV passo a passo" é melhor que "Excel ajuda".',
+      'Nunca compartilhe senha com ninguém — nem com o suporte técnico. Empresa séria não pede senha.'
     ],
     prompt: 'Você é um especialista em segurança digital e uso profissional da internet. Ensine como usar a internet com segurança: como pesquisar informações confiáveis, como criar e gerenciar senhas seguras, como identificar e evitar golpes (phishing, links falsos), como usar o e-mail profissionalmente, o que nunca compartilhar online, boas práticas de segurança no celular e computador. Linguagem simples e exemplos práticos. Máximo 4 parágrafos por resposta.'
   },
@@ -2564,12 +2564,12 @@ const CURSOS_CONFIG = {
     cor: 'rgba(16,185,129,.15)',
     sugs: ['Como abordar um cliente no WhatsApp?','Como responder sem parecer robô?','Erros no WhatsApp que afastam clientes'],
     dicas: [
-      '👋 Primeira mensagem: se apresente, diga de onde veio o contato e faça uma pergunta. Nunca mande só "oi".',
-      '⏰ Responda em até 1h em horário comercial — cliente sem resposta vai para o concorrente.',
-      '🎙️ Áudio com mais de 1 minuto: peça permissão antes. Muitos clientes não gostam de ouvir áudio no trabalho.',
-      '✅ Use listas de transmissão para avisos gerais, nunca grupos com clientes que não se conhecem.',
-      '🚫 Evite: emojis em excesso, texto em caixa alta, mensagem longa sem parágrafo e cobranças agressivas.',
-      '📊 WhatsApp Business: configure horário de atendimento, mensagem automática e catálogo — passa mais profissionalismo.'
+      'Primeira mensagem: se apresente, diga de onde veio o contato e faça uma pergunta. Nunca mande só "oi".',
+      'Responda em até 1h em horário comercial — cliente sem resposta vai para o concorrente.',
+      'Áudio com mais de 1 minuto: peça permissão antes. Muitos clientes não gostam de ouvir áudio no trabalho.',
+      'Use listas de transmissão para avisos gerais, nunca grupos com clientes que não se conhecem.',
+      'Evite: emojis em excesso, texto em caixa alta, mensagem longa sem parágrafo e cobranças agressivas.',
+      'WhatsApp Business: configure horário de atendimento, mensagem automática e catálogo — passa mais profissionalismo.'
     ],
     prompt: 'Você é um especialista em comunicação digital e vendas pelo WhatsApp. Ensine como usar o WhatsApp de forma profissional: como estruturar uma abordagem inicial, como responder com agilidade e profissionalismo, como usar listas de transmissão, como criar mensagens que geram resposta, erros comuns que afastam clientes, uso do WhatsApp Business, horários e etiqueta profissional. Use exemplos práticos de mensagens. Máximo 4 parágrafos por resposta.'
   }
@@ -2600,7 +2600,7 @@ function iniciarCurso(id) {
       <div style="background:var(--surface2);border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px 18px;margin-bottom:4px;">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:13px;">
           <div style="width:26px;height:26px;background:${cfg.cor};border-radius:7px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${cfg.icon.replace('22px','14px').replace('22px','14px')}</div>
-          <span style="font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.03em;text-transform:uppercase;">⚡ Dicas Rápidas</span>
+          <span style="font-family:'Syne',sans-serif;font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:.03em;text-transform:uppercase;">Dicas Rápidas</span>
         </div>
         <div style="display:flex;flex-direction:column;gap:9px;">
           ${cfg.dicas.map(d => `
@@ -2609,7 +2609,7 @@ function iniciarCurso(id) {
               <span style="color:var(--muted);">${d.split(' ').slice(1).join(' ')}</span>
             </div>`).join('')}
         </div>
-        <div style="margin-top:13px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--dim);">Tem dúvida sobre alguma dessas dicas ou quer se aprofundar? Use o chat abaixo. 👇</div>
+        <div style="margin-top:13px;padding-top:12px;border-top:1px solid var(--border);font-size:12px;color:var(--dim);">Tem dúvida sobre alguma dessas dicas ou quer se aprofundar? Use o chat abaixo. </div>
       </div>`;
     chat.appendChild(dicasDiv);
   } else {
