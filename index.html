@@ -1465,11 +1465,22 @@ async function doLogin() {
 
 // onLogin removido — login agora é direto via tabela employees
 
+// ── Avatar DiceBear (open-source). Fallback p/ inicial. NÃO afeta a Wex. ──
+function setAvatarFunc(elId, seed, inicial) {
+  var el = document.getElementById(elId);
+  if (!el) return;
+  el.style.overflow = 'hidden';
+  el.style.background = 'none';
+  var s = encodeURIComponent((seed || 'wexio').toLowerCase().trim());
+  var url = 'https://api.dicebear.com/9.x/notionists-neutral/svg?seed=' + s + '&backgroundColor=f97316,fb923c,fdba74&radius=20';
+  el.innerHTML = '<img src="'+url+'" alt="" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;" onerror="this.parentNode.textContent=\''+(inicial||'?')+'\'">';
+}
+
 function initUI() {
   setWexImages();
   const nome = currentEmployee.nome || currentEmployee.email || '?';
   const initials = nome.split(' ').slice(0,2).map(w=>w[0]||'').join('').toUpperCase() || '?';
-  document.getElementById('func-ava').textContent = initials;
+  setAvatarFunc('func-ava', nome, initials);
   document.getElementById('func-nome').textContent = nome;
   document.getElementById('func-cargo').textContent = currentEmployee.cargo || 'Consultor Comercial';
 
