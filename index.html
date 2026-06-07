@@ -253,6 +253,33 @@ textarea.form-input{resize:vertical;min-height:90px;}
   .stats-row{grid-template-columns:1fr 1fr;}
 }
 
+/* ── MOBILE: refinamentos de usabilidade ── */
+@media(max-width:768px){
+  /* Materiais e cursos: uma coluna */
+  .mat-grid, #evg-cursos-grid, [id*="cursos-grid"]{grid-template-columns:1fr !important;}
+  /* Tabelas com scroll suave e largura mínima */
+  .tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .tbl-wrap table{min-width:560px;}
+  /* Wex ocupa a tela no celular */
+  #wex-panel{width:100% !important;right:0 !important;left:0 !important;bottom:0 !important;border-radius:16px 16px 0 0;max-height:85vh;}
+  /* Modais de material/curso em largura quase total */
+  .modal-card,[id^="modal-"] .modal-card{width:calc(100vw - 24px) !important;max-width:none !important;}
+  /* Conteúdo do tutorial usa mais altura */
+  #tut-static{max-height:65vh !important;}
+  /* Cards de material com toque maior */
+  .mat-card{padding:14px;}
+}
+@media(max-width:480px){
+  .stats-row{grid-template-columns:1fr;}
+  /* Abas do tutorial roláveis sem cortar */
+  #tut-tabs{font-size:12px;}
+  #tut-tabs > *{white-space:nowrap;}
+  /* Botões confortáveis para o dedo */
+  .btn{min-height:40px;}
+  /* Esconde colunas secundárias nas tabelas muito estreitas */
+  .tbl-wrap table{min-width:420px;}
+}
+
 /* CURSO INTERNO CARD */
 .curso-interno-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:12px;transition:all .2s;cursor:pointer;}
 .curso-interno-card:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.25);}
@@ -803,16 +830,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     <div id="tut-tabs" style="display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface2);overflow-x:auto;"></div>
 
     <!-- Conteudo estático da aba -->
-    <div id="tut-static" style="padding:20px 24px;max-height:340px;overflow-y:auto;font-size:13.5px;line-height:1.75;color:var(--text);display:none;"></div>
-
-    <!-- Chat interativo da aba -->
-    <div id="tut-chat" style="height:320px;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:var(--bg);display:none;"></div>
-
-    <div style="padding:14px 16px;border-top:1px solid var(--border);display:flex;gap:8px;background:var(--surface);">
-      <input id="tut-input" placeholder="Pergunte sobre este tema..." style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 13px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;" onkeydown="if(event.key==='Enter')enviarTutorial()">
-      <button onclick="enviarTutorial()" style="background:var(--accent);border:none;border-radius:10px;padding:10px 18px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;">Enviar</button>
-    </div>
-    <div style="padding:6px 16px 12px;display:flex;gap:6px;flex-wrap:wrap;" id="tut-sugs"></div>
+    <div id="tut-static" style="padding:20px 24px;max-height:60vh;overflow-y:auto;font-size:13.5px;line-height:1.75;color:var(--text);display:none;"></div>
   </div>
 </div>
 
@@ -1300,42 +1318,31 @@ window.addEventListener('load', async () => {
   const loginImg = document.getElementById('login-wex-img');
   if (loginImg) loginImg.src = WEX_AVATAR_SRC;
 
-  // Tentar restaurar sessão salva — SEMPRE validar JWT Supabase primeiro
+  // Restaurar sessão salva (localStorage persiste entre recargas e fechamento da aba)
   try {
-    // 1. Verificar se o token JWT do Supabase ainda é válido
-    const { data: { session: sbSession } } = await SB.auth.getSession();
-
-    const saved = sessionStorage.getItem('wexio_session');
-    if (saved && sbSession) {
-      // JWT válido — restaurar dados locais do funcionário
+    const saved = localStorage.getItem('wexio_session');
+    if (saved) {
       const sess = JSON.parse(saved);
-      if (sess && sess.emp && sess.emp.id) {
+      // Sessão válida por 7 dias; revalida o funcionário no banco a cada restauração
+      const expirada = !sess.ts || (Date.now() - sess.ts) > 7 * 24 * 60 * 60 * 1000;
+      if (!expirada && sess.emp && sess.emp.id) {
         const { data: emps, error } = await SB.rpc('find_employee_by_id', { p_id: sess.emp.id });
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
           currentUser = { id: emps[0].id, email: emps[0].email };
           await loadAll();
           initUI();
-          setupRealtime(); // ← sincronização em tempo real com admin
+          setupRealtime(); // sincronização em tempo real com admin
           document.getElementById('login-screen').style.display = 'none';
           return;
         }
       }
+      // Sessão expirada ou funcionário inválido/inativo — limpar
+      localStorage.removeItem('wexio_session');
     }
-    // JWT expirado ou sessionStorage sem dados — limpar e pedir login
-    sessionStorage.removeItem('wexio_session');
-    if (sbSession) await SB.auth.signOut(); // limpar token expirado/inválido
   } catch(e) {
-    sessionStorage.removeItem('wexio_session');
+    localStorage.removeItem('wexio_session');
   }
-
-  // Monitorar expiração de token em tempo real
-  SB.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_OUT' || !session) {
-      sessionStorage.removeItem('wexio_session');
-      document.getElementById('login-screen').style.display = 'flex';
-    }
-  });
 });
 
 // Helper SDK API
@@ -1448,8 +1455,8 @@ async function doLogin() {
     console.log('Acesso liberado:', emp.nome);
     currentEmployee = emp;
     currentUser = { id: emp.id, email: emp.email };
-    // Salvar sessão para recargas da página
-    try { sessionStorage.setItem('wexio_session', JSON.stringify({ emp })); } catch(e) {}
+    // Salvar sessão para recargas da página (localStorage persiste entre sessões)
+    try { localStorage.setItem('wexio_session', JSON.stringify({ emp, ts: Date.now() })); } catch(e) {}
     await loadAll();
     initUI();
     setupRealtime(); // ← sincronização em tempo real com admin
@@ -1503,8 +1510,8 @@ function initUI() {
 }
 
 async function doLogout() {
-  try { sessionStorage.removeItem('wexio_session'); } catch(e) {}
-  await SB.auth.signOut();
+  try { localStorage.removeItem('wexio_session'); } catch(e) {}
+  try { await SB.auth.signOut(); } catch(e) {}
   window.location.href = 'index.html';
 }
 
@@ -2204,7 +2211,7 @@ const WEX_OFFLINE_FAQ = [
   },
   {
     keys: ['wex', 'ajuda', 'help', 'como usar', 'o que você faz', 'o que voce faz'],
-    answer: 'Sou a <strong>Wex</strong>, sua assistente no WexioLead! Posso te ajudar com:<br>• Dúvidas sobre o sistema<br>• Estratégias de prospecção e vendas<br>• Abordagem de leads por perfil<br>• Dicas sobre o mercado de construção civil<br><br>É só perguntar! '
+    answer: 'Sou a <strong>Wex</strong>, sua assistente no WexioLead! Posso te ajudar com:<br>• Dúvidas sobre o sistema<br>• Estratégias de prospecção e vendas<br>• Abordagem de leads por perfil e setor<br>• Recomendação do plano certo para cada cliente<br><br>É só perguntar!'
   }
 ];
 
@@ -2308,10 +2315,18 @@ function buildWexContext() {
   const ativos = myClientes.filter(c => c.status_crm === 'fechado');
   const mrr = ativos.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
   const comPct = parseFloat(currentEmployee?.comissao_pct || 20);
-  return `Você é a Wex, assistente comercial do wexiolead — plataforma SaaS de leads B2B para construção civil brasileira.
+  return `Você é a Wex, assistente comercial do WexioLead — plataforma SaaS de geração de leads B2B. Nascida na construção civil, hoje atende múltiplos setores (saúde, jurídico, contábil, tecnologia, logística, imobiliário, comércio, alimentação, indústria e serviços).
 Fale com ${nome}, consultor comercial da equipe. Ele tem ${ativos.length} clientes ativos gerando R$${mrr}/mês em MRR (comissão de ${comPct}%).
-Plataforma: Free (R$0), Starter (R$97), Pro (R$197), Agency (R$397). Foco: construção civil, construtoras, fornecedores.
-Seja direta, profissional, motivadora. Máximo 3 parágrafos. Responda em português brasileiro.`;
+
+PLANOS (cobrança mensal avulsa):
+- Free: gratuito, 10 consultas/mês, sem CRM/rede/radar
+- Starter R$97: 300 consultas, filtros completos, CRM leve, Rede B2B (1 crédito por conexão), Wex essencial
+- Pro R$197: 1.000 consultas, CRM completo (funil e Kanban), Rede B2B incluída, Wex completa, suporte prioritário
+- Agency R$397: ilimitado, Radar de Empresas Novas exclusivo, multi-usuário, suporte WhatsApp
+
+DIFERENCIAIS para argumentar na venda: dados da Receita Federal com score de qualificação (0-100) e selo verificado; busca inteligente por setor; CRM para organizar o funil; Rede B2B que conecta empresas para fecharem negócios; Radar de Empresas Novas (Agency) para achar negócios recém-abertos.
+
+Ajude ${nome} a prospectar, contornar objeções, recomendar o plano certo e fechar mais. Seja direta, profissional e motivadora. Máximo 3 parágrafos. Responda em português brasileiro. Nunca use emojis.`;
 }
 
 async function sendWexMessage() {
@@ -2914,16 +2929,6 @@ const TUTORIAIS = {
     <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97/mes e da acesso a 300 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos no primeiro mes. Um contrato seu vale quanto? Vale testar por um mes?"</p>
   </div>
 </div>`
-      },
-      {
-        label: 'Objecoes Comuns', tipo: 'chat',
-        sugs: ['Como responder "e caro"?', 'O cliente quer pensar, e agora?', 'Ja tenho clientes por indicacao', 'Como provar que funciona?'],
-        prompt: 'Voce e um especialista em vendas do WexioLead, plataforma de leads B2B com foco em construcao civil (e tambem outros setores). Ajude o vendedor a responder objecoes da apresentacao comercial. Planos: Starter R$97 (300 consultas, CRM leve, Rede B2B com 1 credito por conexao, Wex essencial), Pro R$197 (1000 consultas + CRM completo com funil e Kanban + Rede B2B incluida + Wex completo), Agency R$397 (ilimitado + Radar de Empresas Novas exclusivo + multi-usuario + WhatsApp). De respostas diretas, praticas e scripts prontos para usar. Maximo 3 paragrafos.'
-      },
-      {
-        label: 'Perguntar a IA', tipo: 'chat',
-        sugs: ['Como personalizar a apresentacao?', 'O que mostrar primeiro no demo?', 'Como fechar na primeira reuniao?'],
-        prompt: 'Voce e um coach especialista em apresentacoes comerciais de software SaaS para construcao civil. Ajude o vendedor a melhorar sua apresentacao do WexioLead. De dicas praticas, scripts e tecnicas. Maximo 3 paragrafos.'
       }
     ]
   },
@@ -2985,11 +2990,6 @@ const TUTORIAIS = {
     <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">O <strong style="color:var(--accent2);">Agency R$397</strong> paga o custo com o primeiro cliente novo que fechar. Radar de Empresas Novas exclusivo, multi-usuario e suporte via WhatsApp para toda a equipe.</p>
   </div>
 </div>`
-      },
-      {
-        label: 'Tirar Duvidas com IA', tipo: 'chat',
-        sugs: ['Como justificar o preco Pro?', 'Quando oferecer upgrade?', 'Como comparar com concorrente mais barato?'],
-        prompt: 'Voce e um especialista em vendas do WexioLead. Ajude o vendedor a defender e recomendar os planos: Free (gratis, 10 consultas), Starter (R$97, 300 consultas + CRM leve + Rede B2B com 1 credito por conexao + Wex essencial), Pro (R$197, 1000 consultas + CRM completo funil/Kanban + Rede B2B incluida + Wex completo), Agency (R$397, ilimitado + Radar de Empresas Novas exclusivo + multi-usuario + WhatsApp). De argumentos de valor, ROI e tecnicas de upsell. Maximo 3 paragrafos.'
       }
     ]
   },
@@ -3048,11 +3048,6 @@ const TUTORIAIS = {
     <p style="color:var(--muted);font-style:italic;font-size:12.5px;margin-top:4px;">"Esse fornecedor de SP tinha o mesmo desafio que voce. Ele assinou o Starter e fechou 2 contratos no mes 1. O que voce acha que conseguiria com 300 leads qualificados?"</p>
   </div>
 </div>`
-      },
-      {
-        label: 'Criar Case com IA', tipo: 'chat',
-        sugs: ['Crie um case para fornecedor de aco', 'Case para empresa de impermeabilizacao', 'Como apresentar ROI de forma convincente?'],
-        prompt: 'Voce e um especialista em marketing de conteudo e vendas B2B. Ajude o vendedor a criar e adaptar cases de sucesso para o WexioLead. Crie historias credíveis, com numeros e resultados concretos, para diferentes perfis do mercado de construcao civil. Maximo 3 paragrafos por caso.'
       }
     ]
   },
@@ -3112,11 +3107,6 @@ const TUTORIAIS = {
     </div>
   </div>
 </div>`
-      },
-      {
-        label: 'Criar Script com IA', tipo: 'chat',
-        sugs: ['Crie script para fornecedor de esquadrias', 'Script para empresa de pintura predial', 'Como personalizar a abordagem por segmento?'],
-        prompt: 'Voce e um copywriter especialista em vendas B2B e prospeccao pelo WhatsApp e LinkedIn. Crie scripts de abordagem personalizados para o WexioLead — plataforma de leads para construcao civil. Scripts devem ser diretos, humanizados e gerar resposta. Maximo 3 paragrafos, inclua o script pronto.'
       }
     ]
   },
@@ -3167,11 +3157,6 @@ const TUTORIAIS = {
       <p style="color:var(--muted);font-size:12.5px;margin-top:3px;">${desc}</p>
     </div>`).join('')}
 </div>`
-      },
-      {
-        label: 'Consultar IA', tipo: 'chat',
-        sugs: ['Qual o tamanho do mercado de fornecedores?', 'Quais segmentos crescem mais em 2025?', 'Como usar dados de mercado para vender?'],
-        prompt: 'Voce e um analista de mercado especialista no setor de construcao civil brasileiro. Responda perguntas sobre dados, tendencias, segmentos, CNAEs e oportunidades do mercado. Use dados reais e recentes quando possivel. Ajude o vendedor a usar informacoes de mercado como argumento de venda do WexioLead. Maximo 3 paragrafos.'
       }
     ]
   },
@@ -3209,11 +3194,6 @@ const TUTORIAIS = {
   <p style="color:var(--muted);">Se nao for o momento certo, so me fala — sem problema. Se quiser ver como o WexioLead funciona, tenho um horario disponivel [dia] as [hora].</p><br>
   <p style="color:var(--muted);">Att,<br><strong style="color:var(--text);">[seu nome]</strong></p>
 </div>`
-      },
-      {
-        label: 'Criar E-mail com IA', tipo: 'chat',
-        sugs: ['Crie e-mail para construtora de SP', 'E-mail para empresa de instalacoes eletricas', 'Como personalizar o assunto do e-mail?'],
-        prompt: 'Voce e um copywriter especialista em cold email e prospeccao B2B. Crie e-mails de prospeccao personalizados para o WexioLead — plataforma de leads para construcao civil. E-mails devem ter assunto que gera abertura, corpo curto e claro, e CTA especifico. Use linguagem profissional mas acessivel. Maximo 3 paragrafos.'
       }
     ]
   }
@@ -3269,104 +3249,12 @@ function mudarAba(idx) {
 
   const aba = cfg.abas[idx];
   const staticEl = document.getElementById('tut-static');
-  const chatEl = document.getElementById('tut-chat');
-  const inputEl = document.getElementById('tut-input');
-  const sugsEl = document.getElementById('tut-sugs');
-
-  if (aba.tipo === 'estatico') {
-    staticEl.style.display = 'block';
-    chatEl.style.display = 'none';
-    staticEl.innerHTML = aba.conteudo;
-    inputEl.placeholder = 'Pergunte sobre este conteudo...';
-    sugsEl.innerHTML = '';
-    // Input ainda funciona para perguntas sobre o conteudo estatico
-    tutorialHistorico = [{ role: 'user', content: 'Estou lendo sobre: ' + aba.label }];
-  } else {
-    staticEl.style.display = 'none';
-    chatEl.style.display = 'flex';
-    chatEl.innerHTML = '';
-    // Mensagem de abertura do chat
-    const intro = document.createElement('div');
-    intro.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .3s ease;';
-    intro.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:11px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.6;max-width:90%;">Ola! Use as sugestoes abaixo ou escreva sua duvida sobre <strong style="color:var(--accent);">' + aba.label + '</strong>.</div>';
-    chatEl.appendChild(intro);
-    inputEl.placeholder = 'Pergunte sobre ' + aba.label.toLowerCase() + '...';
-    sugsEl.innerHTML = (aba.sugs || []).map(s =>
-      '<span class="wex-chip" onclick="usarSugTutorial(\'' + s.replace(/'/g, "\\'") + '\')" style="font-size:11.5px;cursor:pointer;">' + s + '</span>'
-    ).join('');
-  }
+  // Todos os materiais agora são estáticos (sem IA, para economia)
+  staticEl.style.display = 'block';
+  staticEl.innerHTML = aba.conteudo;
 }
 
-function usarSugTutorial(texto) {
-  document.getElementById('tut-input').value = texto;
-  enviarTutorial();
-}
-
-async function enviarTutorial() {
-  const input = document.getElementById('tut-input');
-  const texto = input.value.trim();
-  if (!texto || !tutorialAtual) return;
-  input.value = '';
-
-  const cfg = TUTORIAIS[tutorialAtual];
-  const aba = cfg.abas[tutorialAbaAtual];
-  const staticEl = document.getElementById('tut-static');
-  const chatEl = document.getElementById('tut-chat');
-  document.getElementById('tut-sugs').innerHTML = '';
-
-  // Garante que o chat esta visível para a resposta
-  staticEl.style.display = 'none';
-  chatEl.style.display = 'flex';
-
-  // Mensagem do usuario
-  const userDiv = document.createElement('div');
-  userDiv.style.cssText = 'display:flex;justify-content:flex-end;animation:fadeIn .2s ease;';
-  userDiv.innerHTML = '<div style="background:var(--accent);color:#fff;padding:10px 14px;border-radius:12px 12px 4px 12px;font-size:13px;max-width:85%;line-height:1.5;">' + texto.replace(/\n/g,'<br>') + '</div>';
-  chatEl.appendChild(userDiv);
-  chatEl.scrollTop = chatEl.scrollHeight;
-  tutorialHistorico.push({ role: 'user', content: texto });
-
-  // Typing indicator
-  const typingDiv = document.createElement('div');
-  typingDiv.id = 'tut-typing';
-  typingDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .2s ease;';
-  typingDiv.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;"><div class="wex-thinking"><span></span><span></span><span></span></div></div>';
-  chatEl.appendChild(typingDiv);
-  chatEl.scrollTop = chatEl.scrollHeight;
-
-  try {
-    const { data: { session: _s4 } } = await SB.auth.getSession();
-    const res = await fetch(WEX_CHAT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + (_s4?.access_token || SB_KEY) },
-      body: JSON.stringify({
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: aba.prompt || cfg.abas.find(a => a.tipo === 'chat')?.prompt || 'Voce e um especialista em vendas do WexioLead. Responda de forma direta e pratica. Maximo 3 paragrafos.' },
-          ...tutorialHistorico.slice(-8)
-        ],
-        max_tokens: 600,
-        temperature: 0.65
-      })
-    });
-    const data = await res.json();
-    document.getElementById('tut-typing')?.remove();
-    const resposta = data?.choices?.[0]?.message?.content || 'Nao foi possivel carregar a resposta. Tente novamente.';
-    tutorialHistorico.push({ role: 'assistant', content: resposta });
-
-    const botDiv = document.createElement('div');
-    botDiv.style.cssText = 'display:flex;gap:8px;align-items:flex-start;animation:fadeIn .25s ease;';
-    botDiv.innerHTML = '<div style="width:30px;height:30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" style="width:13px;height:13px;stroke:#fff;fill:none;stroke-width:2;"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/></svg></div><div style="background:var(--surface);border:1px solid var(--border);padding:12px 14px;border-radius:4px 12px 12px 12px;font-size:13px;color:var(--text);line-height:1.65;max-width:90%;">' + resposta.replace(/\n/g,'<br>') + '</div>';
-    chatEl.appendChild(botDiv);
-    chatEl.scrollTop = chatEl.scrollHeight;
-  } catch(e) {
-    document.getElementById('tut-typing')?.remove();
-    const errDiv = document.createElement('div');
-    errDiv.innerHTML = '<div style="background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);padding:12px 14px;border-radius:8px;font-size:12.5px;color:var(--red);">Erro ao conectar. Verifique sua conexao e tente novamente.</div>';
-    chatEl.appendChild(errDiv);
-    chatEl.scrollTop = chatEl.scrollHeight;
-  }
-}
+// Materiais de venda agora são 100% estáticos (sem IA) para economia de tokens.
 
 
 
