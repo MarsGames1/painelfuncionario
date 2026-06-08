@@ -3262,96 +3262,52 @@ function mudarAba(idx) {
 // TOUR DA WEX — apresenta cada seção do painel
 // ═══════════════════════════════════════════
 const TOUR_STEPS = [
-  {
-    target: 'page-dashboard',
-    nav: 'dashboard',
-    title: 'Visão Geral',
-    msg: 'Aqui você acompanha tudo de uma vez: seus clientes ativos, comissão acumulada no mês, meta de progresso e os últimos leads adicionados. É a sua tela inicial toda vez que entrar.',
-    pos: 'center'
-  },
-  {
-    target: 'nav-clientes',
-    nav: null,
-    title: 'Meus Clientes',
-    msg: 'Lista completa dos seus clientes. Você pode ver o histórico de cada um, adicionar notas e acompanhar o status. Mantenha isso sempre atualizado — é de onde vem a sua recorrência.',
-    pos: 'right'
-  },
-  {
-    target: 'nav-comissoes',
-    nav: null,
-    title: 'Comissões',
-    msg: 'Acompanhe tudo que você já ganhou e o que está previsto. A comissão padrão é de 20% sobre cada mensalidade paga. Se o lead veio por você sem usar a base da plataforma, pode chegar a 30%.',
-    pos: 'right'
-  },
-  {
-    target: 'nav-metas',
-    nav: null,
-    title: 'Metas',
-    msg: 'Veja sua meta mensal e o quanto já avançou. As metas são definidas pela gestora e podem vir com bônus fixo por atingimento. Bater meta abre espaço para negociar mais.',
-    pos: 'right'
-  },
-  {
-    target: 'nav-materiais',
-    nav: 'materiais',
-    title: 'Material de Vendas',
-    msg: 'Tudo que você precisa para vender bem: apresentação da plataforma, tabela de preços, cases de sucesso, scripts de abordagem e templates de e-mail. Use antes de cada contato.',
-    pos: 'right'
-  },
-  {
-    target: 'nav-treinamentos',
-    nav: 'treinamentos',
-    title: 'Treinamentos',
-    msg: 'Cursos práticos de vendas B2B, técnicas de follow-up, gestão de objeções e muito mais. São cursos interativos com a Wex como instrutora. Recomendo os dois primeiros logo de início.',
-    pos: 'right'
-  },
-  {
-    target: 'nav-ranking',
-    nav: 'ranking',
-    title: 'Ranking',
-    msg: 'Veja sua posição entre a equipe. Quanto mais alto no ranking, maior a chance de receber bônus e reconhecimento. A competição saudável move o time.',
-    pos: 'right'
-  },
-  {
-    target: 'wex-sidebar-btn',
-    nav: null,
-    title: 'Wex — sua assistente IA',
-    msg: 'Sou a Wex! Estou sempre aqui no menu lateral. Clique em "Wex IA" para me abrir. Pode me pedir scripts de abordagem, e-mails de prospecção, como responder objeções ou dicas para fechar qualquer tipo de lead.',
-    pos: 'right'
-  },
+  { target: 'nav-dashboard',     nav: 'dashboard', title: 'Visão Geral',
+    msg: 'Sua tela inicial. Aqui você acompanha tudo de uma vez: clientes ativos, comissão do mês, progresso da meta e os próximos follow-ups.' },
+  { target: 'nav-clientes',      nav: null, title: 'Meus Clientes',
+    msg: 'Lista completa dos seus clientes. Veja o histórico de cada um, adicione notas e acompanhe o status. É de onde vem a sua recorrência — mantenha sempre atualizado.' },
+  { target: 'nav-comissoes',     nav: null, title: 'Comissões',
+    msg: 'Acompanhe tudo que já ganhou e o previsto. A comissão padrão é de 20% sobre cada mensalidade paga — e pode chegar a 30% se o lead vier da sua prospecção própria.' },
+  { target: 'nav-metas',         nav: null, title: 'Metas',
+    msg: 'Veja sua meta mensal e o quanto já avançou. Bater meta abre espaço para bônus e reconhecimento.' },
+  { target: 'nav-materiais',     nav: 'materiais', title: 'Material de Vendas',
+    msg: 'Tudo para vender bem: apresentação da plataforma, tabela de preços, cases, scripts de abordagem e templates de e-mail. Use antes de cada contato.' },
+  { target: 'nav-treinamentos',  nav: 'treinamentos', title: 'Treinamentos',
+    msg: 'Cursos práticos de vendas B2B, follow-up e gestão de objeções. Recomendo começar pelos dois primeiros.' },
+  { target: 'nav-ranking',       nav: null, title: 'Ranking',
+    msg: 'Veja sua posição entre a equipe. Competição saudável move o time — e quem está no topo costuma receber bônus.' },
+  { target: 'wex-sidebar-btn',   nav: null, title: 'Wex — sua assistente',
+    msg: 'Sou a Wex! Clique aqui em "Wex IA" sempre que precisar: scripts de abordagem, e-mails, como responder objeções ou dicas para fechar um lead específico. Estou sempre à disposição.' },
 ];
 
 let tourStep = 0;
-let tourAtivo = false;
 
 function iniciarTour(step) {
-  tourStep = step || 0;
-  tourAtivo = true;
-
-  // Fecha o painel lateral da Wex se estiver aberto
-  if (typeof wexOpen !== 'undefined' && wexOpen && typeof toggleWex === 'function') toggleWex();
-
-  // Esconde o widget wex-dash inline para não sobrepor o balão do tour
+  tourStep = (typeof step === 'number') ? step : 0;
+  // fecha painel lateral da Wex se aberto
+  try { if (typeof wexOpen !== 'undefined' && wexOpen) toggleWex(); } catch(e) {}
+  // esconde o widget Wex inline do dashboard
   document.querySelectorAll('#page-dashboard .card').forEach(c => {
     if (c.querySelector('#wex-dash-messages')) c.style.display = 'none';
   });
-
+  // avatar da Wex no balão
+  try {
+    const wi = document.getElementById('wex-panel-img') || document.getElementById('wex-sidebar-img');
+    const ti = document.getElementById('tour-wex-img');
+    if (wi && ti && wi.src) ti.src = wi.src;
+  } catch(e) {}
   const ov = document.getElementById('tour-overlay');
-  if (!ov) { console.warn('tour-overlay não encontrado'); return; }
-  ov.style.setProperty('display', 'block', 'important');
-
-  // Sincroniza avatar da Wex no balão
-  const wexImg = document.getElementById('wex-panel-img') || document.getElementById('wex-sidebar-img');
-  const tourImg = document.getElementById('tour-wex-img');
-  if (wexImg && tourImg && wexImg.src) tourImg.src = wexImg.src;
-
+  if (!ov) return;
+  document.body.classList.add('tour-on');
+  ov.classList.add('open');
   renderTourStep();
 }
 
 function fecharTour() {
-  tourAtivo = false;
   const ov = document.getElementById('tour-overlay');
-  if (ov) ov.style.setProperty('display', 'none', 'important');
-  document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+  if (ov) ov.classList.remove('open');
+  document.body.classList.remove('tour-on');
+  document.querySelectorAll('.tour-hl').forEach(el => el.classList.remove('tour-hl'));
   document.querySelectorAll('#page-dashboard .card').forEach(c => {
     if (c.querySelector('#wex-dash-messages')) c.style.display = '';
   });
@@ -3362,41 +3318,31 @@ function renderTourStep() {
   const s = TOUR_STEPS[tourStep];
   if (!s) { fecharTour(); return; }
 
-  // Remove highlight anterior
-  document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
+  // remove destaque anterior
+  document.querySelectorAll('.tour-hl').forEach(el => el.classList.remove('tour-hl'));
 
-  // Navega para a seção se necessário
-  if (s.nav) nav(s.nav);
+  // navega para a seção, se houver
+  if (s.nav) { try { nav(s.nav); } catch(e) {} }
 
-  // Aplica highlight no elemento alvo
+  // destaca o item de menu correspondente
   const alvo = document.getElementById(s.target);
-  if (alvo) {
-    alvo.classList.add('tour-highlight');
-    // Rola para o elemento
-    setTimeout(() => alvo.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 150);
-  }
+  if (alvo) alvo.classList.add('tour-hl');
 
-  // Atualiza conteúdo do balão
+  // conteúdo do balão
   document.getElementById('tour-titulo').textContent = s.title;
   document.getElementById('tour-msg').textContent = s.msg;
-  document.getElementById('tour-step-num').textContent = (tourStep + 1) + ' / ' + TOUR_STEPS.length;
+  document.getElementById('tour-step-num').textContent = (tourStep + 1) + ' de ' + TOUR_STEPS.length;
 
-  // Botões de navegação
-  const btnPrev = document.getElementById('tour-prev');
-  const btnNext = document.getElementById('tour-next');
-  const btnFim  = document.getElementById('tour-fim');
+  // botões
+  document.getElementById('tour-prev').style.display = tourStep > 0 ? 'inline-flex' : 'none';
+  document.getElementById('tour-next').style.display = tourStep < TOUR_STEPS.length - 1 ? 'inline-flex' : 'none';
+  document.getElementById('tour-fim').style.display  = tourStep === TOUR_STEPS.length - 1 ? 'inline-flex' : 'none';
 
-  btnPrev.style.display  = tourStep > 0 ? 'inline-flex' : 'none';
-  btnNext.style.display  = tourStep < TOUR_STEPS.length - 1 ? 'inline-flex' : 'none';
-  btnFim.style.display   = tourStep === TOUR_STEPS.length - 1 ? 'inline-flex' : 'none';
-
-  // Dots de progresso
+  // dots
   const dots = document.getElementById('tour-dots');
-  if (dots) {
-    dots.innerHTML = TOUR_STEPS.map((_, i) =>
-      `<div style="width:${i===tourStep?'20':'7'}px;height:7px;border-radius:4px;background:${i===tourStep?'var(--accent)':'var(--border)'};transition:all .25s;"></div>`
-    ).join('');
-  }
+  if (dots) dots.innerHTML = TOUR_STEPS.map((_, i) =>
+    '<div style="width:' + (i===tourStep?'20':'7') + 'px;height:7px;border-radius:4px;background:' +
+    (i===tourStep?'var(--accent)':'var(--border)') + ';transition:all .25s;"></div>').join('');
 }
 
 function tourProximo() { tourStep++; renderTourStep(); }
@@ -3407,84 +3353,67 @@ function tourAnterior() { tourStep--; renderTourStep(); }
 </script>
 
 <!-- ── TOUR OVERLAY ──────────────────────────────────────── -->
-<div id="tour-overlay" style="display:none;position:fixed;inset:0;z-index:3000;">
-  <!-- Fundo escurecido semi-transparente -->
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);" onclick="fecharTour()"></div>
-
-  <!-- Balão da Wex (fixo no centro-inferior) -->
-  <div id="tour-card" style="
-    position:absolute;bottom:2.5%;left:50%;transform:translateX(-50%);
-    width:min(480px,92vw);background:var(--surface);border:1px solid var(--border);
-    border-radius:18px;box-shadow:0 24px 60px rgba(0,0,0,.6);
-    pointer-events:all;overflow:hidden;z-index:3200;
-    animation:tourSlideUp .35s cubic-bezier(.16,1,.3,1);
-  ">
-    <!-- Barra laranja topo -->
+<div id="tour-overlay">
+  <div class="tour-backdrop" onclick="fecharTour()"></div>
+  <div id="tour-card">
     <div style="height:4px;background:linear-gradient(90deg,var(--accent),var(--accent2));"></div>
-
-    <!-- Cabeçalho com avatar Wex -->
     <div style="display:flex;align-items:center;gap:12px;padding:16px 20px 12px;">
-      <div style="width:42px;height:42px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(249,115,22,.3);">
+      <div style="width:42px;height:42px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 2px 8px rgba(249,115,22,.3);background:var(--accent);">
         <img id="tour-wex-img" src="" style="width:100%;height:100%;object-fit:cover;">
       </div>
       <div style="flex:1;">
-        <div style="font-weight:700;font-size:14px;">Wex — Tour Guiado</div>
-        <div style="font-size:11px;color:var(--muted);" id="tour-step-num">1 / 8</div>
+        <div style="font-weight:700;font-size:14px;color:var(--text);">Wex — Tour Guiado</div>
+        <div style="font-size:11px;color:var(--muted);" id="tour-step-num">1 de 8</div>
       </div>
-      <button onclick="fecharTour()" style="width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:16px;">
+      <button onclick="fecharTour()" style="width:30px;height:30px;border-radius:8px;background:var(--surface2);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted);">
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-
-    <!-- Conteúdo -->
-    <div style="padding:0 20px 18px;">
+    <div style="padding:0 20px 14px;">
       <div style="font-size:15px;font-weight:700;color:var(--text);margin-bottom:8px;" id="tour-titulo"></div>
       <div style="font-size:13.5px;color:var(--text);line-height:1.7;" id="tour-msg"></div>
     </div>
-
-    <!-- Indicadores de progresso -->
-    <div id="tour-dots" style="display:flex;justify-content:center;gap:5px;padding-bottom:4px;">
-    </div>
-
-    <!-- Botões -->
+    <div id="tour-dots" style="display:flex;justify-content:center;gap:5px;padding-bottom:6px;"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px 18px;gap:8px;">
       <button id="tour-prev" onclick="tourAnterior()" style="display:none;align-items:center;gap:6px;padding:9px 16px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-size:13px;font-weight:600;cursor:pointer;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg>
-        Anterior
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="15 18 9 12 15 6"/></svg> Anterior
       </button>
       <span style="flex:1;"></span>
       <button id="tour-next" onclick="tourProximo()" style="display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:none;background:var(--accent);color:#fff;font-size:13px;font-weight:700;cursor:pointer;">
-        Próximo
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
+        Próximo <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="9 18 15 12 9 6"/></svg>
       </button>
       <button id="tour-fim" onclick="fecharTour()" style="display:none;align-items:center;gap:6px;padding:9px 20px;border-radius:10px;border:none;background:var(--green);color:#fff;font-size:13px;font-weight:700;cursor:pointer;">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg>
-        Tudo certo!
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Tudo certo!
       </button>
     </div>
   </div>
 </div>
 
 <style>
-/* Tour highlight — destaque no elemento focado */
-.tour-highlight {
-  position: relative;
-  z-index: 3100 !important;
-  outline: 3px solid var(--accent) !important;
-  outline-offset: 3px;
-  border-radius: 10px;
-  box-shadow: 0 0 0 6px rgba(249,115,22,.25), 0 4px 24px rgba(249,115,22,.3) !important;
-  animation: tourPulse 1.8s ease-in-out infinite;
-  background: var(--surface) !important;
+#tour-overlay{ display:none; position:fixed; inset:0; z-index:5000; }
+#tour-overlay.open{ display:flex; align-items:flex-end; justify-content:center; }
+#tour-overlay .tour-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,.5); }
+#tour-card{
+  position:relative; z-index:5001; margin-bottom:3vh;
+  width:min(480px,92vw); background:var(--surface);
+  border:1px solid var(--border); border-radius:18px;
+  box-shadow:0 24px 60px rgba(0,0,0,.6); overflow:hidden;
+  animation:tourUp .3s ease;
 }
-@keyframes tourPulse {
-  0%,100% { box-shadow: 0 0 0 4px rgba(249,115,22,.2), 0 4px 24px rgba(249,115,22,.15); }
-  50%      { box-shadow: 0 0 0 9px rgba(249,115,22,.08), 0 4px 32px rgba(249,115,22,.28); }
+@keyframes tourUp{ from{ transform:translateY(20px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+/* Destaque do item de menu — fica ACIMA do backdrop */
+.tour-hl{
+  position:relative; z-index:5002 !important;
+  outline:3px solid var(--accent); outline-offset:2px;
+  border-radius:10px;
+  box-shadow:0 0 0 6px rgba(249,115,22,.25);
+  animation:tourPulse 1.6s ease-in-out infinite;
 }
-@keyframes tourSlideUp {
-  from { opacity:0; transform: translateX(-50%) translateY(24px); }
-  to   { opacity:1; transform: translateX(-50%) translateY(0); }
-}
+@keyframes tourPulse{ 0%,100%{ box-shadow:0 0 0 5px rgba(249,115,22,.22);} 50%{ box-shadow:0 0 0 9px rgba(249,115,22,.10);} }
+/* Durante o tour, eleva a sidebar acima do overlay para o item destacado aparecer */
+body.tour-on aside{ z-index:5001 !important; }
+body.tour-on aside::after{ content:''; position:absolute; inset:0; background:rgba(0,0,0,.5); pointer-events:none; z-index:5000; }
+body.tour-on aside .tour-hl{ position:relative; z-index:5003 !important; }
 </style>
 
 </body>
