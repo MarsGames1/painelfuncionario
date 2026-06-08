@@ -3328,27 +3328,30 @@ function iniciarTour(step) {
   tourAtivo = true;
 
   // Fecha o painel lateral da Wex se estiver aberto
-  if (wexOpen) toggleWex();
+  if (typeof wexOpen !== 'undefined' && wexOpen && typeof toggleWex === 'function') toggleWex();
 
   // Esconde o widget wex-dash inline para não sobrepor o balão do tour
-  const wexDash = document.querySelector('#page-dashboard .card');
-  if (wexDash) {
-    // Encontra o card da Wex pelo conteúdo
-    document.querySelectorAll('#page-dashboard .card').forEach(c => {
-      if (c.querySelector('#wex-dash-messages')) c.style.display = 'none';
-    });
-  }
+  document.querySelectorAll('#page-dashboard .card').forEach(c => {
+    if (c.querySelector('#wex-dash-messages')) c.style.display = 'none';
+  });
 
-  document.getElementById('tour-overlay').style.display = 'flex';
+  const ov = document.getElementById('tour-overlay');
+  if (!ov) { console.warn('tour-overlay não encontrado'); return; }
+  ov.style.setProperty('display', 'block', 'important');
+
+  // Sincroniza avatar da Wex no balão
+  const wexImg = document.getElementById('wex-panel-img') || document.getElementById('wex-sidebar-img');
+  const tourImg = document.getElementById('tour-wex-img');
+  if (wexImg && tourImg && wexImg.src) tourImg.src = wexImg.src;
+
   renderTourStep();
 }
 
 function fecharTour() {
   tourAtivo = false;
-  document.getElementById('tour-overlay').style.display = 'none';
-  // Remove highlight de qualquer elemento
+  const ov = document.getElementById('tour-overlay');
+  if (ov) ov.style.setProperty('display', 'none', 'important');
   document.querySelectorAll('.tour-highlight').forEach(el => el.classList.remove('tour-highlight'));
-  // Restaura o wex-dash inline
   document.querySelectorAll('#page-dashboard .card').forEach(c => {
     if (c.querySelector('#wex-dash-messages')) c.style.display = '';
   });
@@ -3404,9 +3407,9 @@ function tourAnterior() { tourStep--; renderTourStep(); }
 </script>
 
 <!-- ── TOUR OVERLAY ──────────────────────────────────────── -->
-<div id="tour-overlay" style="display:none;position:fixed;inset:0;z-index:3000;pointer-events:none;">
+<div id="tour-overlay" style="display:none;position:fixed;inset:0;z-index:3000;">
   <!-- Fundo escurecido semi-transparente -->
-  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);pointer-events:all;" onclick="fecharTour()"></div>
+  <div style="position:absolute;inset:0;background:rgba(0,0,0,0.45);" onclick="fecharTour()"></div>
 
   <!-- Balão da Wex (fixo no centro-inferior) -->
   <div id="tour-card" style="
