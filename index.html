@@ -1909,43 +1909,63 @@ function renderMetas() {
 // RANKING
 // 
 async function renderRanking() {
-  const allEmps = await sbGet('employees', 'status=eq.ativo&select=id,nome,cargo');
-  if (!allEmps || allEmps.length === 0) return;
+  const listEl = document.getElementById('ranking-list');
+  const posEl  = document.getElementById('minha-posicao');
 
-  const allClients = await sbGet('employee_clients', 'select=employee_id,plano,status_crm');
-  if (!allClients) return;
+  // Busca funcionários ativos (sempre tenta, mesmo sem clientes)
+  let allEmps = [];
+  try {
+    allEmps = await sbGet('employees', 'status=eq.ativo&select=id,nome,cargo') || [];
+  } catch(e) { console.error('ranking employees:', e); }
+
+  if (!allEmps.length) {
+    if (listEl) listEl.innerHTML = '<div class="empty"><p>Nenhum funcionário ativo cadastrado ainda.</p></div>';
+    if (posEl)  posEl.innerHTML  = '<div class="empty"><p>Sem ranking disponível.</p></div>';
+    return;
+  }
+
+  // Busca clientes (se falhar, segue com lista zerada — não derruba o ranking)
+  let allClients = [];
+  try {
+    allClients = await sbGet('employee_clients', 'select=employee_id,plano,status_crm') || [];
+  } catch(e) { console.error('ranking clients:', e); }
 
   const ranking = allEmps.map(e => {
-    const clientesFechados = allClients.filter(c => c.employee_id === e.id && c.status_crm === 'fechado');
-    const mrr = clientesFechados.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
-    return { ...e, clientes: clientesFechados.length, mrr };
+    const fechados = allClients.filter(c => c.employee_id === e.id && c.status_crm === 'fechado');
+    const mrr = fechados.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
+    return { ...e, clientes: fechados.length, mrr };
   }).sort((a, b) => b.clientes - a.clientes || b.mrr - a.mrr);
 
   const numColors = ['gold', 'silver', 'bronze'];
+  const meuId = (currentEmployee && currentEmployee.id) || null;
 
-  document.getElementById('ranking-list').innerHTML = ranking.slice(0, 10).map((e, i) => {
-    const isMe = e.id === currentEmployee.id;
-    return `<div class="rank-item" style="${isMe ? 'border-color:var(--accent);background:rgba(249,115,22,.08);' : ''}">
-      <div class="rank-num ${numColors[i] || ''}">${i + 1}</div>
-      <div style="flex:1;">
-        <div style="font-weight:600;font-size:13px;">${e.nome}${isMe ? ' <span class="badge b-orange" style="font-size:9px;">você</span>' : ''}</div>
-        <div style="font-size:11px;color:var(--muted);">${e.cargo || 'Consultor'}</div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-family:'Syne',sans-serif;font-weight:700;">${e.clientes}</div>
-        <div style="font-size:11px;color:var(--muted);">clientes</div>
-      </div>
-    </div>`;
-  }).join('') || '<div class="empty"><p>Sem dados de ranking disponíveis</p></div>';
+  if (listEl) {
+    listEl.innerHTML = ranking.slice(0, 10).map((e, i) => {
+      const isMe = e.id === meuId;
+      return `<div class="rank-item" style="${isMe ? 'border-color:var(--accent);background:rgba(249,115,22,.08);' : ''}">
+        <div class="rank-num ${numColors[i] || ''}">${i + 1}</div>
+        <div style="flex:1;">
+          <div style="font-weight:600;font-size:13px;">${e.nome}${isMe ? ' <span class="badge b-orange" style="font-size:9px;">você</span>' : ''}</div>
+          <div style="font-size:11px;color:var(--muted);">${e.cargo || 'Consultor'}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:'Syne',sans-serif;font-weight:700;">${e.clientes}</div>
+          <div style="font-size:11px;color:var(--muted);">cliente${e.clientes!==1?'s':''}</div>
+        </div>
+      </div>`;
+    }).join('') || '<div class="empty"><p>Sem dados de ranking disponíveis</p></div>';
+  }
 
-  const minhaPosicao = ranking.findIndex(e => e.id === currentEmployee.id) + 1;
-  document.getElementById('minha-posicao').innerHTML = minhaPosicao > 0 ? `
-    <div style="text-align:center;padding:20px;">
-      <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--accent);">#${minhaPosicao}</div>
-      <div style="color:var(--muted);font-size:13px;margin-top:6px;">de ${ranking.length} funcionários</div>
-      <div style="margin-top:16px;font-size:13px;color:var(--text);">${ranking[minhaPosicao-1]?.clientes || 0} clientes ativos · R$${(ranking[minhaPosicao-1]?.mrr || 0).toLocaleString('pt-BR')} MRR</div>
-    </div>
-  ` : '<div class="empty"><p>Você ainda não está no ranking</p></div>';
+  if (posEl) {
+    const minhaPosicao = meuId ? ranking.findIndex(e => e.id === meuId) + 1 : 0;
+    posEl.innerHTML = minhaPosicao > 0 ? `
+      <div style="text-align:center;padding:20px;">
+        <div style="font-family:'Syne',sans-serif;font-size:48px;font-weight:800;color:var(--accent);">#${minhaPosicao}</div>
+        <div style="color:var(--muted);font-size:13px;margin-top:6px;">de ${ranking.length} funcionário${ranking.length!==1?'s':''}</div>
+        <div style="margin-top:16px;font-size:13px;color:var(--text);">${ranking[minhaPosicao-1]?.clientes || 0} cliente(s) · R$${(ranking[minhaPosicao-1]?.mrr || 0).toLocaleString('pt-BR')} MRR</div>
+      </div>
+    ` : '<div class="empty"><p>Você ainda não está no ranking</p></div>';
+  }
 }
 
 // 
@@ -2177,7 +2197,7 @@ const WEX_OFFLINE_FAQ = [
   },
   {
     keys: ['plano', 'planos', 'starter', 'pro', 'agency', 'free', 'preço', 'preco', 'valor', 'assinar'],
-    answer: 'Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 300 leads/mês<br>• <strong>Pro R$197</strong> — 1.000 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
+    answer: 'Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 100 leads/mês<br>• <strong>Pro R$197</strong> — 300 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
   },
   {
     keys: ['quota', 'cota', 'limite', 'crédito', 'credito', 'quantos leads'],
@@ -2322,8 +2342,8 @@ Fale com ${nome}, consultor comercial da equipe. Ele tem ${ativos.length} client
 
 PLANOS (cobrança mensal avulsa):
 - Free: gratuito, 10 consultas/mês, sem CRM/rede/radar
-- Starter R$97: 300 consultas, filtros completos, CRM leve, Rede B2B (1 crédito por conexão), Wex essencial
-- Pro R$197: 1.000 consultas, CRM completo (funil e Kanban), Rede B2B incluída, Wex completa, suporte prioritário
+- Starter R$97: 100 consultas, filtros completos, CRM leve, Rede B2B (1 crédito por conexão), Wex essencial
+- Pro R$197: 300 consultas, CRM completo (funil e Kanban), Rede B2B incluída, Wex completa, suporte prioritário
 - Agency R$397: ilimitado, Radar de Empresas Novas exclusivo, multi-usuário, suporte WhatsApp
 
 DIFERENCIAIS para argumentar na venda: dados da Receita Federal com score de qualificação (0-100) e selo verificado; busca inteligente por setor; CRM para organizar o funil; Rede B2B que conecta empresas para fecharem negócios; Radar de Empresas Novas (Agency) para achar negócios recém-abertos.
@@ -2928,7 +2948,7 @@ const TUTORIAIS = {
   </div>
   <div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;">
     <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Fechamento</div>
-    <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97/mes e da acesso a 300 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos no primeiro mes. Um contrato seu vale quanto? Vale testar por um mes?"</p>
+    <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97/mes e da acesso a 100 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos no primeiro mes. Um contrato seu vale quanto? Vale testar por um mes?"</p>
   </div>
 </div>`
       }
@@ -2956,14 +2976,14 @@ const TUTORIAIS = {
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">Starter</div>
     <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent);">R$ 97<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
-      <li>300 consultas/mes</li><li>Filtros completos por regiao, segmento e CNAE</li><li>Score completo 0-100 e selo verificado</li><li>Exportacao CSV</li><li>CRM leve para organizar contatos</li><li>Rede B2B (1 credito por conexao)</li><li>Assistente Wex (versao essencial)</li>
+      <li>100 consultas/mes</li><li>Filtros completos por regiao, segmento e CNAE</li><li>Score completo 0-100 e selo verificado</li><li>Exportacao CSV</li><li>CRM leve para organizar contatos</li><li>Rede B2B (1 credito por conexao)</li><li>Assistente Wex (versao essencial)</li>
     </ul>
   </div>
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.3);">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Pro — MAIS VENDIDO</div>
     <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--purple);">R$ 197<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
-      <li>1.000 consultas/mes</li><li>Tudo do Starter</li><li>CRM completo: funil e Kanban</li><li>Rede B2B incluida (sem custo extra)</li><li>Assistente Wex completo</li><li>Suporte prioritario por e-mail</li>
+      <li>300 consultas/mes</li><li>Tudo do Starter</li><li>CRM completo: funil e Kanban</li><li>Rede B2B incluida (sem custo extra)</li><li>Assistente Wex completo</li><li>Suporte prioritario por e-mail</li>
     </ul>
   </div>
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(251,191,36,.3);">
@@ -2981,11 +3001,11 @@ const TUTORIAIS = {
 <div style="display:flex;flex-direction:column;gap:12px;">
   <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
     <strong style="color:var(--text);">Autonomo / Prestador individual</strong>
-    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Comece com <strong style="color:var(--accent);">Starter R$97</strong>. 300 leads sao mais que suficientes para validar o negocio e comecar a prospectar.</p>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Comece com <strong style="color:var(--accent);">Starter R$97</strong>. 100 leads sao mais que suficientes para validar o negocio e comecar a prospectar.</p>
   </div>
   <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
     <strong style="color:var(--text);">Pequena empresa com equipe comercial</strong>
-    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Indique o <strong style="color:var(--purple);">Pro R$197</strong>. O CRM integrado e os 1.000 leads justificam facilmente o investimento com 1 ou 2 fechamentos.</p>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Indique o <strong style="color:var(--purple);">Pro R$197</strong>. O CRM integrado e os 300 leads qualificados justificam facilmente o investimento com 1 ou 2 fechamentos.</p>
   </div>
   <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
     <strong style="color:var(--text);">Agencia de vendas / Grande equipe</strong>
@@ -3047,7 +3067,7 @@ const TUTORIAIS = {
   </div>
   <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;">
     <strong style="color:var(--green);">Pergunta poderosa:</strong>
-    <p style="color:var(--muted);font-style:italic;font-size:12.5px;margin-top:4px;">"Esse fornecedor de SP tinha o mesmo desafio que voce. Ele assinou o Starter e fechou 2 contratos no mes 1. O que voce acha que conseguiria com 300 leads qualificados?"</p>
+    <p style="color:var(--muted);font-style:italic;font-size:12.5px;margin-top:4px;">"Esse fornecedor de SP tinha o mesmo desafio que voce. Ele assinou o Starter e fechou 2 contratos no mes 1. O que voce acha que conseguiria com 100 leads qualificados?"</p>
   </div>
 </div>`
       }
