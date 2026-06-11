@@ -1849,8 +1849,9 @@ async function saveEditCliente() {
 
 async function removeCliente(id) {
   if (!confirm('Remover este cliente da sua carteira?')) return;
-  const error = await sbDelete('employee_clients', 'id=eq.' + id);
+  const { data, error } = await SB.rpc('excluir_cliente_funcionario', { p_id: id });
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
+  if (data === false) { toast('Cliente não encontrado', 'error'); return; }
   toast('Removido', 'info');
   await loadClientes();
   renderClientes();
@@ -1928,44 +1929,23 @@ async function renderRanking() {
   const listEl = document.getElementById('ranking-list');
   const posEl  = document.getElementById('minha-posicao');
 
-  // Busca funcionários ativos (com flags de isca e cargo)
-  let allEmps = [];
+  // Ranking calculado no servidor (RPC) — iscas por fechado, demais por pagante real.
+  // Evita o embed profiles() que anon não pode ler.
+  let ranking = [];
   try {
-    allEmps = await sbGet('employees', 'status=eq.ativo&select=id,nome,cargo,is_isca') || [];
-  } catch(e) { console.error('ranking employees:', e); }
+    const { data, error } = await SB.rpc('ranking_vendas');
+    if (error) throw error;
+    ranking = (data || []).map(r => ({
+      id: r.employee_id, nome: r.nome, cargo: r.cargo,
+      is_isca: r.is_isca, clientes: Number(r.clientes), mrr: Number(r.mrr)
+    }));
+  } catch(e) { console.error('ranking_vendas:', e); }
 
-  if (!allEmps.length) {
-    if (listEl) listEl.innerHTML = '<div class="empty"><p>Nenhum funcionário ativo cadastrado ainda.</p></div>';
-    if (posEl)  posEl.innerHTML  = '<div class="empty"><p>Sem ranking disponível.</p></div>';
+  if (!ranking.length) {
+    if (listEl) listEl.innerHTML = '<div class="empty"><p>Ranking será exibido assim que houver vendas confirmadas.</p></div>';
+    if (posEl)  posEl.innerHTML  = '<div class="empty"><p>Sem ranking ainda.</p></div>';
     return;
   }
-
-  // Clientes com status real do plano (para contar só pagantes confirmados)
-  let allClients = [];
-  try {
-    allClients = await sbGet('employee_clients', 'select=employee_id,plano,status_crm,verificado,profile_id,profiles(plan,is_active,plan_expires_at)') || [];
-  } catch(e) { console.error('ranking clients:', e); }
-
-  // Pagante real = verificado + plano pago + ativo + não vencido
-  function ehPaganteRealF(c) {
-    if (!c.verificado) return false;
-    const p = c.profiles;
-    if (!p || !p.plan || p.plan === 'free' || !p.is_active) return false;
-    if (p.plan_expires_at && new Date(p.plan_expires_at) < new Date()) return false;
-    return true;
-  }
-
-  // Gestores não entram no ranking de vendas (são liderança, não vendedores)
-  const ehGestor = e => /gestor/i.test(e.cargo || '');
-
-  const ranking = allEmps.filter(e => !ehGestor(e)).map(e => {
-    // Iscas contam por "fechado" (concorrência saudável); demais, só pagante real confirmado
-    const contam = e.is_isca
-      ? allClients.filter(c => c.employee_id === e.id && c.status_crm === 'fechado')
-      : allClients.filter(c => c.employee_id === e.id && ehPaganteRealF(c));
-    const mrr = contam.reduce((s, c) => s + (PLAN_PRICES[c.profiles?.plan || c.plano] || 0), 0);
-    return { ...e, clientes: contam.length, mrr };
-  }).sort((a, b) => b.clientes - a.clientes || b.mrr - a.mrr);
 
   const meuId = (currentEmployee && currentEmployee.id) || null;
   const medalCores = ['#FFD700','#C0C0C0','#CD7F32'];
