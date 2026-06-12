@@ -426,7 +426,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
     </div>
     <div class="stat-card">
       <div class="stat-icon"></div>
-      <div class="stat-lbl">Receita recorrente (carteira)</div>
+      <div class="stat-lbl">Receita da carteira (renovações 30d)</div>
       <div class="stat-val" id="d-mrr-carteira">R$—</div>
       <div class="stat-delta">MRR da sua carteira</div>
     </div>
@@ -560,7 +560,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
   </div>
   <div class="card" style="border-color:rgba(249,115,22,.2);background:linear-gradient(135deg,rgba(249,115,22,.04),var(--surface));">
     <div class="card-body">
-      <p style="font-size:13px;color:var(--muted);line-height:1.6;"> <strong style="color:var(--text);">Comissão recorrente:</strong> enquanto seu cliente mantiver o plano ativo, você recebe comissão todo mês — sem esforço adicional. Isso é seu incentivo para manter e expandir sua carteira.</p>
+      <p style="font-size:13px;color:var(--muted);line-height:1.6;"> <strong style="color:var(--text);">Comissão por renovação:</strong> a cada renovação de 30 dias do seu cliente, você recebe comissão de novo — sem esforço adicional. Isso é seu incentivo para manter e expandir sua carteira.</p>
     </div>
   </div>
 </div>
@@ -1158,9 +1158,9 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <label class="form-label">Plano</label>
       <select class="form-input" id="new-cli-plano">
         <option value="free">Free</option>
-        <option value="starter">Starter — R$97/mês</option>
-        <option value="pro">Pro — R$197/mês</option>
-        <option value="agency">Agency — R$397/mês</option>
+        <option value="starter">Starter — R$97/30 dias</option>
+        <option value="pro">Pro — R$197/30 dias</option>
+        <option value="agency">Agency — R$397/30 dias</option>
       </select>
     </div>
     <div class="form-group">
@@ -1211,9 +1211,9 @@ textarea.form-input{resize:vertical;min-height:90px;}
         <label class="form-label">Plano</label>
         <select class="form-input" id="edit-cli-plano">
           <option value="free">Free</option>
-          <option value="starter">Starter — R$97/mês</option>
-          <option value="pro">Pro — R$197/mês</option>
-          <option value="agency">Agency — R$397/mês</option>
+          <option value="starter">Starter — R$97/30 dias</option>
+          <option value="pro">Pro — R$197/30 dias</option>
+          <option value="agency">Agency — R$397/30 dias</option>
         </select>
       </div>
     </div>
@@ -2249,11 +2249,11 @@ const WEX_OFFLINE_FAQ = [
   },
   {
     keys: ['plano', 'planos', 'starter', 'pro', 'agency', 'free', 'preço', 'preco', 'valor', 'assinar'],
-    answer: 'Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/mês (gratuito)<br>• <strong>Starter R$97</strong> — 100 leads/mês<br>• <strong>Pro R$197</strong> — 300 leads/mês<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
+    answer: 'Planos disponíveis:<br>• <strong>Free</strong> — 10 leads/30 dias (gratuito)<br>• <strong>Starter R$97</strong> — 100 leads/30 dias<br>• <strong>Pro R$197</strong> — 300 leads/30 dias<br>• <strong>Agency R$397</strong> — leads ilimitados<br><br>Para fazer upgrade, acesse <strong>Minha Assinatura</strong> no menu.'
   },
   {
     keys: ['quota', 'cota', 'limite', 'crédito', 'credito', 'quantos leads'],
-    answer: 'Sua cota de leads é renovada todo mês. Você pode ver quanto já usou no card de <strong>Cota Mensal</strong> no topo do painel. Ao atingir o limite, faça upgrade de plano para continuar prospectando.'
+    answer: 'Sua cota de leads vale por 30 dias e é renovada a cada novo ciclo. Você pode ver quanto já usou no card de <strong>Cota</strong> no topo do painel. Ao atingir o limite, faça upgrade de plano para continuar prospectando.'
   },
   {
     keys: ['cnae', 'segmento', 'construtora', 'empreiteira', 'fornecedor', 'civil', 'categoria'],
@@ -2450,10 +2450,10 @@ function buildWexContext() {
   const mrr = ativos.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
   const comPct = parseFloat(currentEmployee?.comissao_pct || 20);
   return `Você é a Wex, assistente comercial do WexioLead — plataforma SaaS de geração de leads B2B. Nascida na construção civil, hoje atende múltiplos setores (saúde, jurídico, contábil, tecnologia, logística, imobiliário, comércio, alimentação, indústria e serviços).
-Fale com ${nome}, consultor comercial da equipe. Ele tem ${ativos.length} clientes ativos gerando R$${mrr}/mês em MRR (comissão de ${comPct}%).
+Fale com ${nome}, consultor comercial da equipe. Ele tem ${ativos.length} clientes ativos gerando R$${mrr} por ciclo (30 dias) (comissão de ${comPct}%).
 
-PLANOS (cobrança mensal avulsa):
-- Free: gratuito, 10 consultas/mês, sem CRM/rede/radar
+PLANOS (pagamento avulso, cada plano vale 30 dias e expira sem renovação automática):
+- Free: gratuito, 10 consultas/30 dias, sem CRM/rede/radar
 - Starter R$97: 100 consultas, filtros completos, CRM leve, Rede B2B (1 crédito por conexão), Wex essencial
 - Pro R$197: 300 consultas, CRM completo (funil e Kanban), Rede B2B incluída, Wex completa, suporte prioritário
 - Agency R$397: ilimitado, Radar de Empresas Novas exclusivo, multi-usuário, suporte WhatsApp
@@ -3073,7 +3073,7 @@ const TUTORIAIS = {
   </div>
   <div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;">
     <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Fechamento</div>
-    <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97/mes e da acesso a 100 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos no primeiro mes. Um contrato seu vale quanto? Vale testar por um mes?"</p>
+    <p style="color:var(--muted);font-style:italic;">"Para comecar, o plano Starter custa R$97 por 30 dias e da acesso a 100 leads. Em media, nossos clientes fecham de 2 a 5 negocios novos nos primeiros 30 dias. Um contrato seu vale quanto? Vale testar por 30 dias?"</p>
   </div>
 </div>`
       }
@@ -3092,28 +3092,28 @@ const TUTORIAIS = {
 <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;">
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid var(--border);">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:6px;">Free</div>
-    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);">R$ 0<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--text);">R$ 0<span style="font-size:13px;font-weight:400;color:var(--muted);">/30 dias</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
-      <li>10 leads por mes</li><li>Filtros basicos por estado e CNAE</li><li>Score parcial dos leads</li><li>Wex limitada</li><li>Sem cartao de credito</li>
+      <li>10 leads por 30 dias</li><li>Filtros basicos por estado e CNAE</li><li>Score parcial dos leads</li><li>Wex limitada</li><li>Sem cartao de credito</li>
     </ul>
   </div>
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(249,115,22,.3);">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">Starter</div>
-    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent);">R$ 97<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent);">R$ 97<span style="font-size:13px;font-weight:400;color:var(--muted);">/30 dias</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
-      <li>100 consultas/mes</li><li>Filtros completos por regiao, segmento e CNAE</li><li>Score completo 0-100 e selo verificado</li><li>Exportacao CSV</li><li>CRM leve para organizar contatos</li><li>Rede B2B (1 credito por conexao)</li><li>Assistente Wex (versao essencial)</li>
+      <li>100 consultas/30 dias</li><li>Filtros completos por regiao, segmento e CNAE</li><li>Score completo 0-100 e selo verificado</li><li>Exportacao CSV</li><li>CRM leve para organizar contatos</li><li>Rede B2B (1 credito por conexao)</li><li>Assistente Wex (versao essencial)</li>
     </ul>
   </div>
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(139,92,246,.3);">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Pro — MAIS VENDIDO</div>
-    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--purple);">R$ 197<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--purple);">R$ 197<span style="font-size:13px;font-weight:400;color:var(--muted);">/30 dias</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
-      <li>300 consultas/mes</li><li>Tudo do Starter</li><li>CRM completo: funil e Kanban</li><li>Rede B2B incluida (sem custo extra)</li><li>Assistente Wex completo</li><li>Suporte prioritario por e-mail</li>
+      <li>300 consultas/30 dias</li><li>Tudo do Starter</li><li>CRM completo: funil e Kanban</li><li>Rede B2B incluida (sem custo extra)</li><li>Assistente Wex completo</li><li>Suporte prioritario por e-mail</li>
     </ul>
   </div>
   <div style="background:var(--surface2);border-radius:10px;padding:14px;border:1px solid rgba(251,191,36,.3);">
     <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--accent2);margin-bottom:6px;">Agency</div>
-    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent2);">R$ 397<span style="font-size:13px;font-weight:400;color:var(--muted);">/mes</span></div>
+    <div style="font-family:'Syne',sans-serif;font-size:24px;font-weight:800;color:var(--accent2);">R$ 397<span style="font-size:13px;font-weight:400;color:var(--muted);">/30 dias</span></div>
     <ul style="margin-top:10px;padding-left:16px;color:var(--muted);font-size:12.5px;display:flex;flex-direction:column;gap:4px;">
       <li>Consultas ilimitadas</li><li>Tudo do Pro</li><li>Radar de Empresas Novas (exclusivo)</li><li>Multiplos usuarios e gestao de equipe</li><li>Onboarding dedicado</li><li>Suporte via WhatsApp</li>
     </ul>
@@ -3410,9 +3410,9 @@ const TOUR_STEPS = [
   { target: 'nav-dashboard',     nav: 'dashboard', title: 'Visão Geral',
     msg: 'Sua tela inicial. Aqui você acompanha tudo de uma vez: clientes ativos, comissão do mês, progresso da meta e os próximos follow-ups.' },
   { target: 'nav-clientes',      nav: null, title: 'Meus Clientes',
-    msg: 'Lista completa dos seus clientes. Veja o histórico de cada um, adicione notas e acompanhe o status. É de onde vem a sua recorrência — mantenha sempre atualizado.' },
+    msg: 'Lista completa dos seus clientes. Veja o histórico de cada um, adicione notas e acompanhe o status. É de onde vêm suas renovações — mantenha sempre atualizado.' },
   { target: 'nav-comissoes',     nav: null, title: 'Comissões',
-    msg: 'Acompanhe tudo que já ganhou e o previsto. A comissão padrão é de 20% sobre cada mensalidade paga — e pode chegar a 30% se o lead vier da sua prospecção própria.' },
+    msg: 'Acompanhe tudo que já ganhou e o previsto. A comissão padrão é de 20% sobre cada pagamento (ciclo de 30 dias) — e pode chegar a 30% se o lead vier da sua prospecção própria.' },
   { target: 'nav-metas',         nav: null, title: 'Metas',
     msg: 'Veja sua meta mensal e o quanto já avançou. Bater meta abre espaço para bônus e reconhecimento.' },
   { target: 'nav-materiais',     nav: 'materiais', title: 'Material de Vendas',
