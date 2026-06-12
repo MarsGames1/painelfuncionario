@@ -1320,6 +1320,7 @@ window.addEventListener('load', async () => {
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
           currentUser = { id: emps[0].id, email: emps[0].email };
+          pingAtividade(); // registra "visto por último" (throttle 10 min)
           await loadAll();
           initUI();
           setupRealtime(); // sincronização em tempo real com admin
@@ -1447,6 +1448,7 @@ async function doLogin() {
     currentUser = { id: emp.id, email: emp.email };
     // Salvar sessão para recargas da página (localStorage persiste entre sessões)
     try { localStorage.setItem('wexio_session', JSON.stringify({ emp, ts: Date.now() })); } catch(e) {}
+    pingAtividade();
     await loadAll();
     initUI();
     setupRealtime(); // ← sincronização em tempo real com admin
@@ -2102,7 +2104,22 @@ async function alterarSenha() {
 // 
 // NAV
 // 
+// Registra atividade do funcionário ("visto por último") — otimizado, sem realtime.
+// Throttle duplo: localStorage (evita a request) + servidor (evita o write).
+// No máximo 1 chamada a cada 10 minutos por funcionário.
+function pingAtividade() {
+  if (!currentEmployee?.id || !SB) return;
+  try {
+    const k = 'wexio_ping_' + currentEmployee.id;
+    const last = parseInt(localStorage.getItem(k) || '0', 10);
+    if (Date.now() - last < 10 * 60 * 1000) return; // <10 min: nem chama
+    localStorage.setItem(k, String(Date.now()));
+    SB.rpc('registrar_atividade_funcionario', { p_id: currentEmployee.id }).then(()=>{});
+  } catch(e) {}
+}
+
 function nav(page) {
+  pingAtividade();
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
   document.getElementById('page-' + page).classList.add('active');
