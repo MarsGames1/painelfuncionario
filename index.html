@@ -351,9 +351,9 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .kan-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
 .kan-count{font-size:11px;color:var(--muted);background:var(--surface2);border-radius:20px;padding:1px 9px;font-weight:600;}
 .kan-body{padding:10px;display:flex;flex-direction:column;gap:9px;min-height:60px;}
-.kan-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 12px;cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;}
+.kan-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 12px;cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;}
 .kan-card:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.22);}
-.kan-card:active{cursor:grabbing;}
+
 .kan-card.dragging{opacity:.45;}
 .kan-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .kan-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
@@ -603,7 +603,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
   <!-- Kanban -->
   <div class="card-title" style="margin:4px 0 4px;font-size:15px;">Funil de vendas</div>
-  <div class="crm-hint">Arraste um cliente entre as colunas para mudar o estágio. Toque no card para ver detalhes.</div>
+  <div class="crm-hint">Visualize seu funil e a previsão de comissão. O estágio de cada cliente é definido na aba Meus Clientes.</div>
   <div class="kanban" id="crm-kanban"></div>
 </div>
 
@@ -2051,8 +2051,7 @@ function renderCRM(){
       const dias = _diasDesde(c.created_at);
       const stale = (st.key==='negociando' || st.key==='contatado') && dias!==null && dias>=7;
       const ageTxt = dias===null ? '' : `${dias===0?'hoje':dias+'d'} na carteira`;
-      return `<div class="kan-card" draggable="true" data-id="${c.id}"
-                 ondragstart="crmDragStart(event,'${c.id}')" ondragend="crmDragEnd(event)"
+      return `<div class="kan-card kan-card-view" data-id="${c.id}"
                  onclick="viewCliente('${c.id}')">
         <div class="kan-name">${(c.nome_cliente||'—')}</div>
         <div class="kan-meta">
@@ -2062,8 +2061,7 @@ function renderCRM(){
         <div class="kan-age ${stale?'stale':''}">${stale?'⚠ ':''}${ageTxt}</div>
       </div>`;
     }).join('') || '<div class="kan-empty">Nenhum cliente</div>';
-    return `<div class="kan-col" data-stage="${st.key}"
-                ondragover="crmDragOver(event)" ondragleave="crmDragLeave(event)" ondrop="crmDrop(event,'${st.key}')">
+    return `<div class="kan-col" data-stage="${st.key}">
       <div class="kan-head">
         <div class="kan-title"><span class="kan-dot" style="background:${st.color}"></span>${st.label}</div>
         <span class="kan-count">${itens.length}</span>
@@ -2074,30 +2072,6 @@ function renderCRM(){
 
   document.getElementById('crm-sub').textContent =
     `${myClientes.length} cliente(s) · ${fechados.length} fechado(s) · potencial de ${brl(comPotenc)} em negociação`;
-}
-
-// ---- Drag & drop ----
-let _crmDragId = null;
-function crmDragStart(e,id){ _crmDragId=id; e.dataTransfer.effectAllowed='move'; e.currentTarget.classList.add('dragging'); }
-function crmDragEnd(e){ e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.kan-col.drop').forEach(c=>c.classList.remove('drop')); }
-function crmDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drop'); e.dataTransfer.dropEffect='move'; }
-function crmDragLeave(e){ e.currentTarget.classList.remove('drop'); }
-async function crmDrop(e,stage){
-  e.preventDefault(); e.currentTarget.classList.remove('drop');
-  const id=_crmDragId; _crmDragId=null;
-  if(!id) return;
-  const c = myClientes.find(x=>x.id===id);
-  if(!c || (c.status_crm||'novo')===stage) return;
-  // Regra existente: marcar FECHADO exige e-mail real para rastrear comissão
-  if(stage==='fechado' && (!c.email_cliente || !String(c.email_cliente).includes('@'))){
-    toast('Para mover para FECHADO, edite o cliente e informe o e-mail real usado na plataforma.','error');
-    return;
-  }
-  const prev=c.status_crm; c.status_crm=stage; renderCRM();
-  const err = await sbPatch('employee_clients','id=eq.'+id,{ status_crm: stage });
-  if(err){ c.status_crm=prev; renderCRM(); toast('Erro ao mover: '+err,'error'); return; }
-  toast('Movido para '+stage,'success');
-  renderClientes(); renderComissoes(); updateDashStats();
 }
 
 // 
