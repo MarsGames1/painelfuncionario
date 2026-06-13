@@ -329,6 +329,45 @@ textarea.form-input{resize:vertical;min-height:90px;}
   .page-title{font-size:18px;}
   .topbar{margin-bottom:18px;}
 }
+
+/* ════════ CRM (funil + kanban + previsão) ════════ */
+.crm-forecast{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px;}
+.fc-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;overflow:hidden;}
+.fc-card.hl{border-color:rgba(16,185,129,.35);background:linear-gradient(135deg,rgba(16,185,129,.06),var(--surface));}
+.fc-card.warn{border-color:rgba(249,115,22,.35);background:linear-gradient(135deg,rgba(249,115,22,.06),var(--surface));}
+.fc-lbl{font-size:11px;color:var(--muted);letter-spacing:.04em;text-transform:uppercase;margin-bottom:9px;}
+.fc-val{font-family:'Syne',sans-serif;font-size:25px;font-weight:800;letter-spacing:-.03em;line-height:1;margin-bottom:6px;color:var(--text);}
+.fc-val.green{color:var(--green);}
+.fc-val.accent{color:var(--accent);}
+.fc-sub{font-size:11.5px;color:var(--muted);line-height:1.5;}
+.fc-bar{height:7px;border-radius:5px;background:var(--surface2);overflow:hidden;margin-top:10px;}
+.fc-bar>i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--accent),var(--green));transition:width .5s ease;}
+
+.kanban{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;align-items:start;}
+.kan-col{background:var(--surface);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;min-height:120px;}
+.kan-col.drop{border-color:var(--accent);box-shadow:0 0 0 2px rgba(249,115,22,.18);}
+.kan-head{padding:13px 14px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.kan-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;display:flex;align-items:center;gap:7px;}
+.kan-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.kan-count{font-size:11px;color:var(--muted);background:var(--surface2);border-radius:20px;padding:1px 9px;font-weight:600;}
+.kan-body{padding:10px;display:flex;flex-direction:column;gap:9px;min-height:60px;}
+.kan-card{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:11px 12px;cursor:grab;transition:transform .15s,box-shadow .15s,border-color .15s;}
+.kan-card:hover{border-color:var(--border2);transform:translateY(-1px);box-shadow:0 4px 14px rgba(0,0,0,.22);}
+.kan-card:active{cursor:grabbing;}
+.kan-card.dragging{opacity:.45;}
+.kan-name{font-size:13px;font-weight:600;color:var(--text);margin-bottom:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.kan-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.kan-val{font-family:'Syne',sans-serif;font-size:11.5px;font-weight:700;color:var(--green);margin-left:auto;}
+.kan-age{font-size:10.5px;color:var(--dim);margin-top:6px;}
+.kan-age.stale{color:var(--accent);}
+.kan-empty{font-size:11.5px;color:var(--dim);text-align:center;padding:16px 6px;}
+.crm-hint{font-size:11.5px;color:var(--dim);margin:2px 0 16px;}
+@media(max-width:900px){.crm-forecast{grid-template-columns:1fr 1fr;}}
+@media(max-width:768px){
+  .kanban{grid-template-columns:1fr;}
+  .kan-col{min-height:auto;}
+}
+@media(max-width:480px){.crm-forecast{grid-template-columns:1fr;}}
 </style>
 </head>
 <body>
@@ -384,6 +423,10 @@ textarea.form-input{resize:vertical;min-height:90px;}
     <a onclick="nav('dashboard')" id="nav-dashboard" class="active">
       <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/></svg>
       <span>Dashboard</span>
+    </a>
+    <a onclick="nav('crm')" id="nav-crm">
+      <svg viewBox="0 0 24 24"><line x1="3" y1="3" x2="3" y2="21"/><rect x="6" y="9" width="4" height="9" rx="1"/><rect x="12" y="5" width="4" height="13" rx="1"/><rect x="18" y="11" width="3" height="7" rx="1"/></svg>
+      <span>CRM</span>
     </a>
     <a onclick="nav('clientes')" id="nav-clientes">
       <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -513,6 +556,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <div style="padding:0 12px 10px;display:flex;gap:6px;flex-wrap:wrap;" id="wex-dash-chips">
         <span class="wex-chip" onclick="sendWexDashChip('Criar abordagem para novo lead')" style="font-size:11px;padding:4px 10px;cursor:pointer;">Abordagem lead</span>
         <span class="wex-chip" onclick="sendWexDashChip('Respostas para objeções comuns')" style="font-size:11px;padding:4px 10px;cursor:pointer;">Objeções</span>
+        <span class="wex-chip" onclick="sendWexDashChip('O que vendemos exatamente?')" style="font-size:11px;padding:4px 10px;cursor:pointer;">O que vendemos?</span>
         <span class="wex-chip" onclick="sendWexDashChip('Dicas para fechar mais vendas')" style="font-size:11px;padding:4px 10px;cursor:pointer;">Fechar vendas</span>
       </div>
     </div>
@@ -540,6 +584,27 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <button class="btn btn-ghost" onclick="nav('ranking')"> Ver ranking</button>
     </div>
   </div>
+</div>
+
+<!--  CRM (funil + kanban + previsão)  -->
+<div class="page" id="page-crm">
+  <div class="topbar">
+    <div><div class="page-title">CRM</div><div class="page-sub" id="crm-sub">Organize seu funil e veja quanto pode ganhar</div></div>
+    <div class="topbar-right">
+      <button class="btn btn-accent btn-sm" onclick="openModal('modal-add-cliente')">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Adicionar Cliente
+      </button>
+    </div>
+  </div>
+
+  <!-- Previsão de comissão -->
+  <div class="crm-forecast" id="crm-forecast"></div>
+
+  <!-- Kanban -->
+  <div class="card-title" style="margin:4px 0 4px;font-size:15px;">Funil de vendas</div>
+  <div class="crm-hint">Arraste um cliente entre as colunas para mudar o estágio. Toque no card para ver detalhes.</div>
+  <div class="kanban" id="crm-kanban"></div>
 </div>
 
 <!--  MEUS CLIENTES  -->
@@ -1539,6 +1604,7 @@ function initUI() {
   renderClientes();
   renderComissoes();
   renderMetas();
+  renderCRM();
   renderRanking();
   loadSugestoes();
   renderPerfil();
@@ -1905,6 +1971,135 @@ async function removeCliente(id) {
   updateDashStats();
 }
 
+
+// 
+// CRM — funil visual, kanban e previsão de comissão
+// 
+const CRM_STAGES = [
+  { key:'novo',       label:'Novo',       color:'var(--blue)'    },
+  { key:'contatado',  label:'Contatado',  color:'var(--accent2)' },
+  { key:'negociando', label:'Negociando', color:'var(--accent)'  },
+  { key:'fechado',    label:'Fechado',    color:'var(--green)'   },
+];
+function _diasDesde(dateStr){
+  if(!dateStr) return null;
+  const d = new Date(dateStr); if(isNaN(d)) return null;
+  return Math.floor((Date.now() - d.getTime())/(1000*60*60*24));
+}
+function renderCRM(){
+  if(!currentEmployee) return;
+  const comPct = parseFloat(currentEmployee.comissao_pct || 20)/100;
+  const pago = c => c.plano && c.plano!=='free' && (PLAN_PRICES[c.plano]||0)>0;
+
+  // ---- Previsão de comissão ----
+  const fechados   = myClientes.filter(c => c.status_crm==='fechado' && pago(c));
+  const negociando = myClientes.filter(c => c.status_crm==='negociando' && pago(c));
+  const comAtual   = fechados.reduce((sm,c)=> sm + (PLAN_PRICES[c.plano]||0)*comPct, 0);
+  const comPotenc  = negociando.reduce((sm,c)=> sm + (PLAN_PRICES[c.plano]||0)*comPct, 0);
+  const comTotal   = comAtual + comPotenc;
+  const meta       = parseFloat(currentEmployee.meta_mensal || 0);
+  const brl = v => 'R$' + v.toLocaleString('pt-BR',{minimumFractionDigits:2});
+
+  let metaCard;
+  if(meta>0){
+    const pct = Math.min(100, Math.round((comAtual/ (meta*comPct || meta))*100)) || 0;
+    // meta pode ser em receita; mostramos progresso da comissão atual rumo à meta de comissão estimada
+    const metaCom = meta*comPct;
+    const pctReal = metaCom>0 ? Math.min(100, Math.round((comAtual/metaCom)*100)) : 0;
+    const falta = Math.max(0, metaCom - comAtual);
+    metaCard = `<div class="fc-card">
+      <div class="fc-lbl">Progresso da meta</div>
+      <div class="fc-val accent">${pctReal}%</div>
+      <div class="fc-sub">${falta>0 ? 'Faltam '+brl(falta)+' em comissão' : 'Meta batida! 🎯'}</div>
+      <div class="fc-bar"><i style="width:${pctReal}%"></i></div>
+    </div>`;
+  } else {
+    metaCard = `<div class="fc-card">
+      <div class="fc-lbl">Clientes na carteira</div>
+      <div class="fc-val">${myClientes.length}</div>
+      <div class="fc-sub">${fechados.length} fechado(s) · ${negociando.length} em negociação</div>
+    </div>`;
+  }
+
+  document.getElementById('crm-forecast').innerHTML = `
+    <div class="fc-card hl">
+      <div class="fc-lbl">Comissão atual</div>
+      <div class="fc-val green">${brl(comAtual)}</div>
+      <div class="fc-sub">${fechados.length} cliente(s) fechado(s)</div>
+    </div>
+    <div class="fc-card warn">
+      <div class="fc-lbl">Se fechar tudo em negociação</div>
+      <div class="fc-val accent">${brl(comTotal)}</div>
+      <div class="fc-sub">${negociando.length>0 ? 'Ganho adicional de '+brl(comPotenc) : 'Sem clientes em negociação'}</div>
+    </div>
+    <div class="fc-card">
+      <div class="fc-lbl">Potencial em jogo agora</div>
+      <div class="fc-val">${brl(comPotenc)}</div>
+      <div class="fc-sub">${negociando.length} negociação(ões) aberta(s)</div>
+    </div>
+    ${metaCard}`;
+
+  // ---- Kanban ----
+  const crmColors = {novo:'b-blue', contatado:'b-yellow', negociando:'b-orange', fechado:'b-green'};
+  const kb = document.getElementById('crm-kanban');
+  kb.innerHTML = CRM_STAGES.map(st => {
+    const itens = myClientes.filter(c => (c.status_crm||'novo')===st.key);
+    const cards = itens.map(c => {
+      const val = PLAN_PRICES[c.plano]||0;
+      const com = val*comPct;
+      const ageRef = c.data_followup || c.created_at;
+      const dias = _diasDesde(c.created_at);
+      const stale = (st.key==='negociando' || st.key==='contatado') && dias!==null && dias>=7;
+      const ageTxt = dias===null ? '' : `${dias===0?'hoje':dias+'d'} na carteira`;
+      return `<div class="kan-card" draggable="true" data-id="${c.id}"
+                 ondragstart="crmDragStart(event,'${c.id}')" ondragend="crmDragEnd(event)"
+                 onclick="viewCliente('${c.id}')">
+        <div class="kan-name">${(c.nome_cliente||'—')}</div>
+        <div class="kan-meta">
+          <span class="badge b-orange" style="font-size:9.5px;">${(c.plano||'free').toUpperCase()}</span>
+          ${val>0 ? `<span class="kan-val">${brl(com)}</span>` : ''}
+        </div>
+        <div class="kan-age ${stale?'stale':''}">${stale?'⚠ ':''}${ageTxt}</div>
+      </div>`;
+    }).join('') || '<div class="kan-empty">Nenhum cliente</div>';
+    return `<div class="kan-col" data-stage="${st.key}"
+                ondragover="crmDragOver(event)" ondragleave="crmDragLeave(event)" ondrop="crmDrop(event,'${st.key}')">
+      <div class="kan-head">
+        <div class="kan-title"><span class="kan-dot" style="background:${st.color}"></span>${st.label}</div>
+        <span class="kan-count">${itens.length}</span>
+      </div>
+      <div class="kan-body">${cards}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('crm-sub').textContent =
+    `${myClientes.length} cliente(s) · ${fechados.length} fechado(s) · potencial de ${brl(comPotenc)} em negociação`;
+}
+
+// ---- Drag & drop ----
+let _crmDragId = null;
+function crmDragStart(e,id){ _crmDragId=id; e.dataTransfer.effectAllowed='move'; e.currentTarget.classList.add('dragging'); }
+function crmDragEnd(e){ e.currentTarget.classList.remove('dragging'); document.querySelectorAll('.kan-col.drop').forEach(c=>c.classList.remove('drop')); }
+function crmDragOver(e){ e.preventDefault(); e.currentTarget.classList.add('drop'); e.dataTransfer.dropEffect='move'; }
+function crmDragLeave(e){ e.currentTarget.classList.remove('drop'); }
+async function crmDrop(e,stage){
+  e.preventDefault(); e.currentTarget.classList.remove('drop');
+  const id=_crmDragId; _crmDragId=null;
+  if(!id) return;
+  const c = myClientes.find(x=>x.id===id);
+  if(!c || (c.status_crm||'novo')===stage) return;
+  // Regra existente: marcar FECHADO exige e-mail real para rastrear comissão
+  if(stage==='fechado' && (!c.email_cliente || !String(c.email_cliente).includes('@'))){
+    toast('Para mover para FECHADO, edite o cliente e informe o e-mail real usado na plataforma.','error');
+    return;
+  }
+  const prev=c.status_crm; c.status_crm=stage; renderCRM();
+  const err = await sbPatch('employee_clients','id=eq.'+id,{ status_crm: stage });
+  if(err){ c.status_crm=prev; renderCRM(); toast('Erro ao mover: '+err,'error'); return; }
+  toast('Movido para '+stage,'success');
+  renderClientes(); renderComissoes(); updateDashStats();
+}
+
 // 
 // COMISSÕES
 // 
@@ -2173,12 +2368,13 @@ function nav(page) {
   if (navEl) navEl.classList.add('active');
   if (page === 'treinamentos') renderEvgGrid();
   // Sempre rebusca do banco ao entrar em comissões ou dashboard
-  if (page === 'comissoes' || page === 'dashboard' || page === 'clientes') {
+  if (page === 'comissoes' || page === 'dashboard' || page === 'clientes' || page === 'crm') {
     loadClientes().then(() => {
       updateDashStats();
       renderClientes();
       renderComissoes();
       renderMetas();
+      renderCRM();
     });
   }
   // Rebusca ranking ao entrar na página (dados de todos os funcionários)
@@ -2273,6 +2469,18 @@ function wexDashThinking(show) {
 //  WEX FALLBACK OFFLINE — respostas pré-programadas sobre o sistema
 // ════════════════════════════════════════════════════════════════
 const WEX_OFFLINE_FAQ = [
+  {
+    keys: ['o que vendo', 'o que vendemos', 'o que e wexiolead', 'o que é wexiolead', 'que produto', 'o que estou vendendo', 'o que e o produto', 'o que vende', 'oque vendo', 'oque vendemos', 'o que eu vendo'],
+    answer: 'Boa pergunta — e é importante saber explicar isso bem! 😊<br><br>Em poucas palavras: a gente vende <strong>uma forma da empresa achar clientes novos</strong>. O WexioLead é uma ferramenta que entrega <strong>listas de empresas reais</strong> (com CNPJ, contato e um score de qualidade) prontas pra serem abordadas.<br><br>Pensa assim: o seu cliente é uma empresa que <strong>quer vender pra outras empresas</strong> (ex: uma fornecedora de material que quer achar construtoras, um contador que quer achar empresas novas pra fechar contrato). A gente entrega esses contatos mastigados pra ele — em vez de ele ficar caçando no Google ou comprando lista velha.<br><br>Ou seja: <strong>você vende a ponte de uma empresa pra outra</strong>. É consulta/geração de leads B2B (de empresa para empresa).'
+  },
+  {
+    keys: ['como explico', 'como explicar', 'explicar pro cliente', 'explicar para o cliente', 'pitch', 'frase de venda', 'como vender isso', 'argumento'],
+    answer: 'Uma forma simples e informal de explicar pro cliente:<br><br><em>"Sabe quando você precisa achar empresas novas pra oferecer seu produto ou serviço? A gente te entrega uma lista pronta de empresas reais, com contato e tudo, filtrada do jeito que você precisa. Assim você para de perder tempo caçando cliente e foca em fechar negócio."</em><br><br>Se o cliente é mais técnico, complementa: os dados vêm da <strong>Receita Federal</strong>, com <strong>score de 0 a 100</strong> mostrando quais contatos valem mais a pena, e tem <strong>selo verificado</strong> nos que têm telefone/e-mail confirmado.<br><br>O segredo é: não venda "software", venda <strong>clientes novos chegando</strong>.'
+  },
+  {
+    keys: ['para quem', 'pra quem vender', 'quem compra', 'quem e o cliente', 'quem é o cliente', 'tipo de cliente', 'segmento', 'setores'],
+    answer: 'O cliente ideal é <strong>qualquer empresa que vende para outras empresas (B2B)</strong> e precisa achar novos clientes. Começou na construção civil, mas hoje serve vários setores: saúde, jurídico, contábil, tecnologia, logística, imobiliário, comércio, alimentação, indústria e serviços.<br><br>Exemplos práticos:<br>• Fornecedor de material → quer achar construtoras e empreiteiras<br>• Contador → quer achar empresas recém-abertas<br>• Agência/consultoria → quer achar empresas de um nicho<br><br>Se a empresa <strong>precisa de mais clientes e vende pra outras empresas</strong>, ela é um cliente em potencial.'
+  },
   {
     keys: ['lead', 'leads', 'buscar lead', 'encontrar lead', 'pesquisar'],
     answer: 'Para buscar leads, acesse a seção <strong>Leads</strong> no menu lateral. Você pode filtrar por segmento (construtoras, empreiteiras, fornecedores), estado, score e situação cadastral. Clique em qualquer lead para ver os detalhes completos.'
@@ -2511,7 +2719,9 @@ PLANOS (pagamento avulso, cada plano vale 30 dias e expira sem renovação autom
 
 DIFERENCIAIS para argumentar na venda: dados da Receita Federal com score de qualificação (0-100) e selo verificado; busca inteligente por setor; CRM para organizar o funil; Rede B2B que conecta empresas para fecharem negócios; Radar de Empresas Novas (Agency) para achar negócios recém-abertos.
 
-Ajude ${nome} a prospectar, contornar objeções, recomendar o plano certo e fechar mais. Seja direta, profissional e motivadora. Máximo 3 parágrafos. Responda em português brasileiro. Nunca use emojis.`;
+O QUE VENDEMOS (explique de forma simples e informal quando ${nome} perguntar): o WexioLead vende geração/consulta de leads B2B — ou seja, entregamos para uma empresa uma lista pronta de OUTRAS empresas reais (com CNPJ, contato e score de qualidade) para ela prospectar e fechar negócio. O cliente do consultor é uma empresa que vende para outras empresas e quer achar clientes novos sem perder tempo caçando. A frase-chave: "não vendemos software, vendemos clientes novos chegando". Muitos consultores ainda não sabem explicar isso — então, se perceber dúvida, explique com calma, com exemplos do dia a dia (fornecedor que quer achar construtoras, contador que quer achar empresas novas) e num tom de colega, não corporativo.
+
+Ajude ${nome} a entender e explicar o produto, prospectar, contornar objeções, recomendar o plano certo e fechar mais. Seja direta, simpática e didática, como uma colega de equipe que manja de vendas — pode ser informal. Máximo 3 parágrafos. Responda em português brasileiro. Nunca use emojis.`;
 }
 
 async function sendWexMessage() {
