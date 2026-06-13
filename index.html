@@ -361,6 +361,8 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .kan-age{font-size:10.5px;color:var(--dim);margin-top:6px;}
 .kan-age.stale{color:var(--accent);}
 .kan-empty{font-size:11.5px;color:var(--dim);text-align:center;padding:16px 6px;}
+.kan-more{width:100%;margin-top:2px;padding:8px;border:1px dashed var(--border2);background:transparent;color:var(--muted);border-radius:9px;font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;}
+.kan-more:hover{border-color:var(--accent);color:var(--accent);background:rgba(249,115,22,.05);}
 .crm-hint{font-size:11.5px;color:var(--dim);margin:2px 0 16px;}
 @media(max-width:900px){.crm-forecast{grid-template-columns:1fr 1fr;}}
 @media(max-width:768px){
@@ -1975,6 +1977,10 @@ async function removeCliente(id) {
 // 
 // CRM — funil visual, kanban e previsão de comissão
 // 
+const CRM_PAGE = 8;
+let _crmVisiveis = {};
+function crmVerMais(stage){ _crmVisiveis[stage] = (_crmVisiveis[stage]||CRM_PAGE) + CRM_PAGE; renderCRM(); }
+function crmVerMenos(stage){ _crmVisiveis[stage] = CRM_PAGE; renderCRM(); }
 const CRM_STAGES = [
   { key:'novo',       label:'Novo',       color:'var(--blue)'    },
   { key:'contatado',  label:'Contatado',  color:'var(--accent2)' },
@@ -2039,34 +2045,39 @@ function renderCRM(){
     </div>
     ${metaCard}`;
 
-  // ---- Kanban ----
-  const crmColors = {novo:'b-blue', contatado:'b-yellow', negociando:'b-orange', fechado:'b-green'};
+  // ---- Kanban (paginado por coluna para não sobrecarregar) ----
   const kb = document.getElementById('crm-kanban');
+  const cardHtml = c => {
+    const val = PLAN_PRICES[c.plano]||0;
+    const com = val*comPct;
+    const dias = _diasDesde(c.created_at);
+    const stale = ((c.status_crm||'novo')==='negociando' || (c.status_crm||'novo')==='contatado') && dias!==null && dias>=7;
+    const ageTxt = dias===null ? '' : `${dias===0?'hoje':dias+'d'} na carteira`;
+    return `<div class="kan-card kan-card-view" data-id="${c.id}" onclick="viewCliente('${c.id}')">
+      <div class="kan-name">${(c.nome_cliente||'—')}</div>
+      <div class="kan-meta">
+        <span class="badge b-orange" style="font-size:9.5px;">${(c.plano||'free').toUpperCase()}</span>
+        ${val>0 ? `<span class="kan-val">${brl(com)}</span>` : ''}
+      </div>
+      <div class="kan-age ${stale?'stale':''}">${stale?'⚠ ':''}${ageTxt}</div>
+    </div>`;
+  };
   kb.innerHTML = CRM_STAGES.map(st => {
     const itens = myClientes.filter(c => (c.status_crm||'novo')===st.key);
-    const cards = itens.map(c => {
-      const val = PLAN_PRICES[c.plano]||0;
-      const com = val*comPct;
-      const ageRef = c.data_followup || c.created_at;
-      const dias = _diasDesde(c.created_at);
-      const stale = (st.key==='negociando' || st.key==='contatado') && dias!==null && dias>=7;
-      const ageTxt = dias===null ? '' : `${dias===0?'hoje':dias+'d'} na carteira`;
-      return `<div class="kan-card kan-card-view" data-id="${c.id}"
-                 onclick="viewCliente('${c.id}')">
-        <div class="kan-name">${(c.nome_cliente||'—')}</div>
-        <div class="kan-meta">
-          <span class="badge b-orange" style="font-size:9.5px;">${(c.plano||'free').toUpperCase()}</span>
-          ${val>0 ? `<span class="kan-val">${brl(com)}</span>` : ''}
-        </div>
-        <div class="kan-age ${stale?'stale':''}">${stale?'⚠ ':''}${ageTxt}</div>
-      </div>`;
-    }).join('') || '<div class="kan-empty">Nenhum cliente</div>';
+    const limite = _crmVisiveis[st.key] || CRM_PAGE;
+    const visiveis = itens.slice(0, limite);
+    const cards = visiveis.map(cardHtml).join('') || '<div class="kan-empty">Nenhum cliente</div>';
+    const restantes = itens.length - visiveis.length;
+    const maisBtn = restantes > 0
+      ? `<button class="kan-more" onclick="crmVerMais('${st.key}')">Ver mais ${Math.min(CRM_PAGE, restantes)} de ${restantes}</button>`
+      : (limite > CRM_PAGE && itens.length > CRM_PAGE
+          ? `<button class="kan-more" onclick="crmVerMenos('${st.key}')">Mostrar menos</button>` : '');
     return `<div class="kan-col" data-stage="${st.key}">
       <div class="kan-head">
         <div class="kan-title"><span class="kan-dot" style="background:${st.color}"></span>${st.label}</div>
         <span class="kan-count">${itens.length}</span>
       </div>
-      <div class="kan-body">${cards}</div>
+      <div class="kan-body">${cards}${maisBtn}</div>
     </div>`;
   }).join('');
 
