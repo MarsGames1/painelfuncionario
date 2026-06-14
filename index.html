@@ -755,6 +755,41 @@ textarea.form-input{resize:vertical;min-height:90px;}
             <div style="font-size:11px;color:var(--muted);margin-top:2px;">Modelos prontos para envio</div>
           </div>
         </div>
+        <div class="mat-card" onclick="abrirTutorial('primeira_ligacao')">
+          <div class="mat-icon" style="background:rgba(16,185,129,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Roteiro de Primeira Ligação</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">O que falar nos primeiros 60 segundos</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('cnpj')">
+          <div class="mat-icon" style="background:rgba(139,92,246,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">A Pergunta do CNPJ</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Como responder com segurança e firmeza</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('modelo_30dias')">
+          <div class="mat-icon" style="background:rgba(59,130,246,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:1.8;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">O Modelo de 30 Dias</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Acesso avulso, sem mensalidade recorrente</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('usar_planilha')">
+          <div class="mat-icon" style="background:rgba(251,191,36,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Usando a Planilha de Leads</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Por onde começar e quais priorizar</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('faq_clientes')">
+          <div class="mat-icon" style="background:rgba(249,115,22,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">FAQ de Clientes</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Respostas rápidas para as dúvidas comuns</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -3566,6 +3601,185 @@ const TUTORIAIS = {
   <p style="color:var(--muted);">Sei que a caixa de entrada lotada — mando esse e-mail rapido so para perguntar: faz sentido conversar sobre prospeccao para [empresa]?</p><br>
   <p style="color:var(--muted);">Se nao for o momento certo, so me fala — sem problema. Se quiser ver como o WexioLead funciona, tenho um horario disponivel [dia] as [hora].</p><br>
   <p style="color:var(--muted);">Att,<br><strong style="color:var(--text);">[seu nome]</strong></p>
+</div>`
+      }
+    ]
+  },
+
+  primeira_ligacao: {
+    titulo: 'Roteiro de Primeira Ligação',
+    sub: 'O que falar nos primeiros 60 segundos',
+    icorCor: 'rgba(16,185,129,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>',
+    abas: [
+      {
+        label: 'O Roteiro', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--green);">Primeiros 60 segundos — sem pressa, com clareza</h3>
+<p style="color:var(--muted);">Ligação não é para empurrar venda. É para abrir conversa. O objetivo do primeiro contato é só um: conseguir 2 minutos de atenção e marcar o próximo passo.</p>
+<div style="display:flex;flex-direction:column;gap:14px;margin-top:16px;">
+  <div style="background:var(--surface2);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;">1. Identifique-se (10s)</div>
+    <p style="color:var(--muted);font-style:italic;">"Oi, [nome]? Aqui é o [seu nome], da WexioLead. Tudo bem? Você tem 2 minutinhos?"</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">2. Motivo + valor (20s)</div>
+    <p style="color:var(--muted);font-style:italic;">"A gente ajuda empresas como a sua a encontrar clientes novos sem ficar dependendo só de indicação. Trabalho com uma base de empresas com contato real, prontas pra abordar."</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;">3. Pergunta aberta (escute!)</div>
+    <p style="color:var(--muted);font-style:italic;">"Hoje, como você costuma achar cliente novo?" — e aí <strong>cala a boca e ouve</strong>. Quem escuta mais, vende mais.</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">4. Próximo passo (não feche na hora)</div>
+    <p style="color:var(--muted);font-style:italic;">"Posso te mostrar rapidinho como funciona? Te mando uma demonstração hoje ou amanhã, o que fica melhor pra você?"</p>
+  </div>
+</div>`
+      },
+      {
+        label: 'Dicas de Ouro', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--green);">5 regras para não queimar a ligação</h3>
+<ul style="padding-left:18px;display:flex;flex-direction:column;gap:10px;color:var(--muted);">
+  <li><strong style="color:var(--text);">Sorria ao falar.</strong> Parece bobo, mas muda o tom de voz e a pessoa sente.</li>
+  <li><strong style="color:var(--text);">Fale devagar.</strong> Ansiedade na voz derruba credibilidade. Respire.</li>
+  <li><strong style="color:var(--text);">Pesquise antes.</strong> Saiba o nome da empresa e o ramo antes de discar. 30 segundos de pesquisa valem ouro.</li>
+  <li><strong style="color:var(--text);">Não venda no primeiro toque.</strong> Venda o próximo passo (uma demo, um e-mail, uma conversa).</li>
+  <li><strong style="color:var(--text);">Anote tudo no CRM.</strong> O que falou, quando ligar de novo. Follow-up é onde mora o dinheiro.</li>
+</ul>`
+      }
+    ]
+  },
+
+  cnpj: {
+    titulo: 'A Pergunta do CNPJ',
+    sub: 'Como responder com segurança e firmeza',
+    icorCor: 'rgba(139,92,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>',
+    abas: [
+      {
+        label: 'Como Responder', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--purple);">Responda com autoridade, nunca com desculpa</h3>
+<p style="color:var(--muted);">Em algum momento um cliente vai perguntar do CNPJ. A diferença entre fechar e perder a venda está em <strong>como</strong> você responde. Quem demonstra segurança, passa confiança. Quem gagueja, perde ali.</p>
+<div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:14px 16px;margin-top:16px;">
+  <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Resposta padrão</div>
+  <p style="color:var(--muted);font-style:italic;">"A gente é uma operação nova e está se formalizando de forma gradual, dentro da lei. No Brasil a formalização acontece por etapas, conforme o faturamento e a operação crescem. O que importa pra você é o resultado: cliente novo, com contato real, pronto pra você vender."</p>
+</div>
+<br>
+<p><strong style="color:var(--text);">Três princípios:</strong></p>
+<ul style="padding-left:18px;display:flex;flex-direction:column;gap:8px;color:var(--muted);margin-top:8px;">
+  <li>Fale <strong style="color:var(--purple);">com naturalidade</strong> — formalização gradual é normal e legal para quem está começando.</li>
+  <li><strong style="color:var(--purple);">Não peça desculpa</strong> e não baixe a cabeça. Você não está fazendo nada errado.</li>
+  <li><strong style="color:var(--purple);">Redirecione para o valor</strong> — traga a conversa de volta para o resultado que o cliente leva.</li>
+</ul>`
+      },
+      {
+        label: 'O que NÃO fazer', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--red);">Limites importantes</h3>
+<p style="color:var(--muted);">Para te proteger e proteger a empresa, siga estas regras:</p>
+<ul style="padding-left:18px;display:flex;flex-direction:column;gap:10px;color:var(--muted);margin-top:14px;">
+  <li><strong style="color:var(--red);">Não prometa nota fiscal, prazos fiscais ou detalhes tributários.</strong> Qualquer pergunta específica sobre emissão de nota, contrato ou impostos, encaminhe ao gestor. Não improvise.</li>
+  <li><strong style="color:var(--red);">Não invente número de CNPJ nem informação que você não tem.</strong> "Vou confirmar com a gestão e te retorno" é sempre melhor que chutar.</li>
+  <li><strong style="color:var(--red);">Não entre em discussão jurídica.</strong> Se o cliente insistir muito em detalhes legais, diga que o gestor fala diretamente com ele. Seu papel é vender o valor, não defender tese.</li>
+</ul>
+<div style="background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.25);border-radius:10px;padding:12px 14px;margin-top:16px;">
+  <p style="color:var(--muted);font-size:12.5px;"><strong style="color:var(--accent);">Regra de ouro:</strong> fechamento de negócio e emissão de documento fiscal passam pelo gestor. Você abre a porta e mostra o valor — a parte formal é conduzida em conjunto.</p>
+</div>`
+      }
+    ]
+  },
+
+  modelo_30dias: {
+    titulo: 'O Modelo de 30 Dias',
+    sub: 'Acesso avulso, sem mensalidade recorrente',
+    icorCor: 'rgba(59,130,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>',
+    abas: [
+      {
+        label: 'Como Funciona', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--blue);">Acesso por 30 dias — pague só quando precisar</h3>
+<p style="color:var(--muted);">O WexioLead <strong>não tem assinatura recorrente</strong>. O cliente contrata um plano e tem acesso por 30 dias. Acabou o período, ele só renova se quiser. Sem cobrança automática, sem pegadinha.</p>
+<br>
+<p><strong style="color:var(--text);">Por que isso é uma vantagem na venda:</strong></p>
+<ul style="padding-left:18px;display:flex;flex-direction:column;gap:8px;color:var(--muted);margin-top:8px;">
+  <li><strong style="color:var(--blue);">Tira o medo do cliente.</strong> Ninguém fica preso a uma mensalidade que esquece de cancelar.</li>
+  <li><strong style="color:var(--blue);">Facilita o "sim".</strong> "Você testa por 30 dias, sem compromisso de continuar." É muito mais fácil fechar assim.</li>
+  <li><strong style="color:var(--blue);">Coloca a responsabilidade no resultado.</strong> Se entregou valor, o cliente renova naturalmente.</li>
+</ul>
+<div style="background:var(--surface2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:16px;">
+  <p style="color:var(--muted);font-style:italic;">"É acesso por 30 dias, não é mensalidade. Você paga uma vez, usa o mês todo, e só renova se fizer sentido pra você. Sem cobrança automática."</p>
+</div>`
+      },
+      {
+        label: 'Erros a Evitar', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--blue);">Não confunda o cliente</h3>
+<ul style="padding-left:18px;display:flex;flex-direction:column;gap:10px;color:var(--muted);">
+  <li>Nunca diga "assinatura" ou "mensalidade recorrente". O certo é <strong style="color:var(--text);">"acesso de 30 dias"</strong> ou <strong style="color:var(--text);">"contratação avulsa"</strong>.</li>
+  <li>Deixe claro que <strong style="color:var(--text);">não há cobrança automática</strong> — isso é um ponto forte, use a favor.</li>
+  <li>Se o cliente perguntar "e depois?", responda: <em>"Depois de 30 dias você decide se renova. Nada é cobrado sozinho."</em></li>
+</ul>`
+      }
+    ]
+  },
+
+  usar_planilha: {
+    titulo: 'Usando a Planilha de Leads',
+    sub: 'Por onde começar e quais priorizar',
+    icorCor: 'rgba(251,191,36,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent2);fill:none;stroke-width:1.8;"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
+    abas: [
+      {
+        label: 'Passo a Passo', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent2);">Como trabalhar sua planilha do dia</h3>
+<ol style="padding-left:20px;display:flex;flex-direction:column;gap:10px;color:var(--muted);">
+  <li><strong style="color:var(--text);">Comece pelos telefones verificados.</strong> Leads com contato confirmado são os mais quentes — fale com eles primeiro.</li>
+  <li><strong style="color:var(--text);">Pesquise 30 segundos antes de ligar.</strong> Olhe o nome da empresa e o ramo. Chegar sabendo quem é muda tudo.</li>
+  <li><strong style="color:var(--text);">Trabalhe em blocos pequenos.</strong> Escolha 5 a 10 empresas por vez. Qualidade na abordagem vence quantidade no atropelo.</li>
+  <li><strong style="color:var(--text);">Registre cada contato no CRM.</strong> Status, anotação e quando voltar a falar. Sem registro, você perde o follow-up.</li>
+  <li><strong style="color:var(--text);">Não descarte quem não atendeu.</strong> Marque para tentar de novo em outro horário. Persistência educada fecha negócio.</li>
+</ol>`
+      },
+      {
+        label: 'Lendo os Dados', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent2);">O que cada informação te diz</h3>
+<div style="display:flex;flex-direction:column;gap:10px;">
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);"><strong style="color:var(--text);">Telefone verificado</strong><p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Confirmado em fonte atualizada. Prioridade máxima — ligue nesses primeiro.</p></div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);"><strong style="color:var(--text);">Segmento / ramo</strong><p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Te ajuda a adaptar o discurso. Não fale igual com construtora e com clínica.</p></div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);"><strong style="color:var(--text);">Avaliação / porte</strong><p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Empresa ativa e com movimento tende a ter mais condição de comprar.</p></div>
+</div>
+<p style="color:var(--muted);font-size:12.5px;margin-top:14px;">Dica: empresas sem contato preenchido você deixa por último ou pede enriquecimento ao gestor — não perca tempo no escuro quando há leads quentes na mesma lista.</p>`
+      }
+    ]
+  },
+
+  faq_clientes: {
+    titulo: 'FAQ de Clientes',
+    sub: 'Respostas rápidas para as dúvidas comuns',
+    icorCor: 'rgba(249,115,22,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    abas: [
+      {
+        label: 'Perguntas & Respostas', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">As dúvidas que mais aparecem</h3>
+<div style="display:flex;flex-direction:column;gap:14px;">
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">"De onde vêm esses leads?"</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"São empresas reais, com dados públicos consolidados e enriquecidos com contato atualizado e um score de qualificação. Você não liga no escuro."</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">"Isso é um robô que dispara mensagem?"</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Não. A gente entrega a empresa e o contato certo. Quem aborda é você, do seu jeito. A ferramenta organiza e qualifica, não faz spam."</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">"E se eu não gostar?"</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"É acesso por 30 dias, sem cobrança automática. Se não fizer sentido, é só não renovar. O risco é mínimo."</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">"Funciona pro meu ramo?"</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"A plataforma nasceu na construção civil e hoje atende vários setores. Me diz seu ramo que eu te mostro como ficaria pra você."</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--text);">"Tá caro."</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Quanto vale pra você um cliente novo fechado? Um contrato já paga o acesso do mês inteiro. O caro é continuar dependendo só de indicação."</p>
+  </div>
 </div>`
       }
     ]
