@@ -1514,9 +1514,9 @@ async function doLogin() {
   btn.textContent = 'Verificando...';
 
   try {
-    // Usa função segura (sem expor tabela employees publicamente)
+    // Validação 100% no banco: e-mail + nome completo + status ativo.
     const { data: emps, error: fetchError } = await SB
-      .rpc('find_employee', { p_email: email });
+      .rpc('employee_login', { p_email: email, p_nome: nome });
 
     if (fetchError) {
       console.error('Erro SDK:', fetchError);
@@ -1529,26 +1529,7 @@ async function doLogin() {
     const emp = emps && emps.length > 0 ? emps[0] : null;
 
     if (!emp) {
-      errEl.textContent = 'E-mail não cadastrado. Contate o administrador.';
-      errEl.style.display = 'block';
-      btn.textContent = 'Acessar painel →';
-      return;
-    }
-
-    if (emp.status === 'inativo') {
-      errEl.textContent = 'Conta inativa. Contate o administrador.';
-      errEl.style.display = 'block';
-      btn.textContent = 'Acessar painel →';
-      return;
-    }
-
-    // Verifica nome (case-insensitive, ignora espaços extras)
-    const nomeRegistrado = (emp.nome || '').trim().toLowerCase();
-    const nomeDigitado = nome.toLowerCase();
-    console.log('Nome no banco: "' + nomeRegistrado + '" | Digitado: "' + nomeDigitado + '"');
-
-    if (nomeRegistrado !== nomeDigitado) {
-      errEl.textContent = 'Nome não confere com o cadastro.';
+      errEl.textContent = 'E-mail ou nome não conferem, ou conta inativa. Contate o administrador.';
       errEl.style.display = 'block';
       btn.textContent = 'Acessar painel →';
       return;
@@ -1680,10 +1661,7 @@ function setupRealtime() {
 async function loadClientes() {
   try {
     const { data, error } = await SB
-      .from('employee_clients')
-      .select('*')
-      .eq('employee_id', currentEmployee.id)
-      .order('created_at', { ascending: false });
+      .rpc('func_list_clientes', { p_employee_id: currentEmployee.id });
     myClientes = error ? [] : (data || []);
   } catch(e) {
     myClientes = [];
@@ -1818,15 +1796,15 @@ async function addCliente() {
     }
   }
 
-  const error = await sbPost('employee_clients', {
-    employee_id: currentEmployee.id,
-    nome_cliente: nome,
-    email_cliente: email || null,
-    telefone_cliente: tel || null,
-    plano: plano || 'free',
-    status_crm: crm || 'novo',
-    data_followup: followup || null,
-    notas: notas || null,
+  const { error } = await SB.rpc('func_add_cliente', {
+    p_employee_id: currentEmployee.id,
+    p_nome: nome,
+    p_email: email || null,
+    p_telefone: tel || null,
+    p_plano: plano || 'free',
+    p_status_crm: crm || 'novo',
+    p_data_followup: followup || null,
+    p_notas: notas || null,
   });
 
   if (error) { toast('Erro ao adicionar: ' + error.message, 'error'); return; }
@@ -1942,19 +1920,21 @@ async function saveEditCliente() {
     return;
   }
 
-  const error = await sbPatch('employee_clients', 'id=eq.' + id, {
-    nome_cliente: nome || undefined,
-    email_cliente: email || null,
-    telefone_cliente: tel || null,
-    plano: plano,
-    status_crm: crm,
-    origem: origem || null,
-    vencimento_plano: vencimento || null,
-    data_followup: followup || null,
-    notas: notas || null,
+  const { error } = await SB.rpc('func_update_cliente', {
+    p_employee_id: currentEmployee.id,
+    p_id: id,
+    p_nome: nome || null,
+    p_email: email || null,
+    p_telefone: tel || null,
+    p_plano: plano,
+    p_status_crm: crm,
+    p_origem: origem || null,
+    p_vencimento: vencimento || null,
+    p_data_followup: followup || null,
+    p_notas: notas || null,
   });
 
-  if (error) { toast('Erro ao salvar: ' + error, 'error'); return; }
+  if (error) { toast('Erro ao salvar: ' + error.message, 'error'); return; }
   toast('Salvo!', 'success');
   closeModal('modal-edit-cliente');
   await loadClientes();
@@ -1964,7 +1944,7 @@ async function saveEditCliente() {
 
 async function removeCliente(id) {
   if (!confirm('Remover este cliente da sua carteira?')) return;
-  const { data, error } = await SB.rpc('excluir_cliente_funcionario', { p_id: id });
+  const { data, error } = await SB.rpc('func_remove_cliente', { p_employee_id: currentEmployee.id, p_id: id });
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
   if (data === false) { toast('Cliente não encontrado', 'error'); return; }
   toast('Removido', 'info');
@@ -2234,7 +2214,8 @@ async function renderRanking() {
 // SUGESTÃO
 // 
 async function loadSugestoes() {
-  const data = await sbGet('employee_suggestions', 'employee_id=eq.' + currentEmployee.id + '&order=created_at.desc');
+  const { data: data0 } = await SB.rpc('func_list_suggestions', { p_employee_id: currentEmployee.id });
+  const data = data0 || [];
 
   if (!data || data.length === 0) {
     document.getElementById('minhas-sugestoes').innerHTML = '<div class="empty"><p>Nenhuma sugestão enviada ainda este mês</p></div>';
@@ -2276,12 +2257,11 @@ async function enviarSugestao() {
     toast('Preencha todos os campos', 'error'); return;
   }
 
-  const error = await sbPost('employee_suggestions', {
-    employee_id: currentEmployee.id,
-    titulo,
-    descricao,
-    categoria,
-    status: 'pendente',
+  const { error } = await SB.rpc('func_add_suggestion', {
+    p_employee_id: currentEmployee.id,
+    p_titulo: titulo,
+    p_descricao: descricao,
+    p_categoria: categoria,
   });
 
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
