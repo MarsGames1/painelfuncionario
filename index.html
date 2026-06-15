@@ -1842,7 +1842,11 @@ async function addCliente() {
     p_notas: notas || null,
   });
 
-  if (error) { toast('Erro ao adicionar: ' + error.message, 'error'); return; }
+  if (error) {
+    const m = (error.message||'');
+    toast(m.includes('colega colaborador') ? m : 'Erro ao adicionar: ' + m, 'error');
+    return;
+  }
 
   toast('Cliente adicionado!', 'success');
   closeModal('modal-add-cliente');
@@ -1969,7 +1973,11 @@ async function saveEditCliente() {
     p_notas: notas || null,
   });
 
-  if (error) { toast('Erro ao salvar: ' + error.message, 'error'); return; }
+  if (error) {
+    const m = (error.message||'');
+    toast(m.includes('colega colaborador') ? m : 'Erro ao salvar: ' + m, 'error');
+    return;
+  }
   toast('Salvo!', 'success');
   closeModal('modal-edit-cliente');
   await loadClientes();
