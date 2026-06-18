@@ -1443,6 +1443,7 @@ const PLAN_PRICES = {free:0, starter:97, pro:197, agency:397};
 let SB = null;
 let currentUser = null;    // auth user
 let currentEmployee = null; // row na tabela employees
+let sessionToken = null;    // token de sessão emitido no login (segurança das func_*)
 let myClientes = [];
 let clientesPage_n = 1;
 const CLIENTES_PER_PAGE = 10;
@@ -1462,20 +1463,22 @@ window.addEventListener('load', async () => {
       const sess = JSON.parse(saved);
       // Sessão válida por 7 dias; revalida o funcionário no banco a cada restauração
       const expirada = !sess.ts || (Date.now() - sess.ts) > 7 * 24 * 60 * 60 * 1000;
-      if (!expirada && sess.emp && sess.emp.id) {
-        const { data: emps, error } = await SB.rpc('find_employee_by_id', { p_id: sess.emp.id });
+      if (!expirada && sess.token) {
+        const { data: emps, error } = await SB.rpc('employee_resume', { p_token: sess.token });
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
+          sessionToken = sess.token;
           currentUser = { id: emps[0].id, email: emps[0].email };
           pingAtividade(); // registra "visto por último" (throttle 10 min)
           await loadAll();
           initUI();
           setupRealtime(); // sincronização em tempo real com admin
           document.getElementById('login-screen').style.display = 'none'; document.body.classList.add('authed');
+          checkWelcomeBack(emps[0].last_seen_at);
           return;
         }
       }
-      // Sessão expirada ou funcionário inválido/inativo — limpar
+      // Sessão expirada, sem token (sessão antiga) ou funcionário inválido — limpar e pedir login
       localStorage.removeItem('wexio_session');
     }
   } catch(e) {
@@ -1573,14 +1576,16 @@ async function doLogin() {
     // Acesso liberado
     console.log('Acesso liberado:', emp.nome);
     currentEmployee = emp;
+    sessionToken = emp.token;
     currentUser = { id: emp.id, email: emp.email };
     // Salvar sessão para recargas da página (localStorage persiste entre sessões)
-    try { localStorage.setItem('wexio_session', JSON.stringify({ emp, ts: Date.now() })); } catch(e) {}
+    try { localStorage.setItem('wexio_session', JSON.stringify({ emp, token: emp.token, ts: Date.now() })); } catch(e) {}
     pingAtividade();
     await loadAll();
     initUI();
     setupRealtime(); // ← sincronização em tempo real com admin
     document.getElementById('login-screen').style.display = 'none'; document.body.classList.add('authed');
+    checkWelcomeBack(emp.last_seen_at);
 
   } catch(e) {
     console.error('Erro doLogin:', e);
@@ -1588,6 +1593,37 @@ async function doLogin() {
     errEl.style.display = 'block';
     btn.textContent = 'Acessar painel →';
   }
+}
+
+// ── Mensagem da Wex: "bem-vindo de volta" só para quem ficou +24h sem entrar ──
+function checkWelcomeBack(lastSeenIso){
+  try{
+    if(!lastSeenIso) return;                         // primeiro acesso: não mostra
+    const last = new Date(lastSeenIso).getTime();
+    if(isNaN(last)) return;
+    const horas = (Date.now() - last) / 3600000;
+    if(horas < 24) return;                            // SÓ aparece após +24h
+    showWexWelcomeBack(horas);
+  }catch(e){}
+}
+function showWexWelcomeBack(horas){
+  if(document.getElementById('wexWelcomeBack')) return;
+  const nome = (currentEmployee && (currentEmployee.apelido || (currentEmployee.nome||'').split(' ')[0])) || 'você';
+  const dias = Math.floor(horas/24);
+  const ausencia = dias >= 1 ? (dias === 1 ? 'mais de 1 dia' : 'mais de ' + dias + ' dias') : 'mais de 24 horas';
+  const ov = document.createElement('div');
+  ov.id = 'wexWelcomeBack';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(5,8,16,.72);backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;z-index:10000;padding:18px;';
+  ov.innerHTML =
+    '<div style="background:#141823;border:1px solid #262c3a;border-radius:16px;max-width:440px;width:100%;padding:26px 24px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5);">' +
+      '<img src="'+ (typeof WEX_AVATAR_SRC!=="undefined"?WEX_AVATAR_SRC:"") +'" alt="Wex" style="width:64px;height:64px;border-radius:50%;object-fit:cover;margin:0 auto 14px;display:block;border:2px solid #F97316;">' +
+      '<div style="font-family:\'Syne\',sans-serif;font-weight:700;font-size:20px;color:#fff;margin-bottom:10px;">Que bom te ver de volta, '+ nome +'!</div>' +
+      '<p style="font-size:14px;line-height:1.6;color:#aeb6c6;margin:0 0 8px;">Você ficou <b style="color:#fff;">'+ ausencia +'</b> sem aparecer por aqui.</p>' +
+      '<p style="font-size:14px;line-height:1.6;color:#aeb6c6;margin:0 0 20px;">Lembre-se de se dedicar ao combinado nas suas <b style="color:#fff;">horas de dedicação</b>. A constância é o que constrói seus resultados e a sua comissão — conta com a gente.</p>' +
+      '<button onclick="document.getElementById(\'wexWelcomeBack\').remove()" style="background:#F97316;color:#fff;border:none;border-radius:10px;padding:12px 22px;font-size:14px;font-weight:600;cursor:pointer;width:100%;">Bora trabalhar</button>' +
+    '</div>';
+  ov.addEventListener('click', function(e){ if(e.target===ov) ov.remove(); });
+  document.body.appendChild(ov);
 }
 
 // onLogin removido — login agora é direto via tabela employees
@@ -1696,7 +1732,7 @@ function setupRealtime() {
 async function loadClientes() {
   try {
     const { data, error } = await SB
-      .rpc('func_list_clientes', { p_employee_id: currentEmployee.id });
+      .rpc('func_list_clientes', { p_token: sessionToken });
     myClientes = error ? [] : (data || []);
   } catch(e) {
     myClientes = [];
@@ -1832,7 +1868,7 @@ async function addCliente() {
   }
 
   const { error } = await SB.rpc('func_add_cliente', {
-    p_employee_id: currentEmployee.id,
+    p_token: sessionToken,
     p_nome: nome,
     p_email: email || null,
     p_telefone: tel || null,
@@ -1960,7 +1996,7 @@ async function saveEditCliente() {
   }
 
   const { error } = await SB.rpc('func_update_cliente', {
-    p_employee_id: currentEmployee.id,
+    p_token: sessionToken,
     p_id: id,
     p_nome: nome || null,
     p_email: email || null,
@@ -1987,7 +2023,7 @@ async function saveEditCliente() {
 
 async function removeCliente(id) {
   if (!confirm('Remover este cliente da sua carteira?')) return;
-  const { data, error } = await SB.rpc('func_remove_cliente', { p_employee_id: currentEmployee.id, p_id: id });
+  const { data, error } = await SB.rpc('func_remove_cliente', { p_token: sessionToken, p_id: id });
   if (error) { toast('Erro: ' + error.message, 'error'); return; }
   if (data === false) { toast('Cliente não encontrado', 'error'); return; }
   toast('Removido', 'info');
@@ -2183,7 +2219,7 @@ async function renderRanking() {
   // Evita o embed profiles() que anon não pode ler.
   let ranking = [];
   try {
-    const { data, error } = await SB.rpc('ranking_vendas');
+    const { data, error } = await SB.rpc('ranking_vendas', { p_token: sessionToken });
     if (error) throw error;
     ranking = (data || []).map(r => ({
       id: r.employee_id, nome: r.nome, cargo: r.cargo,
@@ -2257,7 +2293,7 @@ async function renderRanking() {
 // SUGESTÃO
 // 
 async function loadSugestoes() {
-  const { data: data0 } = await SB.rpc('func_list_suggestions', { p_employee_id: currentEmployee.id });
+  const { data: data0 } = await SB.rpc('func_list_suggestions', { p_token: sessionToken });
   const data = data0 || [];
 
   if (!data || data.length === 0) {
@@ -2301,7 +2337,7 @@ async function enviarSugestao() {
   }
 
   const { error } = await SB.rpc('func_add_suggestion', {
-    p_employee_id: currentEmployee.id,
+    p_token: sessionToken,
     p_titulo: titulo,
     p_descricao: descricao,
     p_categoria: categoria,
@@ -2362,7 +2398,7 @@ function pingAtividade() {
     const last = parseInt(localStorage.getItem(k) || '0', 10);
     if (Date.now() - last < 10 * 60 * 1000) return; // <10 min: nem chama
     localStorage.setItem(k, String(Date.now()));
-    SB.rpc('registrar_atividade_funcionario', { p_id: currentEmployee.id }).then(()=>{});
+    SB.rpc('registrar_atividade_funcionario', { p_token: sessionToken }).then(()=>{});
   } catch(e) {}
 }
 
