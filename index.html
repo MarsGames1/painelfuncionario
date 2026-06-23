@@ -819,6 +819,34 @@ textarea.form-input{resize:vertical;min-height:90px;}
             <div style="font-size:11px;color:var(--muted);margin-top:2px;">Respostas rápidas para as dúvidas comuns</div>
           </div>
         </div>
+        <div class="mat-card" onclick="abrirTutorial('porte_empresa')">
+          <div class="mat-icon" style="background:rgba(59,130,246,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M3 21h18M6 21V7l6-4 6 4v14M10 9h.01M14 9h.01M10 13h.01M14 13h.01"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Vendendo por Porte de Empresa</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Como adaptar da pequena à grande empresa</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('qualificacao')">
+          <div class="mat-icon" style="background:rgba(16,185,129,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--green);fill:none;stroke-width:1.8;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Qualificar o Cliente</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">As 4 perguntas que economizam seu tempo</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('fechamento')">
+          <div class="mat-icon" style="background:rgba(249,115,22,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--accent);fill:none;stroke-width:1.8;"><path d="M20 6 9 17l-5-5"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Técnicas de Fechamento</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">Como conduzir a conversa até o sim</div>
+          </div>
+        </div>
+        <div class="mat-card" onclick="abrirTutorial('followup')">
+          <div class="mat-icon" style="background:rgba(139,92,246,.12);"><svg viewBox="0 0 24 24" style="width:18px;height:18px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg></div>
+          <div>
+            <div style="font-weight:600;font-size:13px;">Follow-up que Converte</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:2px;">A maioria das vendas vem depois do 1º contato</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -3858,6 +3886,168 @@ const TUTORIAIS = {
     <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Quanto vale pra você um cliente novo fechado? Um contrato já paga o acesso do mês inteiro. O caro é continuar dependendo só de indicação."</p>
   </div>
 </div>`
+      }
+    ]
+  },
+
+  porte_empresa: {
+    titulo: 'Vendendo por Porte de Empresa',
+    sub: 'Como adaptar a abordagem da pequena ate a grande empresa',
+    icorCor: 'rgba(59,130,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--blue);fill:none;stroke-width:1.8;"><path d="M3 21h18M6 21V7l6-4 6 4v14M10 9h.01M14 9h.01M10 13h.01M14 13h.01M10 17h.01M14 17h.01"/></svg>',
+    abas: [
+      {
+        label: 'Pequena (MEI/Micro)', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Pequenas empresas: rapido e direto</h3>
+<p>Na pequena empresa quem decide e o proprio dono — e ele decide rapido. Voce nao precisa de proposta formal nem de reuniao longa. Precisa mostrar valor em 5 minutos, de preferencia pelo WhatsApp.</p>
+<br>
+<p><strong style="color:var(--accent);">Quem voce fala:</strong> o dono. Geralmente atende o proprio telefone.</p>
+<p><strong style="color:var(--accent);">A dor dele:</strong> falta de tempo e de cliente novo. Vive de indicacao.</p>
+<p><strong style="color:var(--accent);">O gancho que funciona:</strong></p>
+<div style="background:var(--surface2);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:8px;">
+  <p style="color:var(--muted);font-style:italic;">"O senhor depende de indicacao pra conseguir cliente novo? Com a gente, o senhor recebe uma lista de empresas da regiao ja com telefone, pra ligar direto. Um cliente fechado ja paga o mes inteiro."</p>
+</div>
+<br>
+<ul class="d" style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Fale de <strong>custo-benefico</strong>, nao de "tecnologia". "Um contrato paga 5 meses de acesso."</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Linguagem simples, sem termos como "CRM", "pipeline" ou "lead score".</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Indique o <strong>Starter (R$97)</strong>. E o tamanho certo pra ele comecar.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Feche na hora. Pequeno empresario que "vai pensar" some. Ofereca ajuda pra fazer a primeira busca junto.</li>
+</ul>`
+      },
+      {
+        label: 'Media', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Medias empresas: foco em equipe e produtividade</h3>
+<p>Na media empresa ja existe um setor comercial. Voce nao fala mais com o dono, e sim com o <strong>gerente comercial</strong> ou socio responsavel por vendas. A decisao leva alguns dias e envolve "vou ver com a equipe".</p>
+<br>
+<p><strong style="color:var(--accent);">Quem voce fala:</strong> gerente comercial / coordenador de vendas.</p>
+<p><strong style="color:var(--accent);">A dor dele:</strong> equipe perdendo tempo procurando contato no Google, sem padrao, sem organizacao.</p>
+<p><strong style="color:var(--accent);">O gancho que funciona:</strong></p>
+<div style="background:var(--surface2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:8px;">
+  <p style="color:var(--muted);font-style:italic;">"Quanto tempo a sua equipe gasta so procurando o contato certo? Com o WexioLead, cada vendedor recebe a lista pronta, ja qualificada, e ainda organiza tudo num funil. Eles passam o dia vendendo, nao garimpando."</p>
+</div>
+<br>
+<ul class="d" style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Aqui voce <strong>pode</strong> falar de CRM, funil e gestao de equipe — esse e o valor.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Traduza em <strong>ROI por vendedor</strong>: "se cada vendedor fechar 1 contrato a mais por mes, ja se paga muitas vezes."</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Indique o <strong>Pro (R$197)</strong> — volume e CRM completo pra um time pequeno.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Ofereca uma demonstracao rapida pra equipe. Quando o time gosta, o gerente compra.</li>
+</ul>`
+      },
+      {
+        label: 'Grande / Construtora', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Grandes empresas: paciencia e volume</h3>
+<p>Na grande empresa a venda e mais lenta e passa por mais de uma pessoa. Nao espere fechar na primeira conversa. O segredo aqui e <strong>nao desistir cedo</strong> e falar a lingua de quem decide: numeros e escala.</p>
+<br>
+<p><strong style="color:var(--accent);">Quem voce fala:</strong> diretor comercial, gerente de novos negocios ou de suprimentos.</p>
+<p><strong style="color:var(--accent);">A dor dele:</strong> precisa de volume previsivel e dados confiaveis, nao de "achismo".</p>
+<p><strong style="color:var(--accent);">O gancho que funciona:</strong></p>
+<div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;margin-top:8px;">
+  <p style="color:var(--muted);font-style:italic;">"Voces trabalham com volume. O WexioLead entrega base segmentada por porte, regiao e CNAE, com dados da Receita e score de qualidade — pra direcionar a forca de vendas com previsibilidade, nao no escuro."</p>
+</div>
+<br>
+<ul class="d" style="list-style:none;display:flex;flex-direction:column;gap:8px;">
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Trabalhe o <strong>follow-up</strong>. Grande empresa raramente fecha de primeira — quem acompanha, ganha.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Foque em <strong>dados e conformidade</strong>: situacao na Receita, sancoes, multi-setor. Isso diferencia.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Indique o <strong>Agency (R$397)</strong> — maximo volume, equipe e recursos exclusivos.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> Mande um e-mail formal de resumo depois da conversa. Eles valorizam registro.</li>
+</ul>`
+      }
+    ]
+  },
+
+  qualificacao: {
+    titulo: 'Qualificar o Cliente',
+    sub: 'Descubra cedo se vale a pena investir tempo naquele contato',
+    icorCor: 'rgba(16,185,129,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--green);fill:none;stroke-width:1.8;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+    abas: [
+      {
+        label: 'As 4 perguntas', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">Nao venda pra quem nao vai comprar</h3>
+<p>Tempo e seu recurso mais escasso. Antes de gastar energia, faca 4 perguntas rapidas pra saber se o contato e quente. Se faltar muita coisa, siga para o proximo.</p>
+<br>
+<div style="display:flex;flex-direction:column;gap:12px;">
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--accent);">1. Dor</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Como voces conseguem clientes novos hoje?" — Se ele reclama, voce tem uma porta aberta.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--accent);">2. Decisor</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Voce decide isso sozinho ou alguem mais participa?" — Saiba com quem voce esta falando.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--accent);">3. Orcamento</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Voces ja investem em prospeccao hoje?" — Mede se ha verba e prioridade.</p>
+  </div>
+  <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+    <strong style="color:var(--accent);">4. Urgencia</strong>
+    <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">"Isso e prioridade pra agora ou pra mais pra frente?" — Define se voce fecha hoje ou agenda follow-up.</p>
+  </div>
+</div>
+<br><p style="color:var(--muted);font-size:12.5px;">Contato com dor + decisor + urgencia = feche hoje. Faltando urgencia = agende follow-up. Sem dor e sem decisor = nao perca tempo.</p>`
+      }
+    ]
+  },
+
+  fechamento: {
+    titulo: 'Tecnicas de Fechamento',
+    sub: 'Como conduzir a conversa ate o sim',
+    icorCor: 'rgba(249,115,22,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--accent);fill:none;stroke-width:1.8;"><path d="M20 6 9 17l-5-5"/></svg>',
+    abas: [
+      {
+        label: 'Como fechar', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">A venda se perde na hora de pedir o sim</h3>
+<p>Muitos vendedores apresentam bem e travam na hora de fechar. Fechar e so conduzir com naturalidade. Use estas tecnicas:</p>
+<br>
+<div style="display:flex;flex-direction:column;gap:12px;">
+  <div style="background:var(--surface2);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--accent);margin-bottom:6px;">Escolha entre opcoes</div>
+    <p style="color:var(--muted);font-style:italic;">"Faz mais sentido comecar com o Starter ou ja ir pro Pro, com mais leads?" — Tira o "sim ou nao" e coloca o "qual".</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--green);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--green);margin-bottom:6px;">Risco baixo</div>
+    <p style="color:var(--muted);font-style:italic;">"E acesso avulso de 30 dias, sem mensalidade te prendendo. Voce testa e decide se renova. O risco e minimo."</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--blue);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--blue);margin-bottom:6px;">Conta do retorno</div>
+    <p style="color:var(--muted);font-style:italic;">"Um unico cliente fechado ja paga varios meses de acesso. Quanto vale um contrato pra voce?"</p>
+  </div>
+  <div style="background:var(--surface2);border-left:3px solid var(--purple);border-radius:0 8px 8px 0;padding:12px 16px;">
+    <div style="font-weight:700;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--purple);margin-bottom:6px;">Proximo passo concreto</div>
+    <p style="color:var(--muted);font-style:italic;">"Me passa seu e-mail que eu ja deixo seu acesso pronto e a gente faz a primeira busca junto agora."</p>
+  </div>
+</div>
+<br><p style="color:var(--muted);font-size:12.5px;">Depois de pedir o fechamento, <strong>fique em silencio</strong>. Quem fala primeiro perde. Deixe o cliente responder.</p>`
+      }
+    ]
+  },
+
+  followup: {
+    titulo: 'Follow-up que Converte',
+    sub: 'A maioria das vendas acontece depois do primeiro nao',
+    icorCor: 'rgba(139,92,246,.15)',
+    icon: '<svg viewBox="0 0 24 24" style="width:22px;height:22px;stroke:var(--purple);fill:none;stroke-width:1.8;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>',
+    abas: [
+      {
+        label: 'A cadencia certa', tipo: 'estatico',
+        conteudo: `<h3 style="font-family:'Syne',sans-serif;font-size:16px;margin-bottom:12px;color:var(--accent);">"Vou pensar" nao e nao. E "ainda nao".</h3>
+<p>A maioria dos vendedores desiste depois do primeiro contato. E a maioria das vendas acontece entre o 3o e o 5o toque. Quem faz follow-up com constancia vende muito mais — sem ser chato.</p>
+<br>
+<p><strong style="color:var(--accent);">Uma cadencia simples que funciona:</strong></p>
+<ul class="d" style="list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:8px;">
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> <strong>Dia 0:</strong> primeiro contato (ligacao ou WhatsApp).</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> <strong>Dia 2:</strong> "Passando pra ver se ficou alguma duvida sobre o que conversamos."</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> <strong>Dia 5:</strong> traga algo novo — um lead de exemplo da regiao dele, um case.</li>
+  <li style="padding-left:18px;position:relative;"><span style="position:absolute;left:0;color:var(--accent);">&bull;</span> <strong>Dia 9:</strong> "Vou organizar minha agenda — faz sentido seguir agora ou prefere que eu volte mes que vem?"</li>
+</ul>
+<br>
+<div style="background:var(--surface2);border-radius:8px;padding:12px 14px;border:1px solid var(--border);">
+  <strong style="color:var(--text);">Regra de ouro</strong>
+  <p style="color:var(--muted);font-size:12.5px;margin-top:4px;">Todo follow-up tem que <strong>agregar algo</strong> — uma duvida respondida, um exemplo, uma novidade. "So passando pra saber se decidiu" cansa. "Achei uma empresa perfeita pro seu perfil" abre conversa.</p>
+</div>
+<br><p style="color:var(--muted);font-size:12.5px;">Use o <strong>CRM</strong> pra agendar cada follow-up. O lembrete na tela inicial nao deixa nenhum contato esfriar.</p>`
       }
     ]
   }
