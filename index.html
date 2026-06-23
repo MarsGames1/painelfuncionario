@@ -534,6 +534,35 @@ textarea.form-input{resize:vertical;min-height:90px;}
     </div>
   </div>
 
+  <!-- Incentivo primeira venda: aparece só para quem ainda não fechou nenhum cliente -->
+  <div class="card" id="primeira-venda-incentivo" style="display:none;border:1px solid rgba(249,115,22,.35);background:linear-gradient(135deg,rgba(249,115,22,.10),rgba(249,115,22,.02));margin-bottom:20px;">
+    <div class="card-body" style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;">
+      <div style="flex:1;min-width:240px;">
+        <div style="display:inline-flex;align-items:center;gap:7px;background:rgba(249,115,22,.14);color:var(--accent);font-size:11px;font-weight:700;padding:4px 11px;border-radius:100px;letter-spacing:.04em;margin-bottom:10px;">SUA PRIMEIRA VENDA</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:19px;line-height:1.25;margin-bottom:6px;">Todo top vendedor já esteve exatamente onde você está agora.</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.55;">Você tem o produto, os scripts e a Wex do seu lado. Faltam só os primeiros contatos. Comece com 5 hoje — a primeira venda destrava todas as outras.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+          <button class="btn btn-accent btn-sm" onclick="nav('materiais')">Ver materiais de venda</button>
+          <button class="btn btn-ghost btn-sm" onclick="sendWexDashChip('Me dê um script de abordagem para fechar meu primeiro cliente')">Pedir abordagem à Wex</button>
+        </div>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;flex:1;min-width:240px;">
+        <div style="flex:1;min-width:110px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:15px;margin-bottom:3px;">1. Aprenda</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.45;">Veja a apresentação e a tabela de preços nos materiais.</div>
+        </div>
+        <div style="flex:1;min-width:110px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:15px;margin-bottom:3px;">2. Aborde</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.45;">Peça à Wex um script e adapte para o seu contato.</div>
+        </div>
+        <div style="flex:1;min-width:110px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;color:var(--accent);font-size:15px;margin-bottom:3px;">3. Feche</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.45;">Cadastre no CRM e acompanhe até o sim.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="grid-2">
     <!-- Wex no dashboard — chat embutido -->
     <div class="card" style="border-color:rgba(249,115,22,.3);background:linear-gradient(160deg,rgba(249,115,22,.07),var(--surface));display:flex;flex-direction:column;min-height:420px;">
@@ -1752,6 +1781,10 @@ function updateDashStats() {
   document.getElementById('d-comissao-mes').textContent = 'R$' + comissao.toLocaleString('pt-BR', {minimumFractionDigits:2, maximumFractionDigits:2});
   document.getElementById('d-mrr-carteira').textContent = 'R$' + mrr.toLocaleString('pt-BR');
   document.getElementById('d-clientes-ativos').textContent = ativos.length;
+
+  // Incentivo de primeira venda: visível apenas enquanto não há cliente fechado
+  const incentivo = document.getElementById('primeira-venda-incentivo');
+  if (incentivo) incentivo.style.display = ativos.length === 0 ? '' : 'none';
 
   // Novos este mês
   const agora = new Date();
