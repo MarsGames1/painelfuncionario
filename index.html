@@ -133,6 +133,31 @@ tbody td{padding:11px 15px;font-size:13px;}
 .form-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(249,115,22,.12);}
 .form-input::placeholder{color:var(--dim);}
 textarea.form-input{resize:vertical;min-height:90px;}
+.rel-num label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:5px;font-weight:500;}
+.rel-num input{text-align:center;font-size:18px;font-weight:700;font-family:'Syne',sans-serif;padding:8px;}
+.rel-animo-btn{flex:1;min-width:78px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;padding:9px 6px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif;}
+.rel-animo-btn:hover{border-color:var(--accent);color:var(--text);}
+.rel-animo-btn.sel{background:rgba(249,115,22,.12);border-color:var(--accent);color:var(--accent);}
+/* Banners de status do relatório */
+.rel-banner{border-radius:12px;padding:14px 16px;margin-bottom:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.rel-banner .rel-banner-txt{flex:1;min-width:200px;}
+.rel-banner .rel-banner-title{font-family:'Syne',sans-serif;font-weight:800;font-size:15px;margin-bottom:3px;}
+.rel-banner .rel-banner-sub{font-size:12.5px;line-height:1.5;}
+.rel-banner-warn{background:linear-gradient(135deg,rgba(249,115,22,.12),rgba(249,115,22,.03));border:1px solid rgba(249,115,22,.35);}
+.rel-banner-warn .rel-banner-title{color:var(--accent);}
+.rel-banner-danger{background:linear-gradient(135deg,rgba(239,68,68,.12),rgba(239,68,68,.03));border:1px solid rgba(239,68,68,.4);}
+.rel-banner-danger .rel-banner-title{color:var(--red);}
+.rel-banner-good{background:linear-gradient(135deg,rgba(16,185,129,.12),rgba(16,185,129,.03));border:1px solid rgba(16,185,129,.35);}
+.rel-banner-good .rel-banner-title{color:var(--green);}
+/* Mobile: área de relatório */
+@media (max-width:680px){
+  #page-relatorio .grid-2{grid-template-columns:1fr;}
+  #page-relatorio .rel-num input{font-size:16px;}
+  #rel-animo{display:grid;grid-template-columns:repeat(2,1fr);}
+  .rel-animo-btn{min-width:0;}
+  .rel-banner{flex-direction:column;align-items:stretch;}
+  .rel-banner .btn{width:100%;justify-content:center;}
+}
 
 /* PROGRESS */
 .prog-track{height:6px;background:var(--surface3);border-radius:3px;overflow:hidden;}
@@ -443,6 +468,10 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
       <span>Metas</span>
     </a>
+    <a onclick="nav('relatorio')" id="nav-relatorio">
+      <svg viewBox="0 0 24 24"><path d="M9 2h6a2 2 0 0 1 2 2v0H7v0a2 2 0 0 1 2-2z"/><path d="M7 4H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-2"/><path d="M9 12l2 2 4-4"/></svg>
+      <span>Relatório do Dia</span>
+    </a>
   </nav>
 
   <div class="nav-section">Recursos</div>
@@ -506,6 +535,9 @@ textarea.form-input{resize:vertical;min-height:90px;}
       </button>
     </div>
   </div>
+
+  <!-- Banner de status do relatório diário (obrigação/elogio/aviso) -->
+  <div id="relatorio-status-banner" style="display:none;"></div>
 
   <div class="stats-row">
     <div class="stat-card">
@@ -1298,6 +1330,96 @@ textarea.form-input{resize:vertical;min-height:90px;}
   </div>
 </div>
 
+<!--  RELATORIO DO DIA  -->
+<div class="page" id="page-relatorio">
+  <div class="topbar">
+    <div><div class="page-title">Relatório do Dia</div><div class="page-sub">Feche o dia em 1 minuto. Cada relatório te aproxima da primeira venda.</div></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-head"><div class="card-title"> Como foi seu dia?</div><div id="rel-data-hoje" style="font-size:12px;color:var(--muted);"></div></div>
+      <div class="card-body">
+        <div id="rel-status-msg" style="display:none;padding:11px 14px;border-radius:10px;font-size:13px;margin-bottom:16px;"></div>
+
+        <div class="form-label" style="margin-bottom:8px;">Seus números de hoje</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px;">
+          <div class="rel-num">
+            <label>Empresas contatadas</label>
+            <input type="number" min="0" class="form-input" id="rel-contatadas" placeholder="0">
+          </div>
+          <div class="rel-num">
+            <label>Responderam</label>
+            <input type="number" min="0" class="form-input" id="rel-responderam" placeholder="0">
+          </div>
+          <div class="rel-num">
+            <label>Demonstraram interesse</label>
+            <input type="number" min="0" class="form-input" id="rel-interesse" placeholder="0">
+          </div>
+          <div class="rel-num">
+            <label>Reuniões agendadas</label>
+            <input type="number" min="0" class="form-input" id="rel-reunioes" placeholder="0">
+          </div>
+          <div class="rel-num">
+            <label>Propostas enviadas</label>
+            <input type="number" min="0" class="form-input" id="rel-propostas" placeholder="0">
+          </div>
+          <div class="rel-num">
+            <label>Vendas fechadas </label>
+            <input type="number" min="0" class="form-input" id="rel-vendas" placeholder="0">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Principais dúvidas que ouviu hoje</label>
+          <textarea class="form-input" id="rel-duvidas" placeholder="Ex: perguntaram muito sobre como os dados são atualizados..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Objeções encontradas</label>
+          <textarea class="form-input" id="rel-objecoes" placeholder="Ex: 'tá caro', 'já tenho fornecedor', 'vou pensar'..."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">O que funcionou / aprendizado do dia</label>
+          <textarea class="form-input" id="rel-aprendizado" placeholder="Ex: abordagem por WhatsApp teve mais resposta que ligação."></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Sua meta para amanhã</label>
+          <textarea class="form-input" id="rel-meta" placeholder="Ex: ligar para 15 construtoras da zona sul e agendar 2 reuniões."></textarea>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Como você se sentiu hoje?</label>
+          <div id="rel-animo" style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" class="rel-animo-btn" data-animo="1" onclick="setAnimo(1)"> Difícil</button>
+            <button type="button" class="rel-animo-btn" data-animo="2" onclick="setAnimo(2)"> Devagar</button>
+            <button type="button" class="rel-animo-btn" data-animo="3" onclick="setAnimo(3)"> Ok</button>
+            <button type="button" class="rel-animo-btn" data-animo="4" onclick="setAnimo(4)"> Bom</button>
+            <button type="button" class="rel-animo-btn" data-animo="5" onclick="setAnimo(5)"> Animado</button>
+          </div>
+        </div>
+
+        <button class="btn btn-accent" id="rel-submit-btn" onclick="enviarRelatorio()">Enviar relatório de hoje →</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><div class="card-title"> Sua constância</div></div>
+      <div class="card-body">
+        <div style="background:linear-gradient(135deg,rgba(249,115,22,.10),rgba(249,115,22,.02));border:1px solid rgba(249,115,22,.25);border-radius:12px;padding:16px;margin-bottom:18px;text-align:center;">
+          <div style="font-family:'Syne',sans-serif;font-weight:800;font-size:30px;color:var(--accent);" id="rel-streak-num">0</div>
+          <div style="font-size:12px;color:var(--muted);" id="rel-streak-txt">relatórios enviados</div>
+          <div style="font-size:12px;color:var(--text);margin-top:8px;line-height:1.5;" id="rel-streak-msg">Comece hoje. Vendedor que acompanha os próprios números vende mais.</div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="rel-ativar-notif" onclick="ativarLembretesRelatorio()" style="width:100%;justify-content:center;margin-bottom:18px;"> Ativar lembrete no celular</button>
+        <div class="card-title" style="font-size:13px;margin-bottom:10px;"> Meus últimos relatórios</div>
+        <div id="rel-historico">
+          <div class="empty"><p>Nenhum relatório enviado ainda</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!--  PERFIL  -->
 <div class="page" id="page-perfil">
   <div class="topbar">
@@ -1721,6 +1843,14 @@ function initUI() {
   renderPerfil();
   initWex();
   initWexDash();
+
+  // Relatório diário: status no dashboard, lembretes e notificações
+  carregarStatusRelatorio();
+  registrarSWRelatorio();
+  if ('Notification' in window && Notification.permission === 'granted') {
+    setTimeout(inscreverPush, 1500); // re-vincula a inscrição de push após carregar o SW
+  }
+  setInterval(checarLembreteFimDia, 15 * 60 * 1000); // checa lembrete de fim de dia a cada 15 min
 
   // Avatar da Wex no tour
   const wexImg = document.getElementById('wex-panel-img');
@@ -2463,6 +2593,248 @@ function pingAtividade() {
   } catch(e) {}
 }
 
+// 
+// RELATORIO DO DIA
+// 
+let relAnimo = 3;
+function setAnimo(n) {
+  relAnimo = n;
+  document.querySelectorAll('#rel-animo .rel-animo-btn').forEach(b => {
+    b.classList.toggle('sel', parseInt(b.dataset.animo, 10) === n);
+  });
+}
+
+function relFmtData(d) {
+  try { return new Date(d + 'T00:00:00').toLocaleDateString('pt-BR', { day:'2-digit', month:'short' }); }
+  catch(e){ return d; }
+}
+
+async function renderRelatorio() {
+  const hoje = new Date().toLocaleDateString('pt-BR', { weekday:'long', day:'2-digit', month:'long' });
+  const elData = document.getElementById('rel-data-hoje');
+  if (elData) elData.textContent = hoje;
+  setAnimo(3);
+
+  // Carrega o relatório de hoje (se já enviado, faz prefill)
+  try {
+    const { data: hojeRel } = await SB.rpc('func_get_today_report', { p_token: sessionToken });
+    const r = Array.isArray(hojeRel) ? hojeRel[0] : hojeRel;
+    const msg = document.getElementById('rel-status-msg');
+    const btn = document.getElementById('rel-submit-btn');
+    if (r && r.id) {
+      document.getElementById('rel-contatadas').value = r.empresas_contatadas ?? '';
+      document.getElementById('rel-responderam').value = r.responderam ?? '';
+      document.getElementById('rel-interesse').value = r.demonstraram_interesse ?? '';
+      document.getElementById('rel-reunioes').value = r.reunioes_agendadas ?? '';
+      document.getElementById('rel-propostas').value = r.propostas_enviadas ?? '';
+      document.getElementById('rel-vendas').value = r.vendas_fechadas ?? '';
+      document.getElementById('rel-duvidas').value = r.principais_duvidas || '';
+      document.getElementById('rel-objecoes').value = r.objecoes || '';
+      document.getElementById('rel-aprendizado').value = r.aprendizado || '';
+      document.getElementById('rel-meta').value = r.meta_amanha || '';
+      setAnimo(r.animo || 3);
+      if (msg) { msg.style.display='block'; msg.style.background='rgba(16,185,129,.12)'; msg.style.color='var(--green)';
+        msg.textContent='✅ Você já enviou o relatório de hoje. Pode editar e reenviar se quiser.'; }
+      if (btn) btn.textContent = 'Atualizar relatório de hoje →';
+    } else {
+      if (msg) msg.style.display='none';
+      if (btn) btn.textContent = 'Enviar relatório de hoje →';
+    }
+  } catch(e) { /* sem relatório hoje, segue */ }
+
+  // Histórico + constância
+  try {
+    const { data: hist } = await SB.rpc('func_list_my_reports', { p_token: sessionToken, p_limit: 30, p_offset: 0 });
+    const lista = hist || [];
+    const n = lista.length;
+    await carregarStatusRelatorio();
+    const st = (relStatusCache && typeof relStatusCache.streak === 'number') ? relStatusCache.streak : n;
+    document.getElementById('rel-streak-num').textContent = st;
+    document.getElementById('rel-streak-txt').textContent = (st === 1 ? 'dia seguido' : 'dias seguidos') + ' · ' + n + ' no total';
+    const sm = document.getElementById('rel-streak-msg');
+    if (sm) {
+      if (st === 0) sm.textContent = 'Comece hoje. Vendedor que acompanha os próprios números vende mais.';
+      else if (st < 3) sm.textContent = 'Bom começo! Enviar todo dia útil é o que separa quem fecha de quem desiste.';
+      else if (st < 5) sm.textContent = ' ' + st + ' dias seguidos! Você está criando um hábito de campeão.';
+      else sm.textContent = ' ' + st + ' dias seguidos. Constância impecável — orgulho da sua disciplina!';
+    }
+    const hEl = document.getElementById('rel-historico');
+    if (n === 0) {
+      hEl.innerHTML = '<div class="empty"><p>Nenhum relatório enviado ainda</p></div>';
+    } else {
+      hEl.innerHTML = lista.map(r => {
+        const tot = (r.empresas_contatadas||0), resp = (r.responderam||0), intr = (r.demonstraram_interesse||0), vend = (r.vendas_fechadas||0);
+        return `<div style="border:1px solid var(--border);border-radius:10px;padding:11px 13px;margin-bottom:8px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+            <strong style="font-size:13px;">${relFmtData(r.report_date)}</strong>
+            ${vend>0?'<span style="font-size:11px;color:var(--green);font-weight:700;">'+vend+' venda'+(vend>1?'s':'')+' </span>':''}
+          </div>
+          <div style="font-size:11.5px;color:var(--muted);">${tot} contatadas &bull; ${resp} responderam &bull; ${intr} interessadas</div>
+        </div>`;
+      }).join('');
+    }
+  } catch(e) { /* ignora */ }
+}
+
+async function enviarRelatorio() {
+  const num = id => { const v = parseInt(document.getElementById(id).value, 10); return isNaN(v) ? 0 : Math.max(0, v); };
+  const btn = document.getElementById('rel-submit-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Enviando...'; }
+  try {
+    const { error } = await SB.rpc('func_submit_daily_report', {
+      p_token: sessionToken,
+      p_empresas_contatadas: num('rel-contatadas'),
+      p_responderam: num('rel-responderam'),
+      p_demonstraram_interesse: num('rel-interesse'),
+      p_reunioes_agendadas: num('rel-reunioes'),
+      p_propostas_enviadas: num('rel-propostas'),
+      p_vendas_fechadas: num('rel-vendas'),
+      p_principais_duvidas: document.getElementById('rel-duvidas').value || null,
+      p_objecoes: document.getElementById('rel-objecoes').value || null,
+      p_aprendizado: document.getElementById('rel-aprendizado').value || null,
+      p_meta_amanha: document.getElementById('rel-meta').value || null,
+      p_animo: relAnimo
+    });
+    if (error) throw error;
+    await carregarStatusRelatorio();
+    const s = relStatusCache;
+    if (s && s.hoje_eh_fim_de_semana) toast('Enviou no fim de semana? Que dedicação! ', 'success');
+    else if (s && s.streak >= 5) toast(' ' + s.streak + ' dias seguidos! Constância de campeão!', 'success');
+    else if (s && s.streak >= 3) toast(' ' + s.streak + ' dias seguidos! Hábito de campeão!', 'success');
+    else toast('Relatório enviado! Bom trabalho hoje ', 'success');
+    renderRelatorio();
+  } catch(e) {
+    toast('Erro ao enviar: ' + (e.message || e), 'error');
+  } finally {
+    if (btn) btn.disabled = false;
+  }
+}
+
+// --- Status do relatório: banner no dashboard, lembretes e notificações ---
+let relStatusCache = null;
+let _relLembreteNotificado = false;
+
+async function carregarStatusRelatorio() {
+  try {
+    const { data } = await SB.rpc('func_report_status', { p_token: sessionToken });
+    relStatusCache = data || null;
+  } catch(e) { relStatusCache = null; }
+  atualizarBannerRelatorio();
+  checarLembreteFimDia();
+}
+
+function atualizarBannerRelatorio() {
+  const el = document.getElementById('relatorio-status-banner');
+  if (!el) return;
+  const s = relStatusCache;
+  if (!s) { el.style.display='none'; return; }
+  const botao = '<button class="btn btn-accent btn-sm" onclick="nav(\'relatorio\')">Preencher agora →</button>';
+
+  // Fim de semana: nunca cobra; se enviou, parabeniza a dedicação
+  if (s.hoje_eh_fim_de_semana) {
+    if (s.enviou_hoje) {
+      el.className='rel-banner rel-banner-good'; el.style.display='flex';
+      el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> Que dedicação!</div><div class="rel-banner-sub">Você enviou seu relatório num fim de semana. Isso mostra comprometimento de verdade — continue assim!</div></div>';
+    } else { el.style.display='none'; }
+    return;
+  }
+
+  // Dia útil, já enviou: esconde obrigação; mostra elogio de sequência se houver marco
+  if (s.enviou_hoje) {
+    if (s.streak >= 5) {
+      el.className='rel-banner rel-banner-good'; el.style.display='flex';
+      el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> '+s.streak+' dias seguidos. Você está voando!</div><div class="rel-banner-sub">Constância de campeão. Vendedor disciplinado é vendedor que fecha. Orgulho da sua evolução!</div></div>';
+    } else if (s.streak >= 3) {
+      el.className='rel-banner rel-banner-good'; el.style.display='flex';
+      el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> '+s.streak+' dias seguidos!</div><div class="rel-banner-sub">Você está criando um hábito de campeão. Não pare agora — a sequência te leva longe.</div></div>';
+    } else {
+      el.className='rel-banner rel-banner-good'; el.style.display='flex';
+      el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> Relatório de hoje enviado!</div><div class="rel-banner-sub">Dia fechado. Bom trabalho — é assim que se constrói resultado.</div></div>';
+    }
+    return;
+  }
+
+  // Dia útil, não enviou: obrigação; escala para aviso se passou de 2 dias úteis
+  if (s.dias_uteis_sem_enviar > 2) {
+    el.className='rel-banner rel-banner-danger'; el.style.display='flex';
+    el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> Atenção: '+s.dias_uteis_sem_enviar+' dias úteis sem relatório</div><div class="rel-banner-sub">O envio do relatório diário é obrigatório. Continuar sem enviar pode levar a penalidade ou bloqueio temporário do painel. Regularize hoje para evitar.</div></div>'+botao;
+  } else {
+    el.className='rel-banner rel-banner-warn'; el.style.display='flex';
+    el.innerHTML = '<div class="rel-banner-txt"><div class="rel-banner-title"> Você ainda não enviou o relatório de hoje</div><div class="rel-banner-sub">É rápido — menos de 1 minuto. O relatório diário é parte da rotina e ajuda você a chegar na primeira venda.</div></div>'+botao;
+  }
+}
+
+function checarLembreteFimDia() {
+  const s = relStatusCache;
+  if (!s || s.hoje_eh_fim_de_semana || s.enviou_hoje) return;
+  const h = new Date().getHours();
+  if (h >= 17 && !_relLembreteNotificado) {       // fim de dia
+    _relLembreteNotificado = true;
+    notificarRelatorio('Não esqueça seu relatório de hoje', 'Feche o dia em 1 minuto. Toque para preencher.');
+  }
+}
+
+function notificarRelatorio(titulo, corpo) {
+  try {
+    if (!('Notification' in window) || Notification.permission !== 'granted') return;
+    if (navigator.serviceWorker && navigator.serviceWorker.ready) {
+      navigator.serviceWorker.ready.then(reg => reg.showNotification(titulo, {
+        body: corpo, icon: 'wexavatar.png', badge: 'wexavatar.png',
+        tag: 'relatorio-dia', requireInteraction: false, data: { url: location.href }
+      })).catch(()=>{ try { new Notification(titulo, { body: corpo }); } catch(e){} });
+    } else {
+      new Notification(titulo, { body: corpo });
+    }
+  } catch(e){}
+}
+
+async function ativarLembretesRelatorio() {
+  try {
+    if (!('Notification' in window)) { toast('Seu navegador não suporta notificações.', 'error'); return; }
+    const perm = await Notification.requestPermission();
+    if (perm === 'granted') {
+      await inscreverPush();
+      toast('Lembretes ativados! Você será avisado no fim do dia. ', 'success');
+      notificarRelatorio('Lembretes ativados ', 'Vou te lembrar de enviar o relatório no fim de cada dia.');
+      const b = document.getElementById('rel-ativar-notif'); if (b) b.style.display='none';
+    } else {
+      toast('Permissão negada. Você pode ativar nas configurações do navegador.', 'info');
+    }
+  } catch(e){ toast('Não foi possível ativar agora.', 'error'); }
+}
+
+// Push: inscreve o navegador para receber lembrete mesmo com o app fechado
+const VAPID_PUBLIC_KEY = 'BHHmaMtWOQDJomt-G41T02buVBg-FsT92dADvJF28gd9G9A3XlmDcuOj52vz4BsF-6MhNNqMUTtrUni0AcLFwao';
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  const arr = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+  return arr;
+}
+async function inscreverPush() {
+  try {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    const reg = await navigator.serviceWorker.ready;
+    let sub = await reg.pushManager.getSubscription();
+    if (!sub) {
+      sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY)
+      });
+    }
+    await SB.rpc('func_save_push_subscription', { p_token: sessionToken, p_subscription: sub.toJSON() });
+  } catch(e) { /* silencioso */ }
+}
+
+// Registra o service worker (necessário para notificações e futura push)
+function registrarSWRelatorio() {
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  }
+}
+
 function nav(page) {
   pingAtividade();
   closeDrawer();
@@ -2485,6 +2857,12 @@ function nav(page) {
   // Rebusca ranking ao entrar na página (dados de todos os funcionários)
   if (page === 'ranking') {
     renderRanking();
+  }
+  if (page === 'relatorio') {
+    renderRelatorio();
+  }
+  if (page === 'dashboard') {
+    carregarStatusRelatorio();
   }
 }
 
@@ -2813,6 +3191,19 @@ function buildWexContext() {
   const ativos = myClientes.filter(c => c.status_crm === 'fechado');
   const mrr = ativos.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
   const comPct = parseFloat(currentEmployee?.comissao_pct || 20);
+  const rs = relStatusCache;
+  let relInfo = '';
+  if (rs) {
+    if (rs.enviou_hoje && !rs.hoje_eh_fim_de_semana) {
+      relInfo = `\n\nSTATUS DO RELATÓRIO DE HOJE: ${nome} JÁ ENVIOU o relatório diário de hoje${rs.streak>=5?' e está numa sequência impressionante de '+rs.streak+' dias seguidos':rs.streak>=3?' e está com '+rs.streak+' dias seguidos':''}. Se ele falar com você, comece a resposta ELOGIANDO essa atitude (reforço positivo), de forma breve e calorosa, e só então ajude no que ele pediu.`;
+    } else if (rs.hoje_eh_fim_de_semana) {
+      relInfo = rs.enviou_hoje
+        ? `\n\nSTATUS DO RELATÓRIO: hoje é fim de semana e ${nome} enviou relatório mesmo assim — parabenize essa dedicação extra de forma calorosa.`
+        : `\n\nSTATUS DO RELATÓRIO: hoje é fim de semana. NÃO cobre relatório — o fim de semana é livre e preferimos que a equipe descanse.`;
+    } else {
+      relInfo = `\n\nSTATUS DO RELATÓRIO DE HOJE: ${nome} AINDA NÃO ENVIOU o relatório diário de hoje${rs.dias_uteis_sem_enviar>2?'. ATENÇÃO: já são '+rs.dias_uteis_sem_enviar+' dias úteis sem enviar, o que pode gerar penalidade ou bloqueio do painel — reforce com firmeza gentil a importância de regularizar hoje':''}. Em algum momento da sua resposta, lembre-o gentilmente (1 frase) de enviar o relatório do dia na aba "Relatório do Dia" antes do fim do expediente.`;
+    }
+  }
   return `Você é a Wex, assistente comercial do WexioLead — plataforma SaaS de geração de leads B2B. Nascida na construção civil, hoje atende múltiplos setores (saúde, jurídico, contábil, tecnologia, logística, imobiliário, comércio, alimentação, indústria e serviços).
 Fale com ${nome}, consultor comercial da equipe. Ele tem ${ativos.length} clientes ativos gerando R$${mrr} por ciclo (30 dias) (comissão de ${comPct}%).
 
@@ -2825,6 +3216,8 @@ PLANOS (pagamento avulso, cada plano vale 30 dias e expira sem renovação autom
 DIFERENCIAIS para argumentar na venda: dados da Receita Federal com score de qualificação (0-100) e selo verificado; busca inteligente por setor; CRM para organizar o funil; Rede B2B que conecta empresas para fecharem negócios; Radar de Empresas Novas (Agency) para achar negócios recém-abertos.
 
 O QUE VENDEMOS (explique de forma simples e informal quando ${nome} perguntar): o WexioLead vende geração/consulta de leads B2B — ou seja, entregamos para uma empresa uma lista pronta de OUTRAS empresas reais (com CNPJ, contato e score de qualidade) para ela prospectar e fechar negócio. O cliente do consultor é uma empresa que vende para outras empresas e quer achar clientes novos sem perder tempo caçando. A frase-chave: "não vendemos software, vendemos clientes novos chegando". Muitos consultores ainda não sabem explicar isso — então, se perceber dúvida, explique com calma, com exemplos do dia a dia (fornecedor que quer achar construtoras, contador que quer achar empresas novas) e num tom de colega, não corporativo.
+
+RELATÓRIO DIÁRIO (nova rotina obrigatória — você deve conhecer e incentivar): ao fim de cada dia útil, ${nome} preenche na aba "Relatório do Dia" um resumo rápido (menos de 1 minuto): quantas empresas contatou, quantas responderam, quantas demonstraram interesse, reuniões, propostas, vendas, principais dúvidas e objeções que ouviu, o que funcionou e a meta para amanhã, além do ânimo do dia. Serve para criar disciplina, acompanhar a evolução e ajudar a chegar na primeira venda. Sábado e domingo são livres (não é cobrado). Enviar em dias seguidos cria "sequência" (streak) — 3 dias seguidos é ótimo, 5+ é excelente. Se ${nome} tiver dúvida sobre o relatório, explique com naturalidade e incentive o hábito.${relInfo}
 
 Ajude ${nome} a entender e explicar o produto, prospectar, contornar objeções, recomendar o plano certo e fechar mais. Seja direta, simpática e didática, como uma colega de equipe que manja de vendas — pode ser informal. Máximo 3 parágrafos. Responda em português brasileiro. Nunca use emojis.`;
 }
