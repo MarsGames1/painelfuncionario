@@ -1626,8 +1626,12 @@ const CLIENTES_PER_PAGE = 10;
 // 
 // INIT
 // 
+// Cria o cliente já no carregamento do script (não espera o evento 'load'),
+// pois o onAuthStateChange abaixo é registrado no nível principal do script
+// e precisa de SB já existente para não falhar silenciosamente.
+SB = supabase.createClient(SB_URL, SB_KEY);
+
 window.addEventListener('load', async () => {
-  SB = supabase.createClient(SB_URL, SB_KEY);
   const loginImg = document.getElementById('login-wex-img');
   if (loginImg) loginImg.src = WEX_AVATAR_SRC;
 
@@ -1720,7 +1724,7 @@ async function loginGoogle() {
   try {
     const { error } = await SB.auth.signInWithOAuth({
       provider: 'google',
-      options: { redirectTo: location.href }
+      options: { redirectTo: location.origin + '/funcionarios.html' }
     });
     if (error) throw error;
   } catch(e) {
