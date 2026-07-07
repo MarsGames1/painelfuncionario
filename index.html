@@ -244,6 +244,29 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .rank-num.silver{color:var(--muted);}
 .rank-num.bronze{color:var(--muted);}
 
+/* PÓDIO DE PREMIAÇÕES */
+.premio-podio{display:flex;align-items:flex-end;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
+.premio-slot{display:flex;flex-direction:column;align-items:center;width:200px;}
+.premio-medalha{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#1a1814;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.35);}
+.premio-medalha-ouro{background:linear-gradient(135deg,#ffe27a,#f0a92e);width:36px;height:36px;font-size:16px;box-shadow:0 4px 16px rgba(240,169,46,.5);}
+.premio-vitrine{position:relative;width:100%;height:150px;border-radius:18px 18px 6px 6px;background:radial-gradient(ellipse at 50% 30%, rgba(255,255,255,.10), rgba(255,255,255,.02) 60%), var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.premio-vitrine-grande{height:190px;border:1px solid rgba(255,215,0,.5);box-shadow:0 0 0 1px rgba(255,215,0,.15), 0 20px 40px -12px rgba(240,169,46,.35);}
+.premio-spot{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:140%;height:140%;background:radial-gradient(ellipse at 50% 20%, rgba(255,255,255,.16), transparent 60%);pointer-events:none;}
+.premio-spot-ouro{background:radial-gradient(ellipse at 50% 20%, rgba(255,215,90,.28), transparent 62%);}
+.premio-vitrine img{position:relative;z-index:1;max-width:78%;max-height:72%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+.premio-base{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:60%;height:14px;border-radius:50%;background:radial-gradient(ellipse, rgba(0,0,0,.45), transparent 70%);z-index:0;}
+.premio-pix,.premio-giftcard{position:relative;z-index:1;font-family:'Syne',sans-serif;font-weight:800;color:#fff;text-shadow:0 4px 14px rgba(0,0,0,.4);}
+.premio-pix{font-size:32px;}
+.premio-giftcard{font-size:40px;}
+.premio-info{text-align:center;margin-top:12px;}
+.premio-nome{font-size:13px;font-weight:700;color:#fff;}
+.premio-nome-grande{font-size:16px;}
+.premio-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.premio-1{order:2;}
+.premio-2{order:1;}
+.premio-3{order:3;}
+@media (max-width:640px){.premio-podio{gap:10px;}.premio-slot{width:31%;}.premio-vitrine,.premio-vitrine-grande{height:110px;}}
+
 /* MATERIAL CARD */
 .mat-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
 .mat-card::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 0% 50%,rgba(249,115,22,.06) 0%,transparent 60%);opacity:0;transition:opacity .3s;}
@@ -485,8 +508,8 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <span>Treinamentos</span>
     </a>
     <a onclick="nav('ranking')" id="nav-ranking">
-      <svg viewBox="0 0 24 24"><polyline points="18 20 18 10"/><polyline points="12 20 12 4"/><polyline points="6 20 6 14"/></svg>
-      <span>Ranking</span>
+      <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 0 1-10 0V4z"/><path d="M7 5H4a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4M17 5h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4"/></svg>
+      <span>Premiações</span>
     </a>
     <a onclick="nav('sugestao')" id="nav-sugestao">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1328,73 +1351,88 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <!--  RANKING  -->
 <div class="page" id="page-ranking">
   <div class="topbar">
-    <div><div class="page-title">Ranking</div><div class="page-sub">Desempenho da equipe e premiações</div></div>
+    <div><div class="page-title">Premiações</div><div class="page-sub">Ranking de desempenho e prêmios em disputa</div></div>
   </div>
 
   <!-- Abas Mensal / Trimestral -->
-  <div style="display:flex;gap:8px;margin-bottom:20px;">
+  <div style="display:flex;gap:8px;margin-bottom:24px;">
     <button class="btn btn-accent btn-sm" id="rk-tab-mensal" onclick="mudarAbaRanking('mensal')">Desafio Mensal</button>
     <button class="btn btn-ghost btn-sm" id="rk-tab-trimestral" onclick="mudarAbaRanking('trimestral')">Desafio Trimestral</button>
   </div>
 
-  <!-- Prêmios em destaque -->
+  <!-- PÓDIO — Prêmios do mês -->
   <div id="ranking-premios-mensal">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Prêmios do mês</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
-      <div style="background:var(--card);border:1px solid rgba(255,215,0,.45);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥇</span>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Airfryer.jpg" alt="Air Fryer" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+    <div class="premio-podio">
+      <div class="premio-slot premio-2">
+        <div class="premio-medalha" style="background:linear-gradient(135deg,#e8e8e8,#b8b8b8);">2</div>
+        <div class="premio-vitrine">
+          <div class="premio-spot"></div>
+          <div class="premio-pix">R$150</div>
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">1º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Air Fryer</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$2.500</div></div>
+        <div class="premio-info"><div class="premio-nome">PIX de R$150</div><div class="premio-meta">Meta mínima R$1.800</div></div>
       </div>
-      <div style="background:var(--card);border:1px solid rgba(192,192,192,.4);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01));">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥈</span>
-          <span style="font-size:46px;font-family:'Syne',sans-serif;font-weight:800;color:#fff;">R$150</span>
+
+      <div class="premio-slot premio-1">
+        <div class="premio-medalha premio-medalha-ouro">1</div>
+        <div class="premio-vitrine premio-vitrine-grande">
+          <div class="premio-spot premio-spot-ouro"></div>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Airfryer.jpg" alt="Air Fryer" loading="lazy">
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">2º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">PIX de R$150</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$1.800</div></div>
+        <div class="premio-info"><div class="premio-nome premio-nome-grande">Air Fryer</div><div class="premio-meta">Meta mínima R$2.500</div></div>
       </div>
-      <div style="background:var(--card);border:1px solid rgba(205,127,50,.4);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01));">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥉</span>
-          <span style="font-size:44px;">🎁</span>
+
+      <div class="premio-slot premio-3">
+        <div class="premio-medalha" style="background:linear-gradient(135deg,#d99a5b,#a86a34);">3</div>
+        <div class="premio-vitrine">
+          <div class="premio-spot"></div>
+          <div class="premio-giftcard">🎁</div>
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">3º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Gift Card</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$1.100</div></div>
+        <div class="premio-info"><div class="premio-nome">Gift Card</div><div class="premio-meta">Meta mínima R$1.100</div></div>
       </div>
     </div>
   </div>
 
+  <!-- PÓDIO — Prêmios do trimestre -->
   <div id="ranking-premios-trimestral" style="display:none;">
-    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Prêmios do trimestre</div>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
-      <div style="background:var(--card);border:1px solid rgba(255,215,0,.45);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥇</span>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/White_iPhone_17.jpg" alt="iPhone 17" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+    <div class="premio-podio">
+      <div class="premio-slot premio-2">
+        <div class="premio-medalha" style="background:linear-gradient(135deg,#e8e8e8,#b8b8b8);">2</div>
+        <div class="premio-vitrine">
+          <div class="premio-spot"></div>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Asus_vivobook.jpg" alt="Notebook ASUS Vivobook Go 15" loading="lazy">
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">1º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">iPhone 17</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$12.000</div></div>
+        <div class="premio-info"><div class="premio-nome">Notebook ASUS Vivobook Go 15</div><div class="premio-meta">Meta mínima R$9.000</div></div>
       </div>
-      <div style="background:var(--card);border:1px solid rgba(192,192,192,.4);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥈</span>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Asus_vivobook.jpg" alt="Notebook ASUS Vivobook Go 15" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+
+      <div class="premio-slot premio-1">
+        <div class="premio-medalha premio-medalha-ouro">1</div>
+        <div class="premio-vitrine premio-vitrine-grande">
+          <div class="premio-spot premio-spot-ouro"></div>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/White_iPhone_17.jpg" alt="iPhone 17" loading="lazy">
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">2º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Notebook ASUS Vivobook Go 15</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$9.000</div></div>
+        <div class="premio-info"><div class="premio-nome premio-nome-grande">iPhone 17</div><div class="premio-meta">Meta mínima R$12.000</div></div>
       </div>
-      <div style="background:var(--card);border:1px solid rgba(205,127,50,.4);border-radius:16px;overflow:hidden;">
-        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
-          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥉</span>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SamsungSmartTV.JPG" alt="Smart TV 40 polegadas" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+
+      <div class="premio-slot premio-3">
+        <div class="premio-medalha" style="background:linear-gradient(135deg,#d99a5b,#a86a34);">3</div>
+        <div class="premio-vitrine">
+          <div class="premio-spot"></div>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SamsungSmartTV.JPG" alt="Smart TV 40 polegadas" loading="lazy">
+          <div class="premio-base"></div>
         </div>
-        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">3º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Smart TV 40"</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$6.000</div></div>
+        <div class="premio-info"><div class="premio-nome">Smart TV 40"</div><div class="premio-meta">Meta mínima R$6.000</div></div>
       </div>
     </div>
   </div>
 
-  <div class="grid-2">
+  <div class="grid-2" style="margin-top:32px;">
     <div class="card">
-      <div class="card-head"><div class="card-title" id="ranking-list-titulo"> Classificação geral</div><div class="card-sub">Por vendas confirmadas</div></div>
+      <div class="card-head"><div class="card-title" id="ranking-list-titulo"> Classificação do mês</div><div class="card-sub">Por vendas confirmadas</div></div>
       <div class="card-body" id="ranking-list">
         <div class="empty"><p>Ranking calculado ao final do período</p></div>
       </div>
