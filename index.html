@@ -456,6 +456,10 @@ textarea.form-input{resize:vertical;min-height:90px;}
       <span>Meus Clientes</span>
       <span class="nav-badge" id="badge-clientes">0</span>
     </a>
+    <a onclick="nav('meulink')" id="nav-meulink">
+      <svg viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+      <span>Meu Link</span>
+    </a>
     <a onclick="nav('comissoes')" id="nav-comissoes">
       <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
       <span>Comissões</span>
@@ -534,6 +538,23 @@ textarea.form-input{resize:vertical;min-height:90px;}
 
   <!-- Banner de status do relatório diário (obrigação/elogio/aviso) -->
   <div id="relatorio-status-banner" style="display:none;"></div>
+
+  <!-- NÍVEL / GEMA -->
+  <div class="card" id="gema-card" style="margin-bottom:20px;overflow:hidden;position:relative;">
+    <div class="card-body" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+      <div id="gema-icon-wrap" style="width:64px;height:64px;flex:0 0 64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;">💎</div>
+      <div style="flex:1;min-width:220px;">
+        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
+          <span id="gema-nome" style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;">Bronze</span>
+          <span id="gema-comissao" style="font-size:12px;font-weight:700;background:rgba(255,255,255,.08);padding:3px 10px;border-radius:100px;color:var(--soft, var(--muted));">20% de comissão</span>
+        </div>
+        <div style="height:8px;border-radius:100px;background:rgba(255,255,255,.08);overflow:hidden;margin-bottom:6px;">
+          <div id="gema-progress-bar" style="height:100%;width:0%;background:linear-gradient(90deg,var(--accent),#ffd76a);border-radius:100px;transition:width .4s;"></div>
+        </div>
+        <div id="gema-progress-texto" style="font-size:12px;color:var(--muted);">Carregando progresso...</div>
+      </div>
+    </div>
+  </div>
 
   <div class="stats-row">
     <div class="stat-card">
@@ -664,6 +685,49 @@ textarea.form-input{resize:vertical;min-height:90px;}
   <div class="card-title" style="margin:4px 0 4px;font-size:15px;">Funil de vendas</div>
   <div class="crm-hint">Visualize seu funil e a previsão de comissão. O estágio de cada cliente é definido na aba Meus Clientes.</div>
   <div class="kanban" id="crm-kanban"></div>
+</div>
+
+<!--  MEU LINK (indicação)  -->
+<div class="page" id="page-meulink">
+  <div class="topbar">
+    <div><div class="page-title">Meu Link de Indicação</div><div class="page-sub">Divulgue e ganhe comissão recorrente de cada cliente indicado</div></div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-body" style="display:flex;gap:24px;flex-wrap:wrap;align-items:center;">
+      <div style="flex:1;min-width:260px;">
+        <div class="stat-lbl" style="margin-bottom:8px;">Seu link exclusivo</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input id="meulink-url" readonly style="flex:1;min-width:220px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:10px;padding:11px 14px;color:#fff;font-size:13px;">
+          <button class="btn btn-accent btn-sm" onclick="copiarMeuLink()">Copiar Link</button>
+        </div>
+        <p style="font-size:12px;color:var(--muted);margin-top:10px;line-height:1.6;">Todo cliente que criar conta ou contratar um plano por esse link fica vinculado automaticamente a você — para sempre, enquanto ele continuar ativo.</p>
+      </div>
+      <div style="flex:0 0 auto;text-align:center;">
+        <img id="meulink-qr" src="" alt="QR Code do seu link" style="width:140px;height:140px;border-radius:12px;background:#fff;padding:8px;">
+        <div style="font-size:11px;color:var(--muted);margin-top:6px;">Escaneie para abrir</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-lbl">Cliques no link</div>
+      <div class="stat-val" id="ml-cliques">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Cadastros realizados</div>
+      <div class="stat-val" id="ml-cadastros">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Clientes convertidos</div>
+      <div class="stat-val" id="ml-conversoes">—</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-lbl">Taxa de conversão</div>
+      <div class="stat-val" id="ml-taxa">—%</div>
+    </div>
+  </div>
 </div>
 
 <!--  MEUS CLIENTES  -->
@@ -1264,13 +1328,75 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <!--  RANKING  -->
 <div class="page" id="page-ranking">
   <div class="topbar">
-    <div><div class="page-title">Ranking do Mês</div><div class="page-sub">Desempenho da equipe</div></div>
+    <div><div class="page-title">Ranking</div><div class="page-sub">Desempenho da equipe e premiações</div></div>
   </div>
+
+  <!-- Abas Mensal / Trimestral -->
+  <div style="display:flex;gap:8px;margin-bottom:20px;">
+    <button class="btn btn-accent btn-sm" id="rk-tab-mensal" onclick="mudarAbaRanking('mensal')">Desafio Mensal</button>
+    <button class="btn btn-ghost btn-sm" id="rk-tab-trimestral" onclick="mudarAbaRanking('trimestral')">Desafio Trimestral</button>
+  </div>
+
+  <!-- Prêmios em destaque -->
+  <div id="ranking-premios-mensal">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Prêmios do mês</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
+      <div style="background:var(--card);border:1px solid rgba(255,215,0,.45);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥇</span>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Airfryer.jpg" alt="Air Fryer" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">1º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Air Fryer</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$2.500</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(192,192,192,.4);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01));">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥈</span>
+          <span style="font-size:46px;font-family:'Syne',sans-serif;font-weight:800;color:#fff;">R$150</span>
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">2º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">PIX de R$150</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$1.800</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(205,127,50,.4);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;background:linear-gradient(135deg,rgba(255,255,255,.06),rgba(255,255,255,.01));">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥉</span>
+          <span style="font-size:44px;">🎁</span>
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">3º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Gift Card</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$1.100</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="ranking-premios-trimestral" style="display:none;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Prêmios do trimestre</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px;">
+      <div style="background:var(--card);border:1px solid rgba(255,215,0,.45);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥇</span>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/White_iPhone_17.jpg" alt="iPhone 17" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">1º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">iPhone 17</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$12.000</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(192,192,192,.4);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥈</span>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Asus_vivobook.jpg" alt="Notebook ASUS Vivobook Go 15" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">2º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Notebook ASUS Vivobook Go 15</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$9.000</div></div>
+      </div>
+      <div style="background:var(--card);border:1px solid rgba(205,127,50,.4);border-radius:16px;overflow:hidden;">
+        <div style="height:140px;background:#fff;display:flex;align-items:center;justify-content:center;padding:14px;position:relative;">
+          <span style="position:absolute;top:8px;left:8px;font-size:18px;">🥉</span>
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SamsungSmartTV.JPG" alt="Smart TV 40 polegadas" style="max-width:100%;max-height:100%;object-fit:contain;" loading="lazy">
+        </div>
+        <div style="padding:14px;"><div style="font-size:11px;color:var(--accent);font-weight:700;text-transform:uppercase;">3º lugar</div><div style="font-size:14px;font-weight:700;color:#fff;">Smart TV 40"</div><div style="font-size:12px;color:var(--muted);">Meta mínima R$6.000</div></div>
+      </div>
+    </div>
+  </div>
+
   <div class="grid-2">
     <div class="card">
-      <div class="card-head"><div class="card-title"> Classificação geral</div><div class="card-sub">Por clientes ativos</div></div>
+      <div class="card-head"><div class="card-title" id="ranking-list-titulo"> Classificação geral</div><div class="card-sub">Por vendas confirmadas</div></div>
       <div class="card-body" id="ranking-list">
-        <div class="empty"><p>Ranking calculado ao final do mês</p></div>
+        <div class="empty"><p>Ranking calculado ao final do período</p></div>
       </div>
     </div>
     <div class="card">
@@ -1922,10 +2048,46 @@ async function loadClientes() {
 }
 
 // 
-// DASHBOARD STATS
+// GEMAS (NÍVEIS)
 // 
+const GEMAS = {
+  bronze: { nome: 'Bronze', icone: '🟫', cor: '#c98a4b', proxima: 'prata', metaProxima: 6000, comissao: 20 },
+  prata:  { nome: 'Prata',  icone: '⬜', cor: '#c7ccd6', proxima: 'ouro',  metaProxima: 10000, comissao: 25 },
+  ouro:   { nome: 'Ouro',   icone: '🟨', cor: '#f6c945', proxima: null,   metaProxima: null,   comissao: 30 },
+};
+
+function renderGema() {
+  const nivelAtual = (currentEmployee && currentEmployee.nivel_gema) || 'bronze';
+  const g = GEMAS[nivelAtual] || GEMAS.bronze;
+  const acumulado = parseFloat((currentEmployee && currentEmployee.vendas_acumuladas) || 0);
+
+  const iconWrap = document.getElementById('gema-icon-wrap');
+  const nomeEl = document.getElementById('gema-nome');
+  const comEl = document.getElementById('gema-comissao');
+  const barEl = document.getElementById('gema-progress-bar');
+  const txtEl = document.getElementById('gema-progress-texto');
+  if (!nomeEl) return;
+
+  if (iconWrap) { iconWrap.textContent = g.icone; iconWrap.style.background = g.cor + '22'; iconWrap.style.border = '1px solid ' + g.cor + '55'; }
+  nomeEl.textContent = g.nome;
+  if (comEl) comEl.textContent = (currentEmployee.comissao_pct || g.comissao) + '% de comissão';
+
+  if (g.proxima) {
+    const pct = Math.min(100, Math.round(acumulado / g.metaProxima * 100));
+    if (barEl) barEl.style.width = pct + '%';
+    const faltam = Math.max(0, g.metaProxima - acumulado);
+    if (txtEl) txtEl.textContent = faltam > 0
+      ? `R$${acumulado.toLocaleString('pt-BR',{maximumFractionDigits:0})} de R$${g.metaProxima.toLocaleString('pt-BR')} para virar ${GEMAS[g.proxima].nome}`
+      : `Meta batida! Nível ${GEMAS[g.proxima].nome} liberado 🎉`;
+  } else {
+    if (barEl) barEl.style.width = '100%';
+    if (txtEl) txtEl.textContent = 'Nível máximo do programa 🏆';
+  }
+}
+
 function updateDashStats() {
   const comPct = parseFloat(currentEmployee.comissao_pct || 20) / 100;
+  renderGema();
   const ativos = myClientes.filter(c => c.status_crm === 'fechado');
   const mrr = ativos.reduce((s, c) => s + (PLAN_PRICES[c.plano] || 0), 0);
   const comissao = mrr * comPct;
@@ -2394,8 +2556,57 @@ function renderMetas() {
 }
 
 // 
+// MEU LINK (indicação)
+// 
+async function renderMeuLink() {
+  const refCode = currentEmployee && currentEmployee.ref_code;
+  const urlInput = document.getElementById('meulink-url');
+  const qrImg = document.getElementById('meulink-qr');
+  if (!refCode) {
+    if (urlInput) urlInput.value = 'Link ainda não disponível — fale com seu gestor.';
+    return;
+  }
+  const url = `https://wexiolead.com?ref=${refCode}`;
+  if (urlInput) urlInput.value = url;
+  if (qrImg) qrImg.src = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(url)}`;
+
+  try {
+    const { data, error } = await SB.rpc('referral_stats', { p_token: sessionToken });
+    if (error || !data || data.status !== 'ok') throw error || new Error('sem dados');
+    document.getElementById('ml-cliques').textContent = data.cliques ?? 0;
+    document.getElementById('ml-cadastros').textContent = data.cadastros ?? 0;
+    document.getElementById('ml-conversoes').textContent = data.conversoes ?? 0;
+    document.getElementById('ml-taxa').textContent = (data.taxa_conversao ?? 0) + '%';
+  } catch (e) {
+    console.error('referral_stats:', e);
+    ['ml-cliques','ml-cadastros','ml-conversoes'].forEach(id => document.getElementById(id).textContent = '0');
+    document.getElementById('ml-taxa').textContent = '0%';
+  }
+}
+
+function copiarMeuLink() {
+  const input = document.getElementById('meulink-url');
+  if (!input || !input.value || input.value.startsWith('Link ainda')) return;
+  navigator.clipboard.writeText(input.value)
+    .then(() => toast('Link copiado!', 'success'))
+    .catch(() => toast('Não foi possível copiar. Copie manualmente.', 'error'));
+}
+
+// 
 // RANKING
 // 
+let rankingPeriodoAtivo = 'mensal';
+
+function mudarAbaRanking(periodo) {
+  rankingPeriodoAtivo = periodo;
+  document.getElementById('rk-tab-mensal').className = periodo === 'mensal' ? 'btn btn-accent btn-sm' : 'btn btn-ghost btn-sm';
+  document.getElementById('rk-tab-trimestral').className = periodo === 'trimestral' ? 'btn btn-accent btn-sm' : 'btn btn-ghost btn-sm';
+  document.getElementById('ranking-premios-mensal').style.display = periodo === 'mensal' ? '' : 'none';
+  document.getElementById('ranking-premios-trimestral').style.display = periodo === 'trimestral' ? '' : 'none';
+  document.getElementById('ranking-list-titulo').textContent = periodo === 'mensal' ? ' Classificação do mês' : ' Classificação do trimestre';
+  renderRanking();
+}
+
 async function renderRanking() {
   const listEl = document.getElementById('ranking-list');
   const posEl  = document.getElementById('minha-posicao');
@@ -2404,13 +2615,23 @@ async function renderRanking() {
   // Evita o embed profiles() que anon não pode ler.
   let ranking = [];
   try {
-    const { data, error } = await SB.rpc('ranking_vendas', { p_token: sessionToken });
-    if (error) throw error;
-    ranking = (data || []).map(r => ({
-      id: r.employee_id, nome: r.nome, cargo: r.cargo,
-      is_isca: r.is_isca, clientes: Number(r.clientes), mrr: Number(r.mrr)
-    }));
+    if (rankingPeriodoAtivo === 'trimestral') {
+      const { data, error } = await SB.rpc('ranking_vendas_trimestral', { p_token: sessionToken });
+      if (error) throw error;
+      ranking = (data || []).map(r => ({
+        id: r.id, nome: r.nome, cargo: null,
+        is_isca: false, clientes: Number(r.clientes || 0), mrr: Number(r.vendas || 0)
+      }));
+    } else {
+      const { data, error } = await SB.rpc('ranking_vendas', { p_token: sessionToken });
+      if (error) throw error;
+      ranking = (data || []).map(r => ({
+        id: r.employee_id, nome: r.nome, cargo: r.cargo,
+        is_isca: r.is_isca, clientes: Number(r.clientes), mrr: Number(r.mrr)
+      }));
+    }
   } catch(e) { console.error('ranking_vendas:', e); }
+
 
   if (!ranking.length) {
     if (listEl) listEl.innerHTML = '<div class="empty"><p>Ranking será exibido assim que houver vendas confirmadas.</p></div>';
@@ -2854,6 +3075,9 @@ function nav(page) {
   }
   if (page === 'relatorio') {
     renderRelatorio();
+  }
+  if (page === 'meulink') {
+    renderMeuLink();
   }
   if (page === 'dashboard') {
     carregarStatusRelatorio();
