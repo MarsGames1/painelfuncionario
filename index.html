@@ -1804,14 +1804,15 @@ window.addEventListener('load', async () => {
     const saved = localStorage.getItem('wexio_session');
     if (saved) {
       const sess = JSON.parse(saved);
-      // Sessão válida por 7 dias; revalida o funcionário no banco a cada restauração
-      const expirada = !sess.ts || (Date.now() - sess.ts) > 7 * 24 * 60 * 60 * 1000;
+      // Sessão válida por 30 dias (mesmo prazo do token no servidor); revalida o funcionário no banco a cada restauração
+      const expirada = !sess.ts || (Date.now() - sess.ts) > 30 * 24 * 60 * 60 * 1000;
       if (!expirada && sess.token) {
         const { data: emps, error } = await SB.rpc('employee_resume', { p_token: sess.token });
         if (!error && emps && emps.length > 0 && emps[0].status !== 'inativo') {
           currentEmployee = emps[0];
           sessionToken = sess.token;
           currentUser = { id: emps[0].id, email: emps[0].email };
+          try { localStorage.setItem('wexio_session', JSON.stringify({ ...sess, ts: Date.now() })); } catch(e) {}
           pingAtividade(); // registra "visto por último" (throttle 10 min)
           await loadAll();
           initUI();
