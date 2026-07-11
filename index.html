@@ -244,6 +244,14 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .rank-num.silver{color:#16181c;background:linear-gradient(135deg,#f6f7fb,#aeb6c4);box-shadow:0 8px 20px rgba(174,182,196,.18);}
 .rank-num.bronze{color:#1a1814;background:linear-gradient(135deg,#e7b07b,#9b5b2e);box-shadow:0 8px 20px rgba(155,91,46,.18);}
 .premio-section{margin-bottom:24px;}
+.premio-sections{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-bottom:24px;}
+.premio-compact{border-top:1px solid var(--border2);padding-top:16px;}
+.premio-list{margin-top:10px;}
+.premio-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid var(--border);}
+.premio-pos{width:28px;height:28px;border:1px solid var(--border2);border-radius:6px;display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted);}
+.premio-row-title{font-size:13px;font-weight:600;}
+.premio-row-meta{font-size:11px;color:var(--muted);margin-top:2px;}
+.premio-goal{font-size:11px;color:var(--accent);white-space:nowrap;}
 .premio-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
 .premio-kicker{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
 .premio-heading{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
@@ -273,6 +281,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
 .gema-svg{width:34px;height:34px;display:block;}
 .gema-bronze{color:#c98546;}.gema-prata{color:#c7ccd6;}.gema-ouro{color:#f4c542;}
 @media (max-width:900px){.premio-grid{grid-template-columns:1fr;}.premio-card.gold .premio-showcase,.premio-showcase,.premio-cash,.premio-gift{height:170px;}.premio-card.gold .premio-showcase img,.premio-showcase img{max-height:126px;}}
+@media (max-width:760px){.premio-sections{grid-template-columns:1fr;}.premio-row{grid-template-columns:32px minmax(0,1fr)}.premio-goal{grid-column:2;}}
 
 /* MATERIAL CARD */
 .mat-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
@@ -1358,31 +1367,33 @@ textarea.form-input{resize:vertical;min-height:90px;}
 <!--  PREMIAÇÕES  -->
 <div class="page" id="page-ranking">
   <div class="topbar">
-    <div><div class="page-title">Premiações</div><div class="page-sub">Vitrines de prêmios, metas e classificação dos revendedores</div></div>
+    <div><div class="page-title">Premiações</div><div class="page-sub">Metas claras para os ciclos mensal e trimestral</div></div>
   </div>
 
-  <div class="premio-section">
+  <div class="premio-sections">
+  <section class="premio-compact">
     <div class="premio-section-head">
       <div><div class="premio-kicker">Desafio mensal</div><div class="premio-heading">Ranking do mês</div></div>
       <div class="premio-sub">Premiação por desempenho mensal. O prêmio só é liberado quando a meta mínima da colocação for atingida.</div>
     </div>
-    <div class="premio-grid">
-      <div class="premio-card gold"><div class="premio-place">I</div><div class="premio-showcase"><img src="https://imgs.extra.com.br/55070219/1g.jpg" alt="Air Fryer Philips Walita" loading="lazy"></div><div class="premio-body"><div class="premio-label">Primeiro lugar</div><div class="premio-title">Air Fryer</div><div class="premio-meta">Meta mínima R$2.500 no mês</div></div></div>
-      <div class="premio-card silver"><div class="premio-place">II</div><div class="premio-cash"><span>R$150</span></div><div class="premio-body"><div class="premio-label">Segundo lugar</div><div class="premio-title">PIX de R$150</div><div class="premio-meta">Meta mínima R$1.800 no mês</div></div></div>
-      <div class="premio-card bronze"><div class="premio-place">III</div><div class="premio-gift"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="24" width="44" height="30" rx="3"/><path d="M32 24v30M10 34h44M22 24c-7-5-6-14 1-14 6 0 9 8 9 14M42 24c7-5 6-14-1-14-6 0-9 8-9 14"/></svg></div><div class="premio-body"><div class="premio-label">Terceiro lugar</div><div class="premio-title">Gift Card</div><div class="premio-meta">Meta mínima R$1.100 no mês</div></div></div>
+    <div class="premio-list">
+      <div class="premio-row"><span class="premio-pos">1º</span><div><div class="premio-row-title">Air Fryer</div><div class="premio-row-meta">Primeira faixa mensal</div></div><span class="premio-goal">R$ 2.500</span></div>
+      <div class="premio-row"><span class="premio-pos">2º</span><div><div class="premio-row-title">PIX de R$ 150</div><div class="premio-row-meta">Segunda faixa mensal</div></div><span class="premio-goal">R$ 1.800</span></div>
+      <div class="premio-row"><span class="premio-pos">3º</span><div><div class="premio-row-title">Gift Card de até R$ 100</div><div class="premio-row-meta">Terceira faixa mensal</div></div><span class="premio-goal">R$ 1.100</span></div>
     </div>
-  </div>
+  </section>
 
-  <div class="premio-section">
+  <section class="premio-compact">
     <div class="premio-section-head">
       <div><div class="premio-kicker">Desafio trimestral</div><div class="premio-heading">Campanha de alto desempenho</div></div>
       <div class="premio-sub">Metas acumuladas no trimestre, separadas da disputa mensal para deixar a evolução mais clara.</div>
     </div>
-    <div class="premio-grid">
-      <div class="premio-card gold"><div class="premio-place">I</div><div class="premio-showcase"><img src="https://zelen-store.com.ua/image/cache/catalog/iPhone/iPhone%2017/iPhone%2017%20Sage/iPhone-17-Sage-1-800x800.png" alt="iPhone 17" loading="lazy"></div><div class="premio-body"><div class="premio-label">Primeiro lugar</div><div class="premio-title">iPhone 17</div><div class="premio-meta">Meta mínima R$12.000 no trimestre</div></div></div>
-      <div class="premio-card silver"><div class="premio-place">II</div><div class="premio-showcase"><img src="https://i5.walmartimages.com/asr/f777af6b-d5b3-42dd-aa37-faf699f71bea.d8e90c413240c341f172fdde8fef6910.jpeg?odnBg=FFFFFF&odnHeight=640&odnWidth=640" alt="ASUS Vivobook Go 15" loading="lazy"></div><div class="premio-body"><div class="premio-label">Segundo lugar</div><div class="premio-title">Notebook ASUS Vivobook Go 15</div><div class="premio-meta">Meta mínima R$9.000 no trimestre</div></div></div>
-      <div class="premio-card bronze"><div class="premio-place">III</div><div class="premio-showcase"><img src="https://images.samsung.com/is/image/samsung/p6pim/africa_en/ua40t5300auxke/gallery/africa-en-fhd-t5300-ua40t5300auxke-530742446?$650_519_PNG$" alt="Smart TV Samsung 40 polegadas" loading="lazy"></div><div class="premio-body"><div class="premio-label">Terceiro lugar</div><div class="premio-title">Smart TV 40&quot;</div><div class="premio-meta">Meta mínima R$6.000 no trimestre</div></div></div>
+    <div class="premio-list">
+      <div class="premio-row"><span class="premio-pos">1º</span><div><div class="premio-row-title">iPhone 17</div><div class="premio-row-meta">Primeira faixa trimestral</div></div><span class="premio-goal">R$ 12.000</span></div>
+      <div class="premio-row"><span class="premio-pos">2º</span><div><div class="premio-row-title">Notebook ASUS Vivobook</div><div class="premio-row-meta">Segunda faixa trimestral</div></div><span class="premio-goal">R$ 9.000</span></div>
+      <div class="premio-row"><span class="premio-pos">3º</span><div><div class="premio-row-title">Smart TV 40&quot;</div><div class="premio-row-meta">Terceira faixa trimestral</div></div><span class="premio-goal">R$ 6.000</span></div>
     </div>
+  </section>
   </div>
 
   <div class="grid-2">
