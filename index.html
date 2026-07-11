@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
@@ -236,36 +236,43 @@ textarea.form-input{resize:vertical;min-height:90px;}
 /* STATUS CRM */
 .crm-status{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
 
-/* RANKING */
-.rank-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;margin-bottom:8px;background:var(--surface2);border:1px solid var(--border);transition:all .2s;}
-.rank-item:hover{border-color:var(--border2);}
-.rank-num{font-family:'Syne',sans-serif;font-weight:500;font-size:11px;width:22px;min-width:22px;text-align:right;color:var(--dim);letter-spacing:0;}
-.rank-num.gold{color:var(--accent);}
-.rank-num.silver{color:var(--muted);}
-.rank-num.bronze{color:var(--muted);}
-
-/* PÓDIO DE PREMIAÇÕES */
-.premio-podio{display:flex;align-items:flex-end;justify-content:center;gap:16px;flex-wrap:wrap;margin-bottom:8px;}
-.premio-slot{display:flex;flex-direction:column;align-items:center;width:200px;}
-.premio-medalha{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:14px;color:#1a1814;margin-bottom:10px;box-shadow:0 3px 10px rgba(0,0,0,.35);}
-.premio-medalha-ouro{background:linear-gradient(135deg,#ffe27a,#f0a92e);width:36px;height:36px;font-size:16px;box-shadow:0 4px 16px rgba(240,169,46,.5);}
-.premio-vitrine{position:relative;width:100%;height:150px;border-radius:18px 18px 6px 6px;background:radial-gradient(ellipse at 50% 30%, rgba(255,255,255,.10), rgba(255,255,255,.02) 60%), var(--card);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;overflow:hidden;}
-.premio-vitrine-grande{height:190px;border:1px solid rgba(255,215,0,.5);box-shadow:0 0 0 1px rgba(255,215,0,.15), 0 20px 40px -12px rgba(240,169,46,.35);}
-.premio-spot{position:absolute;top:-20%;left:50%;transform:translateX(-50%);width:140%;height:140%;background:radial-gradient(ellipse at 50% 20%, rgba(255,255,255,.16), transparent 60%);pointer-events:none;}
-.premio-spot-ouro{background:radial-gradient(ellipse at 50% 20%, rgba(255,215,90,.28), transparent 62%);}
-.premio-vitrine img{position:relative;z-index:1;max-width:78%;max-height:72%;object-fit:contain;filter:drop-shadow(0 10px 14px rgba(0,0,0,.45));}
-.premio-base{position:absolute;bottom:10px;left:50%;transform:translateX(-50%);width:60%;height:14px;border-radius:50%;background:radial-gradient(ellipse, rgba(0,0,0,.45), transparent 70%);z-index:0;}
-.premio-pix,.premio-giftcard{position:relative;z-index:1;font-family:'Syne',sans-serif;font-weight:800;color:#fff;text-shadow:0 4px 14px rgba(0,0,0,.4);}
-.premio-pix{font-size:32px;}
-.premio-giftcard{font-size:40px;}
-.premio-info{text-align:center;margin-top:12px;}
-.premio-nome{font-size:13px;font-weight:700;color:#fff;}
-.premio-nome-grande{font-size:16px;}
-.premio-meta{font-size:11px;color:var(--muted);margin-top:2px;}
-.premio-1{order:2;}
-.premio-2{order:1;}
-.premio-3{order:3;}
-@media (max-width:640px){.premio-podio{gap:10px;}.premio-slot{width:31%;}.premio-vitrine,.premio-vitrine-grande{height:110px;}}
+/* RANKING / PREMIAÇÕES */
+.rank-item{display:flex;align-items:center;gap:12px;padding:13px 16px;border-radius:10px;margin-bottom:8px;background:linear-gradient(90deg,rgba(255,255,255,.035),var(--surface2));border:1px solid var(--border);transition:all .2s;}
+.rank-item:hover{border-color:var(--border2);transform:translateY(-1px);}
+.rank-num{font-family:'Syne',sans-serif;font-weight:800;font-size:11px;width:30px;min-width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);background:rgba(255,255,255,.05);letter-spacing:0;}
+.rank-num.gold{color:#1a1814;background:linear-gradient(135deg,#fff3b0,#d89a22);box-shadow:0 8px 20px rgba(216,154,34,.22);}
+.rank-num.silver{color:#16181c;background:linear-gradient(135deg,#f6f7fb,#aeb6c4);box-shadow:0 8px 20px rgba(174,182,196,.18);}
+.rank-num.bronze{color:#1a1814;background:linear-gradient(135deg,#e7b07b,#9b5b2e);box-shadow:0 8px 20px rgba(155,91,46,.18);}
+.premio-section{margin-bottom:24px;}
+.premio-section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap;}
+.premio-kicker{font-size:10px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:4px;}
+.premio-heading{font-family:'Syne',sans-serif;font-size:18px;font-weight:800;color:var(--text);}
+.premio-sub{font-size:12px;color:var(--muted);max-width:360px;line-height:1.55;}
+.premio-grid{display:grid;grid-template-columns:1.1fr .95fr .9fr;gap:14px;align-items:stretch;}
+.premio-card{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.045),var(--surface));border:1px solid var(--border);border-radius:14px;overflow:hidden;min-height:260px;box-shadow:0 18px 40px -32px rgba(0,0,0,.85);}
+.premio-card.gold{border-color:rgba(218,165,32,.50);box-shadow:0 24px 55px -34px rgba(218,165,32,.75);}
+.premio-card.silver{border-color:rgba(190,198,212,.42);}
+.premio-card.bronze{border-color:rgba(190,122,68,.42);}
+.premio-place{position:absolute;top:12px;left:12px;z-index:3;display:inline-flex;align-items:center;justify-content:center;height:28px;min-width:36px;padding:0 10px;border-radius:8px;font-family:'Syne',sans-serif;font-weight:800;font-size:12px;color:#1a1814;background:#f4f4f5;}
+.premio-card.gold .premio-place{background:linear-gradient(135deg,#fff1a8,#d99a24);}
+.premio-card.silver .premio-place{background:linear-gradient(135deg,#f7f8fb,#aeb6c4);}
+.premio-card.bronze .premio-place{background:linear-gradient(135deg,#e7b07b,#9b5b2e);}
+.premio-showcase{height:178px;background:linear-gradient(180deg,#fff,#f2f4f7);display:flex;align-items:center;justify-content:center;padding:22px;position:relative;}
+.premio-showcase:before{content:'';position:absolute;left:14%;right:14%;bottom:18px;height:16px;background:radial-gradient(ellipse,rgba(0,0,0,.20),transparent 70%);border-radius:50%;}
+.premio-showcase img{position:relative;z-index:1;max-width:100%;max-height:130px;object-fit:contain;filter:drop-shadow(0 14px 18px rgba(15,23,42,.22));}
+.premio-card.gold .premio-showcase{height:204px;}
+.premio-card.gold .premio-showcase img{max-height:152px;}
+.premio-body{padding:15px 16px 17px;}
+.premio-label{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.premio-title{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);line-height:1.15;}
+.premio-meta{font-size:12px;color:var(--muted);margin-top:7px;}
+.premio-cash{height:178px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#12151d,#1f2937);position:relative;}
+.premio-cash span{font-family:'Syne',sans-serif;font-size:38px;font-weight:800;color:#fff;letter-spacing:0;}
+.premio-gift{height:178px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#15120d,#2b2118);position:relative;}
+.premio-gift svg{width:74px;height:74px;stroke:#d8a24a;fill:none;stroke-width:1.5;}
+.gema-svg{width:34px;height:34px;display:block;}
+.gema-bronze{color:#c98546;}.gema-prata{color:#c7ccd6;}.gema-ouro{color:#f4c542;}
+@media (max-width:900px){.premio-grid{grid-template-columns:1fr;}.premio-card.gold .premio-showcase,.premio-showcase,.premio-cash,.premio-gift{height:170px;}.premio-card.gold .premio-showcase img,.premio-showcase img{max-height:126px;}}
 
 /* MATERIAL CARD */
 .mat-card{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:16px;display:flex;align-items:center;gap:14px;transition:all .25s;cursor:pointer;position:relative;overflow:hidden;}
@@ -565,7 +572,7 @@ textarea.form-input{resize:vertical;min-height:90px;}
   <!-- NÍVEL / GEMA -->
   <div class="card" id="gema-card" style="margin-bottom:20px;overflow:hidden;position:relative;">
     <div class="card-body" style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-      <div id="gema-icon-wrap" style="width:64px;height:64px;flex:0 0 64px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:30px;">💎</div>
+      <div id="gema-icon-wrap" style="width:64px;height:64px;flex:0 0 64px;border-radius:16px;display:flex;align-items:center;justify-content:center;"></div>
       <div style="flex:1;min-width:220px;">
         <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px;">
           <span id="gema-nome" style="font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:#fff;">Bronze</span>
@@ -1348,104 +1355,41 @@ textarea.form-input{resize:vertical;min-height:90px;}
   </div>
 </div>
 
-<!--  RANKING  -->
+<!--  PREMIAÇÕES  -->
 <div class="page" id="page-ranking">
   <div class="topbar">
-    <div><div class="page-title">Premiações</div><div class="page-sub">Ranking de desempenho e prêmios em disputa</div></div>
+    <div><div class="page-title">Premiações</div><div class="page-sub">Vitrines de prêmios, metas e classificação dos revendedores</div></div>
   </div>
 
-  <!-- Abas Mensal / Trimestral -->
-  <div style="display:flex;gap:8px;margin-bottom:24px;">
-    <button class="btn btn-accent btn-sm" id="rk-tab-mensal" onclick="mudarAbaRanking('mensal')">Desafio Mensal</button>
-    <button class="btn btn-ghost btn-sm" id="rk-tab-trimestral" onclick="mudarAbaRanking('trimestral')">Desafio Trimestral</button>
-  </div>
-
-  <!-- PÓDIO — Prêmios do mês -->
-  <div id="ranking-premios-mensal">
-    <div class="premio-podio">
-      <div class="premio-slot premio-2">
-        <div class="premio-medalha" style="background:linear-gradient(135deg,#e8e8e8,#b8b8b8);">2</div>
-        <div class="premio-vitrine">
-          <div class="premio-spot"></div>
-          <div class="premio-pix">R$150</div>
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome">PIX de R$150</div><div class="premio-meta">Meta mínima R$1.800</div></div>
-      </div>
-
-      <div class="premio-slot premio-1">
-        <div class="premio-medalha premio-medalha-ouro">1</div>
-        <div class="premio-vitrine premio-vitrine-grande">
-          <div class="premio-spot premio-spot-ouro"></div>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Airfryer.jpg" alt="Air Fryer" loading="lazy">
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome premio-nome-grande">Air Fryer</div><div class="premio-meta">Meta mínima R$2.500</div></div>
-      </div>
-
-      <div class="premio-slot premio-3">
-        <div class="premio-medalha" style="background:linear-gradient(135deg,#d99a5b,#a86a34);">3</div>
-        <div class="premio-vitrine">
-          <div class="premio-spot"></div>
-          <div class="premio-giftcard">🎁</div>
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome">Gift Card</div><div class="premio-meta">Meta mínima R$1.100</div></div>
-      </div>
+  <div class="premio-section">
+    <div class="premio-section-head">
+      <div><div class="premio-kicker">Desafio mensal</div><div class="premio-heading">Ranking do mês</div></div>
+      <div class="premio-sub">Premiação por desempenho mensal. O prêmio só é liberado quando a meta mínima da colocação for atingida.</div>
+    </div>
+    <div class="premio-grid">
+      <div class="premio-card gold"><div class="premio-place">I</div><div class="premio-showcase"><img src="https://imgs.extra.com.br/55070219/1g.jpg" alt="Air Fryer Philips Walita" loading="lazy"></div><div class="premio-body"><div class="premio-label">Primeiro lugar</div><div class="premio-title">Air Fryer</div><div class="premio-meta">Meta mínima R$2.500 no mês</div></div></div>
+      <div class="premio-card silver"><div class="premio-place">II</div><div class="premio-cash"><span>R$150</span></div><div class="premio-body"><div class="premio-label">Segundo lugar</div><div class="premio-title">PIX de R$150</div><div class="premio-meta">Meta mínima R$1.800 no mês</div></div></div>
+      <div class="premio-card bronze"><div class="premio-place">III</div><div class="premio-gift"><svg viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="24" width="44" height="30" rx="3"/><path d="M32 24v30M10 34h44M22 24c-7-5-6-14 1-14 6 0 9 8 9 14M42 24c7-5 6-14-1-14-6 0-9 8-9 14"/></svg></div><div class="premio-body"><div class="premio-label">Terceiro lugar</div><div class="premio-title">Gift Card</div><div class="premio-meta">Meta mínima R$1.100 no mês</div></div></div>
     </div>
   </div>
 
-  <!-- PÓDIO — Prêmios do trimestre -->
-  <div id="ranking-premios-trimestral" style="display:none;">
-    <div class="premio-podio">
-      <div class="premio-slot premio-2">
-        <div class="premio-medalha" style="background:linear-gradient(135deg,#e8e8e8,#b8b8b8);">2</div>
-        <div class="premio-vitrine">
-          <div class="premio-spot"></div>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Asus_vivobook.jpg" alt="Notebook ASUS Vivobook Go 15" loading="lazy">
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome">Notebook ASUS Vivobook Go 15</div><div class="premio-meta">Meta mínima R$9.000</div></div>
-      </div>
-
-      <div class="premio-slot premio-1">
-        <div class="premio-medalha premio-medalha-ouro">1</div>
-        <div class="premio-vitrine premio-vitrine-grande">
-          <div class="premio-spot premio-spot-ouro"></div>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/White_iPhone_17.jpg" alt="iPhone 17" loading="lazy">
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome premio-nome-grande">iPhone 17</div><div class="premio-meta">Meta mínima R$12.000</div></div>
-      </div>
-
-      <div class="premio-slot premio-3">
-        <div class="premio-medalha" style="background:linear-gradient(135deg,#d99a5b,#a86a34);">3</div>
-        <div class="premio-vitrine">
-          <div class="premio-spot"></div>
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/SamsungSmartTV.JPG" alt="Smart TV 40 polegadas" loading="lazy">
-          <div class="premio-base"></div>
-        </div>
-        <div class="premio-info"><div class="premio-nome">Smart TV 40"</div><div class="premio-meta">Meta mínima R$6.000</div></div>
-      </div>
+  <div class="premio-section">
+    <div class="premio-section-head">
+      <div><div class="premio-kicker">Desafio trimestral</div><div class="premio-heading">Campanha de alto desempenho</div></div>
+      <div class="premio-sub">Metas acumuladas no trimestre, separadas da disputa mensal para deixar a evolução mais clara.</div>
+    </div>
+    <div class="premio-grid">
+      <div class="premio-card gold"><div class="premio-place">I</div><div class="premio-showcase"><img src="https://zelen-store.com.ua/image/cache/catalog/iPhone/iPhone%2017/iPhone%2017%20Sage/iPhone-17-Sage-1-800x800.png" alt="iPhone 17" loading="lazy"></div><div class="premio-body"><div class="premio-label">Primeiro lugar</div><div class="premio-title">iPhone 17</div><div class="premio-meta">Meta mínima R$12.000 no trimestre</div></div></div>
+      <div class="premio-card silver"><div class="premio-place">II</div><div class="premio-showcase"><img src="https://i5.walmartimages.com/asr/f777af6b-d5b3-42dd-aa37-faf699f71bea.d8e90c413240c341f172fdde8fef6910.jpeg?odnBg=FFFFFF&odnHeight=640&odnWidth=640" alt="ASUS Vivobook Go 15" loading="lazy"></div><div class="premio-body"><div class="premio-label">Segundo lugar</div><div class="premio-title">Notebook ASUS Vivobook Go 15</div><div class="premio-meta">Meta mínima R$9.000 no trimestre</div></div></div>
+      <div class="premio-card bronze"><div class="premio-place">III</div><div class="premio-showcase"><img src="https://images.samsung.com/is/image/samsung/p6pim/africa_en/ua40t5300auxke/gallery/africa-en-fhd-t5300-ua40t5300auxke-530742446?$650_519_PNG$" alt="Smart TV Samsung 40 polegadas" loading="lazy"></div><div class="premio-body"><div class="premio-label">Terceiro lugar</div><div class="premio-title">Smart TV 40&quot;</div><div class="premio-meta">Meta mínima R$6.000 no trimestre</div></div></div>
     </div>
   </div>
 
-  <div class="grid-2" style="margin-top:32px;">
-    <div class="card">
-      <div class="card-head"><div class="card-title" id="ranking-list-titulo"> Classificação do mês</div><div class="card-sub">Por vendas confirmadas</div></div>
-      <div class="card-body" id="ranking-list">
-        <div class="empty"><p>Ranking calculado ao final do período</p></div>
-      </div>
-    </div>
-    <div class="card">
-      <div class="card-head"><div class="card-title"> Sua posição</div></div>
-      <div class="card-body" id="minha-posicao">
-        <div class="empty"><p>Carregando posição...</p></div>
-      </div>
-    </div>
+  <div class="grid-2">
+    <div class="card"><div class="card-head"><div class="card-title" id="ranking-list-titulo"> Classificação do mês</div><div class="card-sub">Por clientes ativos e vendas confirmadas</div></div><div class="card-body" id="ranking-list"><div class="empty"><p>Ranking será exibido assim que houver vendas confirmadas.</p></div></div></div>
+    <div class="card"><div class="card-head"><div class="card-title"> Sua posição</div></div><div class="card-body" id="minha-posicao"><div class="empty"><p>Carregando posição...</p></div></div></div>
   </div>
 </div>
-
 <!--  SUGESTÃO  -->
 <div class="page" id="page-sugestao">
   <div class="topbar">
@@ -2090,11 +2034,14 @@ async function loadClientes() {
 // GEMAS (NÍVEIS)
 // 
 const GEMAS = {
-  bronze: { nome: 'Bronze', icone: '🟫', cor: '#c98a4b', proxima: 'prata', metaProxima: 6000, comissao: 20 },
-  prata:  { nome: 'Prata',  icone: '⬜', cor: '#c7ccd6', proxima: 'ouro',  metaProxima: 10000, comissao: 25 },
-  ouro:   { nome: 'Ouro',   icone: '🟨', cor: '#f6c945', proxima: null,   metaProxima: null,   comissao: 30 },
+  bronze: { nome: 'Bronze', classe: 'gema-bronze', cor: '#c98546', proxima: 'prata', metaProxima: 6000, comissao: 20 },
+  prata:  { nome: 'Prata',  classe: 'gema-prata', cor: '#c7ccd6', proxima: 'ouro',  metaProxima: 10000, comissao: 25 },
+  ouro:   { nome: 'Ouro',   classe: 'gema-ouro', cor: '#f4c542', proxima: null,   metaProxima: null,   comissao: 30 },
 };
 
+function gemaSvg(classe){
+  return `<svg class="gema-svg ${classe}" viewBox="0 0 64 64" aria-hidden="true"><path d="M18 8h28l12 16-26 32L6 24 18 8Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/><path d="M18 8l14 48L46 8M6 24h52M18 8l-4 16M46 8l4 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" opacity=".75"/></svg>`;
+}
 function renderGema() {
   const nivelAtual = (currentEmployee && currentEmployee.nivel_gema) || 'bronze';
   const g = GEMAS[nivelAtual] || GEMAS.bronze;
@@ -2107,7 +2054,7 @@ function renderGema() {
   const txtEl = document.getElementById('gema-progress-texto');
   if (!nomeEl) return;
 
-  if (iconWrap) { iconWrap.textContent = g.icone; iconWrap.style.background = g.cor + '22'; iconWrap.style.border = '1px solid ' + g.cor + '55'; }
+  if (iconWrap) { iconWrap.innerHTML = gemaSvg(g.classe); iconWrap.style.background = g.cor + '22'; iconWrap.style.border = '1px solid ' + g.cor + '55'; }
   nomeEl.textContent = g.nome;
   if (comEl) comEl.textContent = (currentEmployee.comissao_pct || g.comissao) + '% de comissão';
 
@@ -2117,10 +2064,10 @@ function renderGema() {
     const faltam = Math.max(0, g.metaProxima - acumulado);
     if (txtEl) txtEl.textContent = faltam > 0
       ? `R$${acumulado.toLocaleString('pt-BR',{maximumFractionDigits:0})} de R$${g.metaProxima.toLocaleString('pt-BR')} para virar ${GEMAS[g.proxima].nome}`
-      : `Meta batida! Nível ${GEMAS[g.proxima].nome} liberado 🎉`;
+      : `Meta batida. Nível ${GEMAS[g.proxima].nome} liberado.`;
   } else {
     if (barEl) barEl.style.width = '100%';
-    if (txtEl) txtEl.textContent = 'Nível máximo do programa 🏆';
+    if (txtEl) txtEl.textContent = 'Nível máximo do programa.';
   }
 }
 
@@ -2640,8 +2587,8 @@ function mudarAbaRanking(periodo) {
   rankingPeriodoAtivo = periodo;
   document.getElementById('rk-tab-mensal').className = periodo === 'mensal' ? 'btn btn-accent btn-sm' : 'btn btn-ghost btn-sm';
   document.getElementById('rk-tab-trimestral').className = periodo === 'trimestral' ? 'btn btn-accent btn-sm' : 'btn btn-ghost btn-sm';
-  document.getElementById('ranking-premios-mensal').style.display = periodo === 'mensal' ? '' : 'none';
-  document.getElementById('ranking-premios-trimestral').style.display = periodo === 'trimestral' ? '' : 'none';
+  
+  
   document.getElementById('ranking-list-titulo').textContent = periodo === 'mensal' ? ' Classificação do mês' : ' Classificação do trimestre';
   renderRanking();
 }
@@ -2712,11 +2659,10 @@ async function renderRanking() {
   if (posEl) {
     const minhaPosicao = meuId ? ranking.findIndex(e => e.id === meuId) + 1 : 0;
     const me = minhaPosicao > 0 ? ranking[minhaPosicao-1] : null;
-    const emojiPos = minhaPosicao===1?'🥇':minhaPosicao===2?'🥈':minhaPosicao===3?'🥉':'';
     posEl.innerHTML = minhaPosicao > 0 ? `
       <div style="text-align:center;padding:24px 20px;">
         <div style="font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:8px;">Sua colocação</div>
-        <div style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:var(--accent);line-height:1;">${emojiPos||'#'+minhaPosicao}</div>
+        <div style="font-family:'Syne',sans-serif;font-size:64px;font-weight:800;color:var(--accent);line-height:1;">#${minhaPosicao}</div>
         ${emojiPos?`<div style="font-family:'Syne',sans-serif;font-size:22px;font-weight:700;margin-top:4px;">${minhaPosicao}º lugar</div>`:''}
         <div style="color:var(--muted);font-size:13px;margin-top:8px;">de ${ranking.length} consultor${ranking.length!==1?'es':''}</div>
         <div style="margin-top:18px;display:flex;gap:10px;justify-content:center;">
@@ -4926,3 +4872,6 @@ body.tour-on aside .tour-hl{ position:relative; z-index:5003 !important; }
 
 </body>
 </html>
+
+
+
